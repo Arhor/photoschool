@@ -1,0 +1,20 @@
+plugins {
+    id 'org.springframework.boot' version '2.1.4.RELEASE'
+}
+
+apply plugin: 'io.spring.dependency-management'
+
+dependencies {
+	implementation project(":service")
+
+    implementation 'io.springfox:springfox-swagger2:2.9.2'
+    implementation 'io.springfox:springfox-swagger-ui:2.9.2'
+
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.springframework.security.oauth:spring-security-oauth2:2.3.4.RELEASE'
+    implementation 'org.springframework.security:spring-security-jwt:1.0.10.RELEASE'
+    testImplementation 'org.springframework.security:spring-security-test:5.1.0.RELEASE'
+}
+
+description = 'web'

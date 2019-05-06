@@ -1,0 +1,19 @@
+plugins {
+    id 'org.springframework.boot' version '2.1.4.RELEASE' apply false
+}
+
+apply plugin: 'io.spring.dependency-management'
+
+dependencyManagement {
+    imports {
+        mavenBom org.springframework.boot.gradle.plugin.SpringBootPlugin.BOM_COORDINATES    
+    }
+}
+
+dependencies {
+	implementation project(":repository")
+	implementation 'org.modelmapper:modelmapper:2.3.3'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+}
+
+description = 'service'

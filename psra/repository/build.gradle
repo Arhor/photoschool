@@ -1,0 +1,18 @@
+plugins {
+    id 'org.springframework.boot' version '2.1.4.RELEASE' apply false
+}
+
+apply plugin: 'io.spring.dependency-management'
+
+dependencyManagement {
+    imports {
+        mavenBom org.springframework.boot.gradle.plugin.SpringBootPlugin.BOM_COORDINATES    
+    }
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
+	testImplementation 'de.flapdoodle.embed:de.flapdoodle.embed.mongo'
+}
+
+description = 'repository'
