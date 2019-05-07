@@ -13,6 +13,7 @@ dependencyManagement {
 dependencies {
 	implementation project(":repository")
 	implementation 'org.modelmapper:modelmapper:2.3.3'
+	implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
     implementation 'org.springframework.boot:spring-boot-starter-security'
 }
 

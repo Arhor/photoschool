@@ -4,9 +4,12 @@ import java.util.Collection;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import by.arhor.psra.dto.PhotoDto;
+import by.arhor.psra.mapper.Mapper;
 import by.arhor.psra.repository.PhotoRepository;
+import by.arhor.psra.repository.model.Photo;
 import by.arhor.psra.service.PhotoService;
 
 @Service
@@ -14,13 +17,13 @@ import by.arhor.psra.service.PhotoService;
 public class PhotoServiceImpl implements PhotoService {
 
 	private PhotoRepository photoRepository;
-    private Assembler<Photo, PhotoDto> assembler
+    private Mapper<Photo, PhotoDto> mapper;
 	
 	@Autowired
-	public PhotoServiceImpl(PhotoRepository photoRepository
-                            Assembler<Photo, PhotoDto> assembler) {
+	public PhotoServiceImpl(PhotoRepository photoRepository,
+                            Mapper<Photo, PhotoDto> mapper) {
 		this.photoRepository = photoRepository;
-        this.assembler = assembler;
+        this.mapper = mapper;
 	}
 	
 	@Override

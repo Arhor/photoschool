@@ -4,9 +4,12 @@ import java.util.Collection;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import by.arhor.psra.dto.GalleryDto;
+import by.arhor.psra.mapper.Mapper;
 import by.arhor.psra.repository.GalleryRepository;
+import by.arhor.psra.repository.model.Gallery;
 import by.arhor.psra.service.GalleryService;
 
 @Service
@@ -14,13 +17,13 @@ import by.arhor.psra.service.GalleryService;
 public class GalleryServiceImpl implements GalleryService {
 
 	private GalleryRepository galleryRepository;
-    private Assembler<Gallery, GalleryDto> assembler;
+    private Mapper<Gallery, GalleryDto> mapper;
 	
 	@Autowired
-	public GalleryServiceImpl(GalleryRepository galleryRepository
-                              Assembler<Gallery, GalleryDto> assembler) {
+	public GalleryServiceImpl(GalleryRepository galleryRepository,
+                              Mapper<Gallery, GalleryDto> mapper) {
 		this.galleryRepository = galleryRepository;
-        this.assembler = assembler;
+        this.mapper = mapper;
 	}
 	
 	@Override

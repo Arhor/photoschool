@@ -3,26 +3,31 @@ package by.arhor.psra.service.impl;
 import java.util.Collection;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Primary;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import by.arhor.psra.dto.UserDto;
+import by.arhor.psra.mapper.Mapper;
 import by.arhor.psra.repository.UserRepository;
+import by.arhor.psra.repository.model.User;
 import by.arhor.psra.service.UserService;
 
 @Service
+@Primary
 @Transactional
 public class UserServiceImpl implements UserService {
 	
 	private UserRepository userRepository;
-    private Assembler<User, UserDto> assembler;
+    private Mapper<User, UserDto> mapper;
 	
 	@Autowired
-	public UserServiceImpl(UserRepository userRepository
-                           Assembler<User, UserDto> assembler) {
+	public UserServiceImpl(UserRepository userRepository,
+                           Mapper<User, UserDto> mapper) {
 		this.userRepository = userRepository;
-        this.assembler = assembler;
+        this.mapper = mapper;
 	}
 	
 	@Override

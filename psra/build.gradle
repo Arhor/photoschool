@@ -5,7 +5,7 @@ allprojects {
 
 subprojects {
     apply plugin: 'java'
-//    apply plugin: 'jacoco'
+    apply plugin: 'jacoco'
     apply plugin: 'eclipse'
     apply plugin: 'idea'
 
@@ -24,15 +24,17 @@ subprojects {
 	    }
     }
     
-//    jacocoTestReport {
-//        afterEvaluate {
-//            classDirectories = files(classDirectories.files.collect {
-//                fileTree(dir: it, exclude: exclusions)
-//            })
-//       }
-//    }
-//
-//    test.finalizedBy jacocoTestReport
+    def exclusions = {""}
+        
+    jacocoTestReport {
+        afterEvaluate {
+            classDirectories.from = files(classDirectories.files.collect {
+                fileTree(dir: it, exclude: exclusions)
+            })
+       }
+    }
+
+    test.finalizedBy jacocoTestReport
 
     dependencies {
 	    compileOnly 'org.projectlombok:lombok'

@@ -22,9 +22,9 @@ public class Tag {
 	@Field("name")
 	@Indexed(unique = true)
     private String name;
-
-	public Tag(String name) {
-		this(null, name);
+	
+	public Tag(String id) {
+		this(id, null);
 	}
 
 }
