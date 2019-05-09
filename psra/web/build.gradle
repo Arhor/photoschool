@@ -7,6 +7,10 @@ apply plugin: 'io.spring.dependency-management'
 dependencies {
 	implementation project(":service")
 
+    implementation 'jakarta.activation:jakarta.activation-api:1.2.1'
+    implementation 'jakarta.xml.bind:jakarta.xml.bind-api:2.3.2'
+    implementation 'org.glassfish.jaxb:jaxb-runtime:2.3.2'
+
     implementation 'io.springfox:springfox-swagger2:2.9.2'
     implementation 'io.springfox:springfox-swagger-ui:2.9.2'
 
@@ -14,7 +18,9 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.springframework.security.oauth:spring-security-oauth2:2.3.4.RELEASE'
     implementation 'org.springframework.security:spring-security-jwt:1.0.10.RELEASE'
+
     testImplementation 'org.springframework.security:spring-security-test:5.1.0.RELEASE'
 }
 
 description = 'web'
+

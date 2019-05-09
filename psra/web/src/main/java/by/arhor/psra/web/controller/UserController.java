@@ -22,7 +22,7 @@ public class UserController {
 	
 	@GetMapping(path = "/{id}", produces = "application/json")
 	public UserDto getUserById(@PathVariable("id") String id) {
-		return service.findOne(id);
+        return service.findOne(id);
 	}
 
 }

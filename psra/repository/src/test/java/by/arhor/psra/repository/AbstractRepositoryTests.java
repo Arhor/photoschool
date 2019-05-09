@@ -6,7 +6,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 public class AbstractRepositoryTests {
 	
-	@Autowired protected TagRepository tagRepository;
 	@Autowired protected PhotoRepository photoRepository;
 	@Autowired protected GalleryRepository galleryRepository;
 	@Autowired protected UserRepository userRepository;

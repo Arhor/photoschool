@@ -6,6 +6,7 @@ import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.assertThat;
 
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 
 import org.junit.After;
@@ -16,36 +17,41 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import by.arhor.psra.repository.model.Photo;
 import by.arhor.psra.repository.model.Tag;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @EnableAutoConfiguration
-public class TagRepositoryTests extends AbstractRepositoryTests {
+public class PhotoRepositoryTests extends AbstractRepositoryTests {
 	
 	private List<Tag> tags = Arrays.asList(
-			new Tag(null, "tag 1"),
-			new Tag(null, "tag 2"),
-			new Tag(null, "tag 3")
+			new Tag("tag 1"),
+			new Tag("tag 2"),
+			new Tag("tag 3")
 	);
 	
 	@Before
 	public void methodSetUp() {
-		tagRepository.insert(tags);
+		Photo photo = new Photo();
+		photo.setPath("/user/photo_1.png");
+		photo.setTags(new HashSet<>(tags));
+		photoRepository.insert(photo);
 	}
 	
 	@After
 	public void methodTearDown() {
-		tagRepository.deleteAll();
+		photoRepository.deleteAll();
 	}
 
 	@Test
 	public void findAllTest() {
-		var tags = tagRepository.findAll();
+		var photos = photoRepository.findAll();
 		
-		assertThat(tags, is(notNullValue()));
-		assertThat(tags, hasSize(3));
-		tags.forEach(tag -> assertThat(tag, is(notNullValue())));
+		assertThat(photos, is(notNullValue()));
+		assertThat(photos, hasSize(1));
+		photos.forEach(photo -> assertThat(photo, is(notNullValue())));
+		photos.forEach(System.out::println);
 	}
 
 }

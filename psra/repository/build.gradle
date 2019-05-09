@@ -1,4 +1,5 @@
 plugins {
+    id 'java-library'
     id 'org.springframework.boot' version '2.1.4.RELEASE' apply false
 }
 
@@ -11,7 +12,8 @@ dependencyManagement {
 }
 
 dependencies {
-    implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
+    api 'org.springframework.boot:spring-boot-starter-data-mongodb'
+
 	testImplementation 'de.flapdoodle.embed:de.flapdoodle.embed.mongo'
 }
 

@@ -1,0 +1,24 @@
+server:
+   port: 8080
+   servlet:
+      context-path: /api
+
+######################### Mongo DB config #########################
+
+spring:
+   data:
+      mongodb:
+         host: localhost
+         port: 27017
+         database: photoschool_db
+#            username: # Login user of the mongo server.
+#            password: # Login password of the mongo server.
+#            field-naming-strategy: # Fully qualified name of the FieldNamingStrategy to use.
+#            uri: mongodb://localhost/photoschool_db # Mongo database URI. When set, host and port are ignored.
+#            authentication-database: # Authentication database name.
+
+############################## Logging ##############################
+
+# logging:
+#    level:
+#       root: DEBUG
