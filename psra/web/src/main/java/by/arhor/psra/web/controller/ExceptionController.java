@@ -14,6 +14,7 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import by.arhor.psra.exception.EntityNotFoundException;
+import by.arhor.psra.exception.LocalizedException;
 import by.arhor.psra.web.error.ApiError;
 import by.arhor.psra.web.error.Error;
 import by.arhor.psra.web.error.Error.Code;
@@ -38,15 +39,14 @@ public class ExceptionController extends ResponseEntityExceptionHandler {
 		return new ApiError(HttpStatus.NOT_FOUND, extractCause(ex, request));
 	}
 
-    private Error extractCause(EntityNotFoundException ex, WebRequest request) {
+    private Error extractCause(LocalizedException ex, WebRequest request) {
         return new Error(
                 Code.NOT_FOUND,
                 messageSource.getMessage(
 		                ex.getLabel(),
-		                new Object[] { ex.getSearchCriteriaName(), ex.getSearchCriteriaValue() },
+		                ex.getParams(),
 		                request.getLocale()
-                )
-        );
+                ));
     }
 
 }

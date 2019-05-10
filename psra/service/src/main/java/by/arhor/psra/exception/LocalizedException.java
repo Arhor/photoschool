@@ -8,12 +8,19 @@ public abstract class LocalizedException extends RuntimeException {
 	
 	private final Label label;
 	
-	public LocalizedException(Label label) {
+	protected final Object[] params;
+	
+	public LocalizedException(Label label, Object... params) {
 		this.label = label;
+		this.params = params;
 	}
 	
 	public String getLabel() {
 		return label.getValue();
+	}
+	
+	public Object[] getParams() {
+		return params.clone();
 	}
 
 }
