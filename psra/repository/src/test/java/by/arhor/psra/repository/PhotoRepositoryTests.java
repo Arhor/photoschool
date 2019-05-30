@@ -19,6 +19,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import by.arhor.psra.repository.model.Photo;
 import by.arhor.psra.repository.model.Tag;
+import by.arhor.psra.repository.model.User;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -26,9 +27,9 @@ import by.arhor.psra.repository.model.Tag;
 public class PhotoRepositoryTests extends AbstractRepositoryTests {
 	
 	private List<Tag> tags = Arrays.asList(
-			new Tag("tag 1"),
-			new Tag("tag 2"),
-			new Tag("tag 3")
+			new Tag(),
+			new Tag(),
+			new Tag()
 	);
 	
 	@Before
@@ -52,6 +53,15 @@ public class PhotoRepositoryTests extends AbstractRepositoryTests {
 		assertThat(photos, hasSize(1));
 		photos.forEach(photo -> assertThat(photo, is(notNullValue())));
 		photos.forEach(System.out::println);
+	}
+	
+	@Test
+	public void userRepoTest() {
+		User user = new User();
+		user.setUsername("tester");
+		userRepository.insert(user);
+		
+		System.out.println(userRepository.findByUsername("tester"));
 	}
 
 }

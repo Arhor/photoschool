@@ -1,11 +1,11 @@
 package by.arhor.psra.repository.model;
 
 import static java.util.stream.Collectors.toList;
-import static java.util.stream.Collectors.toSet;
 
 import java.util.List;
-import java.util.Set;
 
+import org.springframework.data.mongodb.core.index.Indexed;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
@@ -16,56 +16,48 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-/**
- * Represents photo file.
- * 
- * @author Maksim Buryshynets
- */
 @Data
-@EqualsAndHashCode(callSuper = true, exclude = {"comments"})
-@ToString(exclude = {"comments"})
+@EqualsAndHashCode(callSuper = true, exclude = {"teacher", "learners"})
+@ToString(callSuper = true, exclude = {"teacher", "learners"})
 @AllArgsConstructor
 @NoArgsConstructor
-@Document(collection = "photos")
-public class Photo extends IdentifiedEntity {
+@Document(collection = "courses")
+public class Course extends IdentifiedEntity {
 	
 	private static final long serialVersionUID = CoreVersion.SERIAL_VERSION_UID;
 	
-	@Field("path")
-    private String path;
-	
 	@Field("name")
-    private String name;
+	@Indexed(unique = true)
+	private String name;
 	
 	@Field("description")
-    private String description;
+	private String description;
 	
-	@Field("tags")
-	private Set<Tag> tags;
-	
-	@Field("comments")
-	private List<Comment> comments;
+    @DBRef(lazy = true)
+    private User teacher;
+
+	@DBRef(lazy = true)
+	private List<User> learners;
 	
 	@Override
-	public Photo clone() {
-		var clone = new Photo();
+	public Course clone() {
+		var clone = new Course();
 		
 		clone.id = this.id;
 		clone.dateTimeCreated = this.dateTimeCreated;
 		clone.dateTimeUpdated = this.dateTimeUpdated;
 		clone.enabled = this.enabled;
 		
-		clone.path = this.path;
 		clone.name = this.name;
 		clone.description = this.description;
-		clone.tags = this.tags != null
-				? this.tags.stream().map(Tag::clone).collect(toSet())
+		clone.teacher = this.teacher != null
+				? this.teacher.clone()
 				: null;
-		clone.comments = this.comments != null
-				? this.comments.stream().map(Comment::clone).collect(toList())
+		clone.learners = this.learners != null
+				? this.learners.stream().map(User::clone).collect(toList())
 				: null;
 				
 		return clone;
 	}
-    
+	
 }

@@ -10,7 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import by.arhor.psra.dto.PhotoDto;
 import by.arhor.psra.exception.EntityNotFoundException;
-import by.arhor.psra.label.Label;
+import by.arhor.psra.localization.Error;
 import by.arhor.psra.mapper.Mapper;
 import by.arhor.psra.repository.PhotoRepository;
 import by.arhor.psra.repository.model.Photo;
@@ -19,64 +19,67 @@ import by.arhor.psra.service.PhotoService;
 @Service
 @Transactional
 public class PhotoServiceImpl implements PhotoService {
-
-	private PhotoRepository photoRepository;
-    private Mapper<Photo, PhotoDto> mapper;
+	
+	private PhotoRepository repository;
+	private Mapper<Photo, PhotoDto> mapper;
 	
 	@Autowired
-	public PhotoServiceImpl(PhotoRepository photoRepository,
-                            Mapper<Photo, PhotoDto> mapper) {
-		this.photoRepository = photoRepository;
-        this.mapper = mapper;
+	public PhotoServiceImpl(PhotoRepository repository, Mapper<Photo, PhotoDto> mapper) {
+		this.repository = repository;
+		this.mapper = mapper;
 	}
 	
 	@Override
     @Transactional(readOnly = true)
 	public PhotoDto findOne(String id) {		
-		return photoRepository
-				.findById(id)
+		return repository.findById(id)
 				.map(mapper::mapToDto)
 				.orElseThrow(() -> new EntityNotFoundException(
-						Label.ERROR_PHOTO_NOT_FOUND,
+						Error.PHOTO_NOT_FOUND,
 						"ID",
 						id
 				));
 	}
-
+	
 	@Override
     @Transactional(readOnly = true)
 	public Collection<PhotoDto> findAll() {
-		return photoRepository
-				.findAll()
+		return repository.findAll()
 				.stream()
 				.map(mapper::mapToDto)
 				.collect(toList());
 	}
-
+	
 	@Override
 	public PhotoDto create(PhotoDto dto) {
-		Photo photo = mapper.mapToEntity(dto);
-		photo = photoRepository.insert(photo);
-		return mapper.mapToDto(photo);
+		var newEntity = mapper.mapToEntity(dto);
+		newEntity = repository.insert(newEntity);
+		return mapper.mapToDto(newEntity);
 	}
 
 	@Override
 	public PhotoDto update(PhotoDto dto) {
-		Photo photo = mapper.mapToEntity(dto);
-		photo = photoRepository.save(photo);
-		return mapper.mapToDto(photo);
+		Photo newPhoto = mapper.mapToEntity(dto);
+		return repository.findById(dto.getId())
+				.map(oldPhoto -> newPhoto)
+				.map(repository::save)
+				.map(mapper::mapToDto)
+				.orElseThrow(() -> new EntityNotFoundException(
+						Error.PHOTO_NOT_FOUND,
+						"ID",
+						dto.getId()
+				));
 	}
 
 	@Override
 	public void delete(PhotoDto dto) {
-		Photo photo = photoRepository
-				.findById(dto.getId())
+		Photo photo = repository.findById(dto.getId())
 				.orElseThrow(() -> new EntityNotFoundException(
-						Label.ERROR_PHOTO_NOT_FOUND,
+						Error.PHOTO_NOT_FOUND,
 						"ID",
 						dto.getId()
 				));
-		photoRepository.delete(photo);
+		repository.delete(photo);
 	}
 
 }

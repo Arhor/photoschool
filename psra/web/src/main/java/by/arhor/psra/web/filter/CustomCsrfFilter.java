@@ -10,7 +10,6 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.springframework.lang.NonNull;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.access.AccessDeniedHandlerImpl;
@@ -31,16 +30,16 @@ public class CustomCsrfFilter extends OncePerRequestFilter {
 
     private static final String ERROR_MSG = "CSRF tokens missing or not matching";
 
-    private static final String CSRF_COOKIE = "CSRF-TOKEN";
-    private static final String CSRF_HEADER = "X-CSRF-TOKEN";
-    private static final String SAFE_METHOD = "^(GET|HEAD|TRACE|OPTIONS)$";
+    private static final String CSRF_COOKIE = "XSRF-TOKEN";
+    private static final String CSRF_HEADER = "X-XSRF-TOKEN";
+    private static final Pattern SAFE_METHOD = Pattern.compile("^(GET|HEAD|TRACE|OPTIONS)$");
 
     private final AccessDeniedHandler accessDeniedHandler = new AccessDeniedHandlerImpl();
 
     @Override
-    protected void doFilterInternal(@NonNull HttpServletRequest request,
-                                    @NonNull HttpServletResponse response,
-                                    @NonNull FilterChain filterChain) throws ServletException, IOException {
+    protected void doFilterInternal(HttpServletRequest request,
+                                    HttpServletResponse response,
+                                    FilterChain filterChain) throws ServletException, IOException {
 
         if (csrfTokenIsRequired(request)) {
 
@@ -58,9 +57,7 @@ public class CustomCsrfFilter extends OncePerRequestFilter {
     }
 
     private boolean csrfTokenIsRequired(HttpServletRequest request) {
-        String actualMethod = request.getMethod();
-        // TODO: replace method with instance Pattern method call
-        return !Pattern.matches(SAFE_METHOD, actualMethod);
+        return !SAFE_METHOD.matcher(request.getMethod()).matches();
     }
 
     private String getCsrfCookieToken(HttpServletRequest request) {

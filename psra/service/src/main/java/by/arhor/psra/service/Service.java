@@ -2,16 +2,16 @@ package by.arhor.psra.service;
 
 import java.util.Collection;
 
-public interface Service<T, K> {
+public interface Service<D, ID> {
 
-	T findOne(K id);
+	D findOne(ID id);
 	
-	Collection<T> findAll();
+	Collection<D> findAll();
 	
-	T create(T dto);
+	D create(D dto);
 		
-	T update(T dto);
+	D update(D dto);
 	
-	void delete(T dto);
+	void delete(D dto);
 	
 }

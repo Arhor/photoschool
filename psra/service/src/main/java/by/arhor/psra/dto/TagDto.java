@@ -1,13 +1,14 @@
 package by.arhor.psra.dto;
 
-import lombok.AllArgsConstructor;
+import java.io.Serializable;
+
+import by.arhor.psra.CoreVersion;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
-public class TagDto {
+public class TagDto implements Serializable {
+	
+	private static final long serialVersionUID = CoreVersion.SERIAL_VERSION_UID;
 	
 	private String name;
 	

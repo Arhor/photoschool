@@ -25,30 +25,31 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     private static final String CLIENT = "giftCertificates";
     private static final String SECRET = "absolutelySecret";
     private static final String[] GRANT_TYPES = {"password", "refresh_token"};
-    private static final String[] SCOPES = {"read", "write"};
+    private static final String[] SCOPES = {"TRUSTED"};
     private static final int ACCESS_TOKEN_VALIDITY = 30; //900;
     private static final int REFRESH_TOKEN_VALIDITY = 3600;
 
+    @Qualifier("userServiceImpl")
+    private UserDetailsService service;
     private AuthenticationManager manager;
     private PasswordEncoder encoder;
     private TokenEnhancer tokenEnhancer;
     private TokenStore tokenStore;
     private JwtAccessTokenConverter tokenConverter;
-    private UserDetailsService userDetailsService;
-
+    
     @Autowired
-    public AuthorizationServerConfig(AuthenticationManager manager,
+    public AuthorizationServerConfig(UserDetailsService service,
+    								 AuthenticationManager manager,
                                      PasswordEncoder encoder,
                                      TokenEnhancer tokenEnhancer,
                                      TokenStore tokenStore,
-                                     JwtAccessTokenConverter tokenConverter,
-                                     @Qualifier("userServiceImpl") UserDetailsService userDetailsService) {
+                                     JwtAccessTokenConverter tokenConverter) {
+        this.service = service;
         this.manager = manager;
         this.encoder = encoder;
         this.tokenEnhancer = tokenEnhancer;
         this.tokenStore = tokenStore;
         this.tokenConverter = tokenConverter;
-        this.userDetailsService = userDetailsService;
     }
 
     @Override
@@ -75,7 +76,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
         endpoints.tokenStore(tokenStore)
                  .tokenEnhancer(tokenEnhancerChain)
                  .authenticationManager(manager)
-                 .userDetailsService(userDetailsService);
+                 .userDetailsService(service);
     }
 
 }

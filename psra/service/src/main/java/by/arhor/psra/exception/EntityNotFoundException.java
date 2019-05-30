@@ -1,27 +1,27 @@
 package by.arhor.psra.exception;
 
-import by.arhor.psra.label.Label;
+import by.arhor.psra.localization.Label;
+import lombok.EqualsAndHashCode;
+import lombok.Value;
 
+@Value
+@EqualsAndHashCode(callSuper = true)
 public final class EntityNotFoundException extends LocalizedException {
 
 	private static final long serialVersionUID = -773080330463111443L;
 	
-	private static class Field {
-    	private static int fieldId;
-    	private static final int SEARCH_CRITERIA_NAME  = fieldId++;
-    	private static final int SEARCH_CRITERIA_VALUE = fieldId++;
-    }
+	private final String fieldName;
+	private final Object fieldValue;
 	    
     public EntityNotFoundException(Label label, String fieldName, Object fieldValue) {
-    	super(label, fieldName, fieldValue);
+    	super(label);
+    	this.fieldName = fieldName;
+    	this.fieldValue = fieldValue;
     }
     
-    public String getFieldName() {
-    	return String.valueOf(params[Field.SEARCH_CRITERIA_NAME]);
-    }
-    
-    public Object getFieldValue() {
-    	return params[Field.SEARCH_CRITERIA_VALUE];
+    @Override
+    public Object[] getParams() {
+    	return new Object[] { fieldName, fieldValue };
     }
 
 }
