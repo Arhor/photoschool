@@ -26,7 +26,10 @@ class ExceptionController(@Autowired private val messageSource: MessageSource) e
   @ResponseStatus(HttpStatus.NOT_FOUND)
   def handleEntityNotFound(ex: EntityNotFoundException, request: WebRequest): ApiError = {
     log.error("Resource not found", ex)
-    ApiError(HttpStatus.NOT_FOUND, extractCause(ex, request))
+    ApiError(
+      HttpStatus.NOT_FOUND,
+      List(extractCause(ex, request))
+    )
   }
 
   private def extractCause(ex: LocalizedException, request: WebRequest): Error =

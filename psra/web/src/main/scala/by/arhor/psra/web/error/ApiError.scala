@@ -13,7 +13,7 @@ object ApiError {
   val serialVersionUID: Long = CoreVersion.SERIAL_VERSION_UID
 }
 
-case class ApiError(@BeanProperty val status: HttpStatus, @BeanProperty val errors: Error*) extends Serializable {
+case class ApiError(@BeanProperty status: HttpStatus, @BeanProperty errors: List[Error]) extends Serializable {
 
   @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy hh:mm:ss")
   @BeanProperty
