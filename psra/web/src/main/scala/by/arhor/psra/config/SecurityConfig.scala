@@ -30,6 +30,7 @@ class SecurityConfig @Autowired() (@Qualifier("userServiceImpl")
     .csrf().disable()
     .authorizeRequests()
     .antMatchers("/api/oauth/token").permitAll()
+    .anyRequest().permitAll() // TODO: in dev purpose only!
 
 
   @throws(classOf[Exception])

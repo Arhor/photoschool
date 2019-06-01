@@ -13,10 +13,9 @@ object ApiError {
   val serialVersionUID: Long = CoreVersion.SERIAL_VERSION_UID
 }
 
-case class ApiError(status: HttpStatus, errors: Error*) extends Serializable {
+case class ApiError(@BeanProperty val status: HttpStatus, @BeanProperty val errors: Error*) extends Serializable {
 
-  // if it fails - try to remove 'T' from the pattern
-  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyyThh:mm:ss")
+  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy hh:mm:ss")
   @BeanProperty
   val timestamp: LocalDateTime = LocalDateTime.now()
 
