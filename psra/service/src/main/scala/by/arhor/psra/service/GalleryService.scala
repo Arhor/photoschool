@@ -5,6 +5,8 @@ import by.arhor.psra.model.Gallery
 trait GalleryService extends Service {
 
   override type Entity = Gallery
-  override type  ID = String
+  override type ID = String
+
+  def findGalleriesByUserId(uid: String): List[Gallery]
 
 }

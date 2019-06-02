@@ -13,8 +13,7 @@ object User {
 }
 
 @Document("users")
-class User extends Entity
-              with Identifiable {
+class User extends Entity {
 
   @Indexed(unique = true)
   @BeanProperty
@@ -26,7 +25,7 @@ class User extends Entity
   @BeanProperty
   var role: Roles = ROLE_GUEST
 
-  @DBRef
+  @DBRef(`lazy` = true)
   var galleries: List[Gallery] = Nil
 
   override def toString: String = s"${getClass.getSimpleName} [" +
@@ -36,7 +35,6 @@ class User extends Entity
     s"dateTimeUpdated=$dateTimeUpdated, " +
     s"username=$username, " +
     s"password=$password, " +
-    s"role=$role, " +
-    s"galleries=$galleries]"
+    s"role=$role]"
 
 }

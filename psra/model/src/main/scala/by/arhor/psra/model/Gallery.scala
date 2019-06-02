@@ -1,33 +1,28 @@
 package by.arhor.psra.model
 
 import by.arhor.psra.CoreVersion
+import by.arhor.psra.model.enums.Visibilities.Visibilities
 import by.arhor.psra.model.traits.Identifiable
-import org.springframework.data.mongodb.core.mapping.Document
+import org.springframework.data.mongodb.core.mapping.{DBRef, Document}
 
 import scala.beans.BeanProperty
 
-object Photo {
+object Gallery {
   val serialVersionUID: Long = CoreVersion.SERIAL_VERSION_UID
 }
 
-@Document("photos")
-class Photo extends Entity
-               with Identifiable {
-  
+@Document("galleries")
+class Gallery extends Entity {
+
   @BeanProperty
   var name: String = _
-  
-  @BeanProperty
-  var description: String = _
 
   @BeanProperty
-  var path: String = _
+  var visibility: Visibilities = _
 
+  @DBRef
   @BeanProperty
-  var tags: Set[Tag] = Set.empty[Tag]
-  
-  @BeanProperty
-  var comments: List[Comment] = Nil
+  var  photos: List[Photo] = Nil
 
   override def toString: String = s"${getClass.getSimpleName} [" +
     s"id=$id, " +
@@ -35,8 +30,6 @@ class Photo extends Entity
     s"dateTimeCreated=$dateTimeCreated, " +
     s"dateTimeUpdated=$dateTimeUpdated, " +
     s"name=$name, " +
-    s"description=$description, " +
-    s"path=$path, " +
-    s"tags=$tags, " +
-    s"comments=$comments]"
+    s"visibility=${visibility}]"
+
 }

@@ -2,42 +2,29 @@ package by.arhor.psra.model
 
 import by.arhor.psra.CoreVersion
 import by.arhor.psra.model.traits.Identifiable
-import org.springframework.data.mongodb.core.index.Indexed
 import org.springframework.data.mongodb.core.mapping.{DBRef, Document}
 
 import scala.beans.BeanProperty
 
-object Course {
+object Comment {
   val serialVersionUID: Long = CoreVersion.SERIAL_VERSION_UID
 }
 
-@Document("courses")
-class Course extends Entity
-                with Identifiable {
+@Document("comments")
+class Comment extends Entity {
 
-  @Indexed(unique = true)
   @BeanProperty
-  var name: String = _
+  var content: String = _
   
+  @DBRef(`lazy` = true)
   @BeanProperty
-  var description: String = _
-  
-  @DBRef
-  @BeanProperty
-  var teacher: User = _
-
-  @DBRef
-  @BeanProperty
-  var learners: List[User] = Nil
+  var user: User = _
 
   override def toString: String = s"${getClass.getSimpleName} [" +
     s"id=$id, " +
     s"enabled=$enabled, " +
     s"dateTimeCreated=$dateTimeCreated, " +
     s"dateTimeUpdated=$dateTimeUpdated, " +
-    s"name=$name, " +
-    s"description=$description, " +
-    s"teacher=$teacher, " +
-    s"learners=$learners]"
+    s"content=$content]"
 
 }
