@@ -1,9 +1,9 @@
 package by.arhor.psra.repository.model
 
 import by.arhor.psra.CoreVersion
-import by.arhor.psra.repository.model.enums.Visibilities.VisibilitiesEnum
+import by.arhor.psra.repository.model.enums.Visibilities.Visibilities
 import by.arhor.psra.repository.model.traits.Identifiable
-import org.springframework.data.mongodb.core.mapping.{DBRef, Document, Field}
+import org.springframework.data.mongodb.core.mapping.{DBRef, Document}
 
 import scala.beans.BeanProperty
 
@@ -19,10 +19,10 @@ class Gallery extends Entity
   var  name: String = _
 
   @BeanProperty
-  var visibility: VisibilitiesEnum = _
+  var visibility: Visibilities = _
     
   @DBRef
   @BeanProperty
-  var  photos: List[Photo] = _
+  var  photos: List[Photo] = Nil
 
 }

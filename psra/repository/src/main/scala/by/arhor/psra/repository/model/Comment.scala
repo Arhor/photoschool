@@ -21,4 +21,12 @@ class Comment extends Entity
   @BeanProperty
   var user: User = _
 
+  override def toString: String = s"${getClass.getSimpleName} [" +
+    s"id=$id, " +
+    s"enabled=$enabled, " +
+    s"dateTimeCreated=$dateTimeCreated, " +
+    s"dateTimeUpdated=$dateTimeUpdated, " +
+    s"content=$content, " +
+    s"user=$user]"
+
 }

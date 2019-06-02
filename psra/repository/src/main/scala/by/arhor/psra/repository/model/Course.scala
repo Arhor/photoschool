@@ -28,6 +28,16 @@ class Course extends Entity
 
   @DBRef
   @BeanProperty
-  var learners: List[User] = _
+  var learners: List[User] = Nil
+
+  override def toString: String = s"${getClass.getSimpleName} [" +
+    s"id=$id, " +
+    s"enabled=$enabled, " +
+    s"dateTimeCreated=$dateTimeCreated, " +
+    s"dateTimeUpdated=$dateTimeUpdated, " +
+    s"name=$name, " +
+    s"description=$description, " +
+    s"teacher=$teacher, " +
+    s"learners=$learners]"
   
 }

@@ -8,9 +8,4 @@ object Tag {
   val serialVersionUID: Long = CoreVersion.SERIAL_VERSION_UID
 }
 
-class Tag extends Serializable {
-
-  @BeanProperty
-  var name: String
-
-}
+case class Tag(@BeanProperty var name: String) extends Serializable

@@ -16,13 +16,13 @@ import org.springframework.test.context.junit4.SpringRunner
 @EnableAutoConfiguration
 class PhotoRepositoryTests extends AbstractRepositoryTests {
 	
-	val tags: List[Tag] = List(Tag("one"), Tag("two"), Tag("three"))
+	val tags: Set[Tag] = Set(Tag("one"), Tag("two"), Tag("three"))
 	
 	@Before
 	def methodSetUp(): Unit = {
 		val photo = new Photo()
 		photo.setPath("/user/photo_1.png")
-		photo.setTags(tags.toSet)
+		photo.setTags(tags)
 		photoRepository.insert(photo)
 	}
 	
