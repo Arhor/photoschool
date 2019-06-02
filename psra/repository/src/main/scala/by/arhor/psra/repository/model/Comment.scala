@@ -7,19 +7,18 @@ import org.springframework.data.mongodb.core.mapping.{DBRef, Document, Field}
 import scala.beans.BeanProperty
 
 object Comment {
-	val serialVersionUID: Long = CoreVersion.SERIAL_VERSION_UID
+  val serialVersionUID: Long = CoreVersion.SERIAL_VERSION_UID
 }
 
 @Document("comments")
 class Comment extends Entity
-	               with Identifiable {
+                 with Identifiable {
 
-	@Field("content")
-	@BeanProperty
-	var content: String = _
-	
-	@DBRef
-	@BeanProperty
-	var user: User = _
+  @BeanProperty
+  var content: String = _
+  
+  @DBRef
+  @BeanProperty
+  var user: User = _
 
 }

@@ -6,8 +6,7 @@ pluginManagement {
 
 rootProject.name = 'psra'
 
+include ':core'
 include ':repository'
 include ':service'
 include ':web'
-include ':core'
-

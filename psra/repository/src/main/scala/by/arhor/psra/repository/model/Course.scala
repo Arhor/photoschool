@@ -8,28 +8,26 @@ import org.springframework.data.mongodb.core.mapping.{DBRef, Document, Field}
 import scala.beans.BeanProperty
 
 object Course {
-	val serialVersionUID: Long = CoreVersion.SERIAL_VERSION_UID
+  val serialVersionUID: Long = CoreVersion.SERIAL_VERSION_UID
 }
 
 @Document("courses")
 class Course extends Entity
-	              with Identifiable {
+                with Identifiable {
 
-	@Field("name")
-	@Indexed(unique = true)
-	@BeanProperty
-	var name: String = _
-	
-	@Field("description")
-	@BeanProperty
-	var description: String = _
-	
-	@DBRef
-	@BeanProperty
-	var teacher: User = _
+  @Indexed(unique = true)
+  @BeanProperty
+  var name: String = _
+  
+  @BeanProperty
+  var description: String = _
+  
+  @DBRef
+  @BeanProperty
+  var teacher: User = _
 
-	@DBRef
-	@BeanProperty
-	var learners: List[User] = _
-	
+  @DBRef
+  @BeanProperty
+  var learners: List[User] = _
+  
 }

@@ -7,31 +7,26 @@ import org.springframework.data.mongodb.core.mapping.{Document, Field}
 import scala.beans.BeanProperty
 
 object Photo {
-	val serialVersionUID: Long = CoreVersion.SERIAL_VERSION_UID
+  val serialVersionUID: Long = CoreVersion.SERIAL_VERSION_UID
 }
 
 @Document("photos")
 class Photo extends Entity
-	             with Identifiable {
+               with Identifiable {
 
-	@Field("path")
-	@BeanProperty
-	var path: String = _
-	
-	@Field("name")
-	@BeanProperty
-	var name: String = _
-	
-	@Field("description")
-	@BeanProperty
-	var description: String = _
-	
-	@Field("tags")
-	@BeanProperty
-	var tags: Set[Tag] = _
-	
-	@Field("comments")
-	@BeanProperty
-	var comments: List[Comment] = _
+  @BeanProperty
+  var path: String = _
+  
+  @BeanProperty
+  var name: String = _
+  
+  @BeanProperty
+  var description: String = _
+  
+  @BeanProperty
+  var tags: Set[Tag] = _
+  
+  @BeanProperty
+  var comments: List[Comment] = _
     
 }

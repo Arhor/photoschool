@@ -8,29 +8,25 @@ import org.springframework.data.mongodb.core.mapping.{DBRef, Document, Field}
 
 import scala.beans.BeanProperty
 
-	object User {
-		val serialVersionUID: Long = CoreVersion.SERIAL_VERSION_UID
-	}
+object User {
+  val serialVersionUID: Long = CoreVersion.SERIAL_VERSION_UID
+}
 
 @Document("users")
 class User extends Entity
-	            with Identifiable {
+              with Identifiable {
 
-	@Field("username")
-	@Indexed(unique = true)
-	@BeanProperty
-	var username: String = _
+  @Indexed(unique = true)
+  @BeanProperty
+  var username: String = _
 
-	@Field("password")
-	@BeanProperty
-	var password: String = _
+  @BeanProperty
+  var password: String = _
 
-	@Field("role")
-	@BeanProperty
-	var role: RolesEnum = _
+  @BeanProperty
+  var role: RolesEnum = _
 
-	@DBRef
-	@BeanProperty
-	var galleries: List[Gallery] = _
+  @DBRef
+  var galleries: List[Gallery] = _
 
 }

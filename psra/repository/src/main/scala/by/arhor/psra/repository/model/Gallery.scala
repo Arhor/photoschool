@@ -5,21 +5,24 @@ import by.arhor.psra.repository.model.enums.Visibilities.VisibilitiesEnum
 import by.arhor.psra.repository.model.traits.Identifiable
 import org.springframework.data.mongodb.core.mapping.{DBRef, Document, Field}
 
+import scala.beans.BeanProperty
+
 object Gallery {
-	val serialVersionUID: Long = CoreVersion.SERIAL_VERSION_UID
+  val serialVersionUID: Long = CoreVersion.SERIAL_VERSION_UID
 }
 
 @Document("galleries")
 class Gallery extends Entity
-	               with Identifiable {
+                 with Identifiable {
 
-	@Field("name")
-	var  name: String = _
+  @BeanProperty
+  var  name: String = _
 
-	@Field("type")
-	var visibility: VisibilitiesEnum = _
+  @BeanProperty
+  var visibility: VisibilitiesEnum = _
     
-	@DBRef
-	var  photos: List[Photo] = _
+  @DBRef
+  @BeanProperty
+  var  photos: List[Photo] = _
 
 }

@@ -6,7 +6,6 @@ import scala.beans.BooleanBeanProperty
 
 trait Deletable {
 
-  @Field("enabled")
   @BooleanBeanProperty
   var enabled: Boolean = _
 

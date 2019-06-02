@@ -8,11 +8,9 @@ import scala.beans.BeanProperty
 
 trait Datable {
 
-  @Field("dateTimeCreated")
   @BeanProperty
   var dateTimeCreated: LocalDateTime = _
 
-  @Field("dateTimeUpdated")
   @BeanProperty
   var dateTimeUpdated: LocalDateTime = _
 

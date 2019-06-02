@@ -7,9 +7,8 @@ import scala.beans.BeanProperty
 
 trait Identifiable {
 
-	@Id
-	@Field("id")
-	@BeanProperty
-	var id: String = _
+  @Id
+  @BeanProperty
+  var id: String = _
 
 }
