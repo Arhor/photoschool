@@ -1,50 +1,42 @@
 package by.arhor.psra.service.impl
 
 import java.util
-import java.util.stream.Collectors.toList
 
-import by.arhor.psra.dto.GalleryDto
 import by.arhor.psra.exception.EntityNotFoundException
 import by.arhor.psra.localization.Error
-import by.arhor.psra.mapper.Mapper
+import by.arhor.psra.model.Gallery
 import by.arhor.psra.repository.GalleryRepository
-import by.arhor.psra.repository.model.Gallery
 import by.arhor.psra.service.GalleryService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
 @Service
-class GalleryServiceImpl @Autowired() (private val repository: GalleryRepository,
-																			 private val mapper: Mapper[Gallery, GalleryDto]) extends GalleryService {
+class GalleryServiceImpl @Autowired() (private val repository: GalleryRepository) extends GalleryService {
 
 	@Transactional(readOnly = true)
-	override def findOne(id: String): GalleryDto = repository.findById(id)
-		.map[GalleryDto] { mapper mapToDto _ }
+	override def findOne(id: String): Gallery = repository
+		.findById(id)
 		.orElseThrow { () => new EntityNotFoundException(Error.GALLERY_NOT_FOUND, "ID", id) }
 
 
 	@Transactional(readOnly = true)
-	override def findAll(): util.List[GalleryDto] = repository.findAll()
-  	.stream()
-  	.map[GalleryDto] { mapper.mapToDto(_) }
-  	.collect(toList())
+	override def findAll(): util.List[Gallery] = repository.findAll()
 
 	@Transactional
-	override def create(dto: GalleryDto): GalleryDto = mapper mapToDto (repository insert (mapper mapToEntity dto))
+	override def create(gallery: Gallery): Gallery = repository.insert(gallery)
 
 	@Transactional
-	override def update(dto: GalleryDto): GalleryDto = repository.findById(dto.getId)
-		.map[Gallery] { _ => mapper mapToEntity dto }
+	override def update(gallery: Gallery): Gallery = repository
+		.findById(gallery.getId)
 		.map[Gallery] { repository save _ }
-		.map[GalleryDto] { mapper mapToDto _ }
-		.orElseThrow { () => new EntityNotFoundException(Error.GALLERY_NOT_FOUND, "ID", dto.getId) }
+		.orElseThrow { () => new EntityNotFoundException(Error.GALLERY_NOT_FOUND, "ID", gallery.getId) }
 
 
 	@Transactional
-	override def delete(dto: GalleryDto): Unit = repository delete
+	override def delete(gallery: Gallery): Unit = repository delete
 		repository
-			.findById(dto.getId)
-			.orElseThrow { () => new EntityNotFoundException(Error.GALLERY_NOT_FOUND, "ID", dto.getId) }
+			.findById(gallery.getId)
+			.orElseThrow { () => new EntityNotFoundException(Error.GALLERY_NOT_FOUND, "ID", gallery.getId) }
 
 }

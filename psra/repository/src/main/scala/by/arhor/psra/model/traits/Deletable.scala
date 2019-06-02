@@ -1,4 +1,4 @@
-package by.arhor.psra.repository.model.traits
+package by.arhor.psra.model.traits
 
 import scala.beans.BooleanBeanProperty
 

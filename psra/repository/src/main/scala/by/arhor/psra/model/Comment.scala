@@ -1,8 +1,8 @@
-package by.arhor.psra.repository.model
+package by.arhor.psra.model
 
 import by.arhor.psra.CoreVersion
-import by.arhor.psra.repository.model.traits.Identifiable
-import org.springframework.data.mongodb.core.mapping.{DBRef, Document, Field}
+import by.arhor.psra.model.traits.Identifiable
+import org.springframework.data.mongodb.core.mapping.{DBRef, Document}
 
 import scala.beans.BeanProperty
 

@@ -1,6 +1,6 @@
-package by.arhor.psra.repository.model
+package by.arhor.psra.model
 
-import by.arhor.psra.repository.model.traits.{Datable, Deletable}
+import by.arhor.psra.model.traits.{Datable, Deletable}
 
 abstract class Entity extends Serializable
                          with Datable

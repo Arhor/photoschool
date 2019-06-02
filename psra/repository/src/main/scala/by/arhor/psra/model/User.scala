@@ -1,7 +1,8 @@
-package by.arhor.psra.repository.model
+package by.arhor.psra.model
 
 import by.arhor.psra.CoreVersion
-import by.arhor.psra.repository.model.traits.Identifiable
+import by.arhor.psra.model.enums.Roles._
+import by.arhor.psra.model.traits.Identifiable
 import org.springframework.data.mongodb.core.index.Indexed
 import org.springframework.data.mongodb.core.mapping.{DBRef, Document}
 
@@ -14,8 +15,6 @@ object User {
 @Document("users")
 class User extends Entity
               with Identifiable {
-
-  import by.arhor.psra.repository.model.enums.Roles._
 
   @Indexed(unique = true)
   @BeanProperty

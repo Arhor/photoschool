@@ -4,17 +4,17 @@ import java.util
 
 trait Service {
 	
-	type DTO
+	type Entity
 	type ID
 
-	def findOne(id: ID): DTO
+	def findOne(id: ID): Entity
 	
-	def findAll(): util.List[DTO]
+	def findAll(): util.List[Entity]
 	
-	def create(dto: DTO): DTO
+	def create(dto: Entity): Entity
 
-	def update(dto: DTO): DTO
+	def update(dto: Entity): Entity
 	
-	def delete(dto: DTO): Unit
+	def delete(dto: Entity): Unit
 	
 }

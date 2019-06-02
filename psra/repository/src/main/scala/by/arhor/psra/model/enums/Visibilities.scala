@@ -1,4 +1,4 @@
-package by.arhor.psra.repository.model.enums
+package by.arhor.psra.model.enums
 
 object Visibilities extends Enumeration {
 

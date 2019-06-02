@@ -1,4 +1,4 @@
-package by.arhor.psra.repository.model.enums
+package by.arhor.psra.model.enums
 
 object Roles extends Enumeration {
 

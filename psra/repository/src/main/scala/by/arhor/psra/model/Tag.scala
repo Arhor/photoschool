@@ -1,4 +1,4 @@
-package by.arhor.psra.repository.model
+package by.arhor.psra.model
 
 import by.arhor.psra.CoreVersion
 

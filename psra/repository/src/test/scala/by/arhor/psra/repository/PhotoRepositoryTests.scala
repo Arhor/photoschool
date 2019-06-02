@@ -1,10 +1,10 @@
 package by.arhor.psra.repository
+import by.arhor.psra.model.{Photo, Tag, User}
 import org.hamcrest.Matchers.is
 import org.hamcrest.Matchers.hasSize
 import org.hamcrest.Matchers.notNullValue
 import org.junit.Assert._
-
-import by.arhor.psra.repository.model.{Photo, Tag, User}
+import by.arhor.psra.repository.model.{Tag, User}
 import org.junit.{After, Before, Test}
 import org.junit.runner.RunWith
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration
@@ -49,6 +49,11 @@ class PhotoRepositoryTests extends AbstractRepositoryTests {
 		userRepository.insert(user)
 
 		println((userRepository findByUsername "tester").get.username)
+	}
+
+	@Test
+	def test(): Unit = {
+		galleryRepository.findAll().forEach(println)
 	}
 
 }

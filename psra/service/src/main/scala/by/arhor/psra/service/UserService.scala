@@ -1,11 +1,11 @@
 package by.arhor.psra.service
 
-import by.arhor.psra.dto.UserDto
+import by.arhor.psra.model.User
 import org.springframework.security.core.userdetails.UserDetailsService
 
 trait UserService extends Service with UserDetailsService {
 
-  override type DTO = UserDto
+  override type Entity = User
   override type ID  = String
 
 }

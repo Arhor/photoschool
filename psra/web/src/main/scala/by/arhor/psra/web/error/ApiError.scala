@@ -2,6 +2,7 @@ package by.arhor.psra.web.error
 
 import java.io.Serializable
 import java.time.LocalDateTime
+import java.util
 
 import by.arhor.psra.CoreVersion
 import com.fasterxml.jackson.annotation.JsonFormat
@@ -14,7 +15,7 @@ object ApiError {
 }
 
 case class ApiError(@BeanProperty status: HttpStatus,
-                    @BeanProperty errors: List[Error]) extends Serializable {
+                    @BeanProperty errors: util.List[Error]) extends Serializable {
 
   @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy hh:mm:ss")
   @BeanProperty
