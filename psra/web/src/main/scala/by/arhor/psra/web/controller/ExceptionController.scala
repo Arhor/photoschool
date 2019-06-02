@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.{ExceptionHandler, ResponseStatus
 import org.springframework.web.context.request.WebRequest
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler
 
+import collection.JavaConverters._
+
 object ExceptionController {
   private val log = LoggerFactory.getLogger(classOf[ExceptionController])
 }
@@ -28,7 +30,7 @@ class ExceptionController(@Autowired private val messageSource: MessageSource) e
     log.error("Resource not found", ex)
     ApiError(
       HttpStatus.NOT_FOUND,
-      List(extractCause(ex, request))
+      List(extractCause(ex, request)).asJava
     )
   }
 

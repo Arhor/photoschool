@@ -39,5 +39,5 @@ class Course extends Entity
     s"description=$description, " +
     s"teacher=$teacher, " +
     s"learners=$learners]"
-  
+
 }
