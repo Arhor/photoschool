@@ -16,7 +16,7 @@ class Comment extends Entity {
   @BeanProperty
   var content: String = _
   
-  @DBRef(`lazy` = true)
+  @DBRef/*(`lazy` = true)*/
   @BeanProperty
   var user: User = _
 
@@ -25,6 +25,7 @@ class Comment extends Entity {
     s"enabled=$enabled, " +
     s"dateTimeCreated=$dateTimeCreated, " +
     s"dateTimeUpdated=$dateTimeUpdated, " +
-    s"content=$content]"
+    s"content=$content, " +
+    s"user=$user]"
 
 }

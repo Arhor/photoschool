@@ -1,7 +1,7 @@
 package by.arhor.psra.model
 
 import by.arhor.psra.CoreVersion
-import by.arhor.psra.model.traits.Identifiable
+import com.fasterxml.jackson.annotation.JsonIgnore
 import org.springframework.data.mongodb.core.index.Indexed
 import org.springframework.data.mongodb.core.mapping.{DBRef, Document}
 
@@ -20,11 +20,13 @@ class Course extends Entity {
   
   @BeanProperty
   var description: String = _
-  
+
+  @JsonIgnore
   @DBRef(`lazy` = true)
   @BeanProperty
   var teacher: User = _
 
+  @JsonIgnore
   @DBRef(`lazy` = true)
   @BeanProperty
   var learners: List[User] = Nil

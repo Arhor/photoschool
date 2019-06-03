@@ -9,4 +9,6 @@ trait UserService extends Service
   override type Entity = User
   override type ID = String
 
+  def findLearnersByCourseId(cid: ID): List[User]
+
 }

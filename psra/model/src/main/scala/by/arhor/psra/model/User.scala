@@ -2,7 +2,7 @@ package by.arhor.psra.model
 
 import by.arhor.psra.CoreVersion
 import by.arhor.psra.model.enums.Roles._
-import by.arhor.psra.model.traits.Identifiable
+import com.fasterxml.jackson.annotation.JsonIgnore
 import org.springframework.data.mongodb.core.index.Indexed
 import org.springframework.data.mongodb.core.mapping.{DBRef, Document}
 
@@ -25,6 +25,8 @@ class User extends Entity {
   @BeanProperty
   var role: Roles = ROLE_GUEST
 
+  @JsonIgnore
+  @BeanProperty
   @DBRef(`lazy` = true)
   var galleries: List[Gallery] = Nil
 

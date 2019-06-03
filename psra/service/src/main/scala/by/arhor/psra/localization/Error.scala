@@ -4,13 +4,17 @@ import scala.beans.BeanProperty
 
 object Error {
 
-  sealed abstract class ErrorLabels(@BeanProperty val value: String) extends Label
+  sealed abstract class ErrorLabel(@BeanProperty val value: String) extends Label
 
-  case object GALLERY_NOT_FOUND extends ErrorLabels("error.not.found.gallery")
-  case object PHOTO_NOT_FOUND   extends ErrorLabels("error.not.found.photo")
-  case object USER_NOT_FOUND    extends ErrorLabels("error.not.found.user")
+  case object COMMENT_NOT_FOUND extends ErrorLabel("error.not.found.comment")
+  case object COURSE_NOT_FOUND  extends ErrorLabel("error.not.found.course")
+  case object GALLERY_NOT_FOUND extends ErrorLabel("error.not.found.gallery")
+  case object PHOTO_NOT_FOUND   extends ErrorLabel("error.not.found.photo")
+  case object USER_NOT_FOUND    extends ErrorLabel("error.not.found.user")
 
-  val values: Seq[Label] = Seq(
+  def values: Seq[Label] = Seq(
+    COMMENT_NOT_FOUND,
+    COURSE_NOT_FOUND,
     GALLERY_NOT_FOUND,
     PHOTO_NOT_FOUND,
     USER_NOT_FOUND

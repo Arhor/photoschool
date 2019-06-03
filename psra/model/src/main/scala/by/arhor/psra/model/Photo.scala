@@ -1,8 +1,8 @@
 package by.arhor.psra.model
 
 import by.arhor.psra.CoreVersion
-import by.arhor.psra.model.traits.Identifiable
-import org.springframework.data.mongodb.core.mapping.Document
+import com.fasterxml.jackson.annotation.JsonIgnore
+import org.springframework.data.mongodb.core.mapping.{DBRef, Document}
 
 import scala.beans.BeanProperty
 
@@ -25,6 +25,7 @@ class Photo extends Entity {
   @BeanProperty
   var tags: Set[Tag] = Set.empty[Tag]
 
+  @JsonIgnore
   @BeanProperty
   @DBRef(`lazy` = true)
   var comments: List[Comment] = Nil
