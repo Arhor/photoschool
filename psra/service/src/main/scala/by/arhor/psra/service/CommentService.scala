@@ -1,12 +1,14 @@
 package by.arhor.psra.service
 
-import by.arhor.psra.model.Comment
+import java.util
+
+import by.arhor.psra.dto.CommentDTO
 
 trait CommentService extends Service {
 
-  type Entity = Comment
-  type ID = String
+  type DTO = CommentDTO
+  type ID  = String
 
-  def findCommentsByPhotoId(pid: ID): List[Comment]
+  def findCommentsByPhotoId(pid: ID): util.List[CommentDTO]
 
 }

@@ -20,7 +20,7 @@ object WebApplication extends App {
 
   @Bean
   def messageSource(): MessageSource = {
-    val messageSource = new ResourceBundleMessageSource()
+    val messageSource = new ResourceBundleMessageSource
     messageSource.setBasename("messages")
     messageSource
   }
@@ -30,7 +30,7 @@ object WebApplication extends App {
 
   @Bean
   def accessTokenConverter(): JwtAccessTokenConverter = {
-    val converter = new JwtAccessTokenConverter()
+    val converter = new JwtAccessTokenConverter
     converter.setSigningKey("key")
     converter
   }
@@ -41,12 +41,12 @@ object WebApplication extends App {
   @Bean
   @Primary
   def tokenServices(store: TokenStore): DefaultTokenServices = {
-    val defaultTokenServices = new DefaultTokenServices()
+    val defaultTokenServices = new DefaultTokenServices
     defaultTokenServices.setTokenStore(store)
     defaultTokenServices
   }
 
   @Bean
-  def tokenEnhancer(): TokenEnhancer = new UserRoleTokenEnhancer()
+  def tokenEnhancer(): TokenEnhancer = new UserRoleTokenEnhancer
 
 }

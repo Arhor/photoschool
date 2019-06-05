@@ -1,5 +1,7 @@
 package by.arhor.psra.model
 
+import java.util
+
 import by.arhor.psra.CoreVersion
 import com.fasterxml.jackson.annotation.JsonIgnore
 import org.springframework.data.mongodb.core.index.Indexed
@@ -29,7 +31,7 @@ class Course extends Entity {
   @JsonIgnore
   @DBRef(`lazy` = true)
   @BeanProperty
-  var learners: List[User] = Nil
+  var learners: util.List[User] = _
 
   override def toString: String = s"${getClass.getSimpleName} [" +
     s"id=$id, " +

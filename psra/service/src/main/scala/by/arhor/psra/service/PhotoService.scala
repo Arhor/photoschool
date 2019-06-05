@@ -1,12 +1,15 @@
 package by.arhor.psra.service
 
-import by.arhor.psra.model.{Photo, Tag, User}
+import java.util
+
+import by.arhor.psra.dto.PhotoDTO
+import by.arhor.psra.model.User
 
 trait PhotoService extends Service {
 
-  override type Entity = Photo
+  override type DTO = PhotoDTO
   override type ID  = String
 
-  def findPhotosByTag(tag: Tag, requester: User): List[Photo]
+  def findPhotosByTag(tag: String, requester: User): util.List[PhotoDTO]
 
 }

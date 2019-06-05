@@ -9,7 +9,7 @@ import java.util
  */
 trait Service {
 
-  type Entity
+  type DTO
   type ID
 
   /**
@@ -18,14 +18,14 @@ trait Service {
    * @param  id enitity's identifier
    * @return entity object instance
    */
-  def findOne(id: ID): Entity
+  def findOne(id: ID): DTO
 
-  def findAll(): util.List[Entity]
+  def findAll(): util.List[DTO]
 
-  def create(dto: Entity): Entity
+  def create(dto: DTO): DTO
 
-  def update(dto: Entity): Entity
+  def update(dto: DTO): DTO
 
-  def delete(dto: Entity): Unit
+  def delete(dto: DTO): Unit
 
 }

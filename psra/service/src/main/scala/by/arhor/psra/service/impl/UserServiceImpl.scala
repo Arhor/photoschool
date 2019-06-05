@@ -39,5 +39,5 @@ class UserServiceImpl @Autowired() (private val repository: UserRepository,
 
 	@Transactional
 	override def delete(user: User): Unit = ??? // TODO Auto-generated method stub
-
+	override def findLearnersByCourseId(cid: String): util.List[User] = ???
 }

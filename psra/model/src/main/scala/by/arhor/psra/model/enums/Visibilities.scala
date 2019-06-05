@@ -1,11 +1,11 @@
 package by.arhor.psra.model.enums
 
-object Visibilities extends Enumeration {
+object Visibilities {
 
-  type Visibilities = Value
+  sealed trait Visibility
 
-  val PUBLIC    = Value("PUBLIC")
-  val PROTECTED = Value("PROTECTED")
-  val PRIVATE   = Value("PRIVATE")
+  case object PUBLIC    extends Visibility
+  case object PROTECTED extends Visibility
+  case object PRIVATE   extends Visibility
 
 }

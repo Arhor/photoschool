@@ -1,5 +1,7 @@
 package by.arhor.psra.model
 
+import java.util
+
 import by.arhor.psra.CoreVersion
 import com.fasterxml.jackson.annotation.JsonIgnore
 import org.springframework.data.mongodb.core.mapping.{DBRef, Document}
@@ -23,12 +25,12 @@ class Photo extends Entity {
   var path: String = _
 
   @BeanProperty
-  var tags: Set[Tag] = Set.empty[Tag]
+  var tags: util.Set[String] = _
 
   @JsonIgnore
   @BeanProperty
   @DBRef(`lazy` = true)
-  var comments: List[Comment] = Nil
+  var comments: util.List[Comment] = _
 
   override def toString: String = s"${getClass.getSimpleName} [" +
     s"id=$id, " +

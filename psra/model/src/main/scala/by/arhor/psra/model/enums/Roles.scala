@@ -1,12 +1,12 @@
 package by.arhor.psra.model.enums
 
-object Roles extends Enumeration {
+object Roles {
 
-  type Roles = Value
+  sealed trait Role
 
-  val ROLE_GUEST   = Value("ROLE_GUEST")
-  val ROLE_USER    = Value("ROLE_USER")
-  val ROLE_MANAGER = Value("ROLE_MANAGER")
-  val ROLE_ADMIN   = Value("ROLE_ADMIN")
+  case object ROLE_GUEST   extends Role
+  case object ROLE_USER    extends Role
+  case object ROLE_MANAGER extends Role
+  case object ROLE_ADMIN   extends Role
 
 }

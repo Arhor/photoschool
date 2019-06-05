@@ -5,7 +5,7 @@ import java.util
 import by.arhor.psra.exception.EntityNotFoundException
 import by.arhor.psra.localization.Error
 import by.arhor.psra.model.Gallery
-import by.arhor.psra.repository.GalleryRepository
+import by.arhor.psra.repository.{GalleryRepository, UserRepository}
 import by.arhor.psra.service.GalleryService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
@@ -41,9 +41,9 @@ class GalleryServiceImpl @Autowired() (private val repository: GalleryRepository
       .orElseThrow { () => new EntityNotFoundException(Error.GALLERY_NOT_FOUND, "ID", gallery.getId) }
 
   @Transactional(readOnly = true)
-  override def findGalleriesByUserId(uid: String): List[Gallery] = userRepository
+  override def findGalleriesByUserId(uid: String): util.List[Gallery] = userRepository
     .findById(uid)
-    .map[List[Gallery]] { _.getGalleries() }
+    .map[util.List[Gallery]] { _.getGalleries }
     .orElseThrow { () => new EntityNotFoundException(Error.USER_NOT_FOUND, "ID", uid) }
 
 }

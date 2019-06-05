@@ -1,5 +1,7 @@
 package by.arhor.psra.model
 
+import java.util
+
 import by.arhor.psra.CoreVersion
 import by.arhor.psra.model.enums.Roles._
 import com.fasterxml.jackson.annotation.JsonIgnore
@@ -23,12 +25,12 @@ class User extends Entity {
   var password: String = _
 
   @BeanProperty
-  var role: Roles = ROLE_GUEST
+  var role: Role = _
 
   @JsonIgnore
   @BeanProperty
   @DBRef(`lazy` = true)
-  var galleries: List[Gallery] = Nil
+  var galleries: util.List[Gallery] = _
 
   override def toString: String = s"${getClass.getSimpleName} [" +
     s"id=$id, " +

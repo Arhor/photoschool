@@ -1,12 +1,14 @@
 package by.arhor.psra.service
 
-import by.arhor.psra.model.Gallery
+import java.util
+
+import by.arhor.psra.dto.GalleryDTO
 
 trait GalleryService extends Service {
 
-  override type Entity = Gallery
-  override type ID = String
+  override type DTO = GalleryDTO
+  override type ID  = String
 
-  def findGalleriesByUserId(uid: ID): List[Gallery]
+  def findGalleriesByUserId(uid: ID): util.List[GalleryDTO]
 
 }

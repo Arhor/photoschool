@@ -1,7 +1,9 @@
 package by.arhor.psra.model
 
+import java.util
+
 import by.arhor.psra.CoreVersion
-import by.arhor.psra.model.enums.Visibilities.Visibilities
+import by.arhor.psra.model.enums.Visibilities.Visibility
 import org.springframework.data.mongodb.core.mapping.{DBRef, Document}
 
 import scala.beans.BeanProperty
@@ -17,11 +19,11 @@ class Gallery extends Entity {
   var name: String = _
 
   @BeanProperty
-  var visibility: Visibilities = _
+  var visibility: Visibility = _
 
-  @DBRef
+  @DBRef(`lazy` = true)
   @BeanProperty
-  var  photos: List[Photo] = Nil
+  var  photos: util.List[Photo] = _
 
   override def toString: String = s"${getClass.getSimpleName} [" +
     s"id=$id, " +
@@ -29,7 +31,6 @@ class Gallery extends Entity {
     s"dateTimeCreated=$dateTimeCreated, " +
     s"dateTimeUpdated=$dateTimeUpdated, " +
     s"name=$name, " +
-    s"visibility=$visibility, " +
-    s"photos=$photos]"
+    s"visibility=$visibility]"
 
 }

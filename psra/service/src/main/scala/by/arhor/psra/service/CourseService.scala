@@ -1,10 +1,10 @@
 package by.arhor.psra.service
 
-import by.arhor.psra.model.Course
+import by.arhor.psra.dto.CourseDTO
 
 trait CourseService extends Service {
 
-  type Entity = Course
-  type ID = String
+  type DTO = CourseDTO
+  type ID  = String
 
 }

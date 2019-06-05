@@ -19,6 +19,12 @@ spring:
 
 ############################## Logging ##############################
 
-# logging:
-#    level:
-#       root: DEBUG
+logging:
+   level:
+      root: DEBUG
+      org:
+         springframework:
+            data:
+               mongodb:
+                  core:
+                     MongoTemplate: DEBUG
