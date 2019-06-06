@@ -2,15 +2,22 @@ package by.arhor.psra.service
 
 import java.util
 
-import by.arhor.psra.dto.UserDTO
-import org.springframework.security.core.userdetails.UserDetailsService
+import by.arhor.psra.dto.UserDto
+import by.arhor.psra.model.User
+import org.modelmapper.ModelMapper
 
-trait UserService extends Service
-                     with UserDetailsService {
+trait UserService extends Service {
 
-  override type DTO = UserDTO
-  override type ID  = String
+  override type Model = User
+  override type Dto   = UserDto
+  override type Id    = String
 
-  def findLearnersByCourseId(cid: ID): util.List[UserDTO]
+  protected val modelMapper: ModelMapper
+
+  def findLearnersByCourseId(cid: Id): util.List[UserDto]
+
+  protected def mapToDTO(model: Model): Dto = modelMapper.map[Dto] (model, classOf[Dto])
+
+  protected def mapToEntity(dto: Dto): Model = modelMapper.map[Model] (dto, classOf[Model])
 
 }

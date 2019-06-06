@@ -10,6 +10,8 @@ dependencies {
 	implementation project(":service")
 
     implementation 'org.scala-lang:scala-library:2.12.8'
+
+    implementation 'com.google.code.findbugs:jsr305:3.0.2'
     
     implementation 'jakarta.activation:jakarta.activation-api:1.2.1'
     implementation 'jakarta.xml.bind:jakarta.xml.bind-api:2.3.2'
@@ -29,4 +31,3 @@ dependencies {
 }
 
 description = 'web'
-

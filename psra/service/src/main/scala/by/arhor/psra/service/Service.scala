@@ -2,6 +2,8 @@ package by.arhor.psra.service
 
 import java.util
 
+import org.modelmapper.ModelMapper
+
 /**
  * 
  * @author Maksim Buryshynets
@@ -9,8 +11,9 @@ import java.util
  */
 trait Service {
 
-  type DTO
-  type ID
+  type Model
+  type Dto
+  type Id
 
   /**
    * Method serves to fetch an entity by it's ID.
@@ -18,14 +21,14 @@ trait Service {
    * @param  id enitity's identifier
    * @return entity object instance
    */
-  def findOne(id: ID): DTO
+  def findOne(id: Id): Dto
 
-  def findAll(): util.List[DTO]
+  def findAll(): util.List[Dto]
 
-  def create(dto: DTO): DTO
+  def create(dto: Dto): Dto
 
-  def update(dto: DTO): DTO
+  def update(dto: Dto): Dto
 
-  def delete(dto: DTO): Unit
+  def delete(dto: Dto): Unit
 
 }

@@ -4,7 +4,7 @@ import java.time.LocalDateTime
 
 import scala.beans.BeanProperty
 
-class GalleryDTO {
+class CommentDto {
 
   @BeanProperty var id: String = _
   @BeanProperty var dateTimeCreated: LocalDateTime = _
