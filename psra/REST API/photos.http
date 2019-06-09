@@ -4,10 +4,10 @@
 
 ### Fetch all photos ###
 GET http://localhost:8080/api/photos HTTP/1.1
-
 Accept: application/json
 
 ### Fetch photo by it's ID ###
-GET uhttp://localhost:8080/api/photos/{{id}} HTTP/1.1
-
+GET http://localhost:8080/api/photos/{{id}} HTTP/1.1
 Accept: application/json
+
+###
