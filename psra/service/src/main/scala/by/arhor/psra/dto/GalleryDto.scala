@@ -1,14 +1,29 @@
 package by.arhor.psra.dto
 
-import java.time.LocalDateTime
+import java.util.Objects
+
+import by.arhor.psra.model.enums.Visibilities.Visibility
 
 import scala.beans.BeanProperty
 
-class GalleryDto {
+class GalleryDto extends Dto {
 
-  @BeanProperty var id: String = _
-  @BeanProperty var dateTimeCreated: LocalDateTime = _
-  @BeanProperty var dateTimeUpdated: LocalDateTime = _
-  @BeanProperty var enabled: Boolean = true
+  @BeanProperty var name: String = _
+  @BeanProperty var visibility: Visibility = _
+
+  override def equals(obj: Any): Boolean = {
+    if (super.equals(obj) && getClass == obj.getClass) {
+      val gallery = obj.asInstanceOf[GalleryDto]
+      Objects.equals(name, gallery.name) &&
+      Objects.equals(visibility, gallery.visibility)
+    } else {
+      false
+    }
+  }
+
+  override def hashCode(): Int = super.hashCode() + Objects.hash(
+    getName,
+    getVisibility
+  )
 
 }

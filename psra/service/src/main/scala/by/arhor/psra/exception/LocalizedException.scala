@@ -10,9 +10,6 @@ object LocalizedException {
 }
 
 abstract class LocalizedException extends RuntimeException {
-
 	def getLabel: String
-
 	def getParams: Array[AnyRef]
-
 }

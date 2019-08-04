@@ -1,14 +1,27 @@
 package by.arhor.psra.dto
 
-import java.time.LocalDateTime
+import java.util.Objects
 
 import scala.beans.BeanProperty
 
-class CommentDto {
+class CommentDto extends Dto {
 
-  @BeanProperty var id: String = _
-  @BeanProperty var dateTimeCreated: LocalDateTime = _
-  @BeanProperty var dateTimeUpdated: LocalDateTime = _
-  @BeanProperty var enabled: Boolean = true
+  @BeanProperty var content: String = _
+  @BeanProperty var user: UserDto = _
+
+  override def equals(obj: Any): Boolean = {
+    if (super.equals(obj) && getClass == obj.getClass) {
+      val comment = obj.asInstanceOf[CommentDto]
+      Objects.equals(content, comment.content) &&
+      Objects.equals(user, comment.user)
+    } else {
+      false
+    }
+  }
+
+  override def hashCode(): Int = super.hashCode() + Objects.hash(
+    getContent,
+    getUser
+  )
 
 }

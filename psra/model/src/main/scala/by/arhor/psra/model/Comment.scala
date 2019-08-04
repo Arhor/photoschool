@@ -1,5 +1,7 @@
 package by.arhor.psra.model
 
+import java.util.Objects
+
 import by.arhor.psra.CoreVersion
 import org.springframework.data.mongodb.core.mapping.{DBRef, Document}
 
@@ -15,9 +17,24 @@ class Comment extends Entity {
   @BeanProperty
   var content: String = _
   
-  @DBRef/*(`lazy` = true)*/
+  @DBRef
   @BeanProperty
   var user: User = _
+
+  override def equals(obj: Any): Boolean = {
+    if (super.equals(obj) && getClass == obj.getClass) {
+      val comment = obj.asInstanceOf[Comment]
+      Objects.equals(content, comment.content) &&
+      Objects.equals(user, comment.user)
+    } else {
+      false
+    }
+  }
+
+  override def hashCode(): Int = super.hashCode() + Objects.hash(
+    getContent,
+    getUser
+  )
 
   override def toString: String = s"${getClass.getSimpleName} [" +
     s"id=$id, " +

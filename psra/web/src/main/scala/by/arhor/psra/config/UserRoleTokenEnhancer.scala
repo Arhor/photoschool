@@ -8,16 +8,16 @@ import org.springframework.security.oauth2.provider.token.TokenEnhancer
 
 class UserRoleTokenEnhancer extends TokenEnhancer {
 
-    override
-    def enhance(token: OAuth2AccessToken, auth: OAuth2Authentication): OAuth2AccessToken = {
-        val scopes = auth.getUserAuthentication
-          .getAuthorities
-          .stream
-          .map[String] { _.getAuthority }
-          .collect(toSet())
+  override def enhance(token: OAuth2AccessToken, auth: OAuth2Authentication): OAuth2AccessToken = {
+    val scopes = auth
+      .getUserAuthentication
+      .getAuthorities
+      .stream
+      .map[String] { _.getAuthority }
+      .collect(toSet())
 
-        token.asInstanceOf[DefaultOAuth2AccessToken].setScope(scopes)
-        token
-    }
+    token.asInstanceOf[DefaultOAuth2AccessToken].setScope(scopes)
+    token
+  }
 
 }

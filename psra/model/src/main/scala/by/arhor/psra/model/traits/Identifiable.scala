@@ -10,6 +10,6 @@ trait Identifiable extends Comparable[Identifiable] {
   @BeanProperty
   var id: String = _
 
-  override def compareTo(that: Identifiable): Int = this.id compareTo that.id
+  override def compareTo(that: Identifiable): Int = this.id.compareTo(that.id)
 
 }

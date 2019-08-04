@@ -1,4 +1,4 @@
-package by.arhor.psra.config;
+package by.arhor.psra.config
 
 import org.modelmapper.ModelMapper
 import org.springframework.context.annotation.{Bean, Configuration}

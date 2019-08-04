@@ -11,5 +11,6 @@ object Codes extends Enumeration {
   implicit def valueToCodeVal(x: Value): Code = x.asInstanceOf[Code]
 
   val NOT_FOUND = Code("10001")
+  val INVALID_JSON = Code("10002")
 
 }

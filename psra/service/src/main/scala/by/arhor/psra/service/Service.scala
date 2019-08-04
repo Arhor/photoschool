@@ -2,33 +2,32 @@ package by.arhor.psra.service
 
 import java.util
 
+import by.arhor.psra.dto.Dto
+import by.arhor.psra.model.Entity
 import org.modelmapper.ModelMapper
 
-/**
- * 
- * @author Maksim Buryshynets
- * @version 1.0, 02 Jun 2019
- */
+import scala.reflect.ClassTag
+
 trait Service {
 
-  type Model
-  type Dto
-  type Id
+  type M <: Entity
+  type D <: Dto
+  type K
 
-  /**
-   * Method serves to fetch an entity by it's ID.
-   *
-   * @param  id enitity's identifier
-   * @return entity object instance
-   */
-  def findOne(id: Id): Dto
+  def findOne(id: K): D
+  def findAll(): util.List[D]
+  def create(dto: D): D
+  def update(dto: D): D
+  def delete(dto: D): Unit
 
-  def findAll(): util.List[Dto]
+  protected val modelMapper: ModelMapper
 
-  def create(dto: Dto): Dto
+  def mapToDto(model: M)(implicit tag: ClassTag[D]): D = {
+    modelMapper.map[D] (model, tag.runtimeClass.asInstanceOf[Class[D]])
+  }
 
-  def update(dto: Dto): Dto
-
-  def delete(dto: Dto): Unit
+  def mapToEntity(dto: D)(implicit tag: ClassTag[M]): M = {
+    modelMapper.map[M] (dto, tag.runtimeClass.asInstanceOf[Class[M]])
+  }
 
 }

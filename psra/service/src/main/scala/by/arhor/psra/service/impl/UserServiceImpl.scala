@@ -25,7 +25,7 @@ class UserServiceImpl @Autowired() (
 	override protected val modelMapper: ModelMapper
 
 ) extends UserService
-     with UserDetailsService{
+     with UserDetailsService {
 
 	@throws(classOf[UsernameNotFoundException])
 	@Transactional(readOnly = true)
@@ -38,7 +38,7 @@ class UserServiceImpl @Autowired() (
 	override def findAll(): util.List[UserDto] = repository
 		.findAll()
 		.stream()
-		.map[UserDto] { mapToDTO }
+		.map[UserDto] { mapToDto }
 		.collect(toList())
 
 	override def create(dto: UserDto): UserDto = {
@@ -47,7 +47,7 @@ class UserServiceImpl @Autowired() (
 		lazy val user: User = mapToEntity(dto) // lazy?
 		user.setPassword(encoder.encode(user.getPassword))
 		lazy val created: User = repository.insert(user) // lazy?
-		mapToDTO(created)
+		mapToDto(created)
 	}
 
 	override def update(dto: UserDto): UserDto = ??? // TODO Auto-generated method stub

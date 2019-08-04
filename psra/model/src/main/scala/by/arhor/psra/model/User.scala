@@ -1,6 +1,7 @@
 package by.arhor.psra.model
 
 import java.util
+import java.util.Objects
 
 import by.arhor.psra.CoreVersion
 import by.arhor.psra.model.enums.Roles._
@@ -31,6 +32,23 @@ class User extends Entity {
   @BeanProperty
   @DBRef(`lazy` = true)
   var galleries: util.List[Gallery] = _
+
+  override def equals(obj: Any): Boolean = {
+    if (super.equals(obj) && getClass == obj.getClass) {
+      val user = obj.asInstanceOf[User]
+      Objects.equals(username, user.username) &&
+      Objects.equals(password, user.password) &&
+      Objects.equals(role, user.role)
+    } else {
+      false
+    }
+  }
+
+  override def hashCode(): Int = super.hashCode() + Objects.hash(
+    getUsername,
+    getPassword,
+    getRole
+  )
 
   override def toString: String = s"${getClass.getSimpleName} [" +
     s"id=$id, " +

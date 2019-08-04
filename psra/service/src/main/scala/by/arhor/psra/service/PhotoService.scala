@@ -2,22 +2,15 @@ package by.arhor.psra.service
 
 import java.util
 
-import by.arhor.psra.dto.PhotoDto
-import by.arhor.psra.model.{Photo, User}
-import org.modelmapper.ModelMapper
+import by.arhor.psra.dto.{PhotoDto, UserDto}
+import by.arhor.psra.model.Photo
 
 trait PhotoService extends Service {
 
-  override type Model = Photo
-  override type Dto   = PhotoDto
-  override type Id    = String
+  override type M = Photo
+  override type D = PhotoDto
+  override type K = String
 
-  protected val modelMapper: ModelMapper
-
-  def findPhotosByTag(tag: String, requester: User): util.List[PhotoDto]
-
-  protected def mapToDTO(model: Model): Dto = modelMapper.map[Dto] (model, classOf[Dto])
-
-  protected def mapToEntity(dto: Dto): Model = modelMapper.map[Model] (dto, classOf[Model])
+  def findPhotosByTag(tag: String, requester: UserDto): util.List[D]
 
 }

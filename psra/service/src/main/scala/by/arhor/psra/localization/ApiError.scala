@@ -2,7 +2,7 @@ package by.arhor.psra.localization
 
 import scala.beans.BeanProperty
 
-object Error {
+object ApiError {
 
   sealed abstract class ErrorLabel(@BeanProperty val value: String) extends Label
 
