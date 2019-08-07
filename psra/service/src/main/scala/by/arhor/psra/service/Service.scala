@@ -8,11 +8,7 @@ import org.modelmapper.ModelMapper
 
 import scala.reflect.ClassTag
 
-trait Service {
-
-  type M <: Entity
-  type D <: Dto
-  type K
+trait Service[M <: Entity, D <: Dto, K] {
 
   def findOne(id: K): D
   def findAll(): util.List[D]

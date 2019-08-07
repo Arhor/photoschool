@@ -5,12 +5,8 @@ import java.util
 import by.arhor.psra.dto.GalleryDto
 import by.arhor.psra.model.Gallery
 
-trait GalleryService extends Service {
+trait GalleryService extends Service[Gallery, GalleryDto, String] {
 
-  override type M = Gallery
-  override type D = GalleryDto
-  override type K = String
-
-  def findGalleriesByUserId(uid: K): util.List[D]
+  def findGalleriesByUserId(uid: String): util.List[GalleryDto]
 
 }

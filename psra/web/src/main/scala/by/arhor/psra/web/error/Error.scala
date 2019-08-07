@@ -11,4 +11,7 @@ object Error {
 	val serialVersionUID: Long = CoreVersion.SERIAL_VERSION_UID
 }
 
-case class Error (@BeanProperty var code: Code, @BeanProperty var message: String) extends Serializable
+case class Error (
+  @BeanProperty val code: Code,
+	@BeanProperty val message: String
+) extends Serializable

@@ -82,7 +82,7 @@ public class CommentServiceImplTest extends MockBeanProvider {
     when(commentRepository.findById(any(String.class)))
         .thenReturn(Optional.empty());
 
-    var id = "test";
+    var id = "test-id";
 
     try {
       service.findOne(id);
@@ -105,7 +105,7 @@ public class CommentServiceImplTest extends MockBeanProvider {
   }
 
   @Test
-  public void findCommentsByPhotoIdTest() {
+  public void findCommentsByPhotoIdPositiveTest() {
     var mockId = "mock-id";
     var mockComments = listOf(5, () -> comment);
 
@@ -129,6 +129,51 @@ public class CommentServiceImplTest extends MockBeanProvider {
     verify(photo)
         .getComments();
     verify(modelMapper, times(5))
+        .map(comment, CommentDto.class);
+  }
+
+  @Test
+  public void findCommentsByPhotoIdNegativeTest() {
+    when(photoRepository.findById(any(String.class)))
+        .thenReturn(Optional.empty());
+
+    var id = "test-id";
+
+    try {
+      service.findCommentsByPhotoId(id);
+      fail();
+    } catch (Throwable error) {
+      assertThat(error, is(instanceOf(EntityNotFoundException.class)));
+
+      if (error instanceof EntityNotFoundException) {
+        var e = (EntityNotFoundException) error;
+
+        assertThat(e.fieldName(), is(equalTo("ID")));
+        assertThat(e.fieldValue(), is(equalTo(id)));
+      } else {
+        fail();
+      }
+    }
+
+    verify(photoRepository)
+        .findById(id);
+  }
+
+  @Test
+  public void createPositiveTest() {
+    when(commentRepository.insert(comment))
+        .thenReturn(comment);
+
+    var result = service.create(commentDto);
+
+    assertThat(result, is(notNullValue()));
+    assertThat(result, is(equalTo(commentDto)));
+
+    verify(modelMapper)
+        .map(commentDto, Comment.class);
+    verify(commentRepository)
+        .insert(comment);
+    verify(modelMapper)
         .map(comment, CommentDto.class);
   }
 

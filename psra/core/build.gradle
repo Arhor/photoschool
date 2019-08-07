@@ -1,8 +1,9 @@
 plugins {
-    id 'java-library'
+    id 'scala'
 }
 
 dependencies {
+    implementation 'org.scala-lang:scala-library:2.12.8'
 }
 
 description = 'core'

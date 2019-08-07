@@ -5,7 +5,7 @@ import java.util.stream.Collectors.toList
 
 import by.arhor.psra.dto.GalleryDto
 import by.arhor.psra.exception.EntityNotFoundException
-import by.arhor.psra.localization.ApiError
+import by.arhor.psra.localization.ErrorLabel
 import by.arhor.psra.model.Gallery
 import by.arhor.psra.repository.{GalleryRepository, UserRepository}
 import by.arhor.psra.service.GalleryService
@@ -17,11 +17,9 @@ import org.springframework.transaction.annotation.Transactional
 @Service
 @Transactional
 class GalleryServiceImpl @Autowired() (
-
   private val repository: GalleryRepository,
   private val userRepository: UserRepository,
   override protected val modelMapper: ModelMapper
-
 ) extends GalleryService {
 
   @Transactional(readOnly = true)
@@ -29,7 +27,7 @@ class GalleryServiceImpl @Autowired() (
     .findById(id)
     .map[GalleryDto] { mapToDto }
     .orElseThrow {
-      () => new EntityNotFoundException(ApiError.GALLERY_NOT_FOUND, "ID", id)
+      () => new EntityNotFoundException(ErrorLabel.GALLERY_NOT_FOUND, "ID", id)
     }
 
 
@@ -53,7 +51,7 @@ class GalleryServiceImpl @Autowired() (
           .collect(toList())
       }
       .orElseThrow {
-        () => new EntityNotFoundException(ApiError.USER_NOT_FOUND, "ID", uid)
+        () => new EntityNotFoundException(ErrorLabel.USER_NOT_FOUND, "ID", uid)
       }
 
 
@@ -64,22 +62,22 @@ class GalleryServiceImpl @Autowired() (
       .map[GalleryDto] { mapToDto }
       .get
 
-  override def update(dto: GalleryDto): GalleryDto =
-    repository
-      .findById(dto.getId)
-      .map[Gallery] { _ => mapToEntity(dto) }
-      .map[Gallery] { repository save _ }
-      .map[GalleryDto] { mapToDto }
-      .orElseThrow {
-        () => new EntityNotFoundException(ApiError.GALLERY_NOT_FOUND, "ID", dto.getId)
-      }
+  override def update(dto: GalleryDto): GalleryDto = ???
+//    repository
+//      .findById(dto.getId)
+//      .map[Gallery] { _ => mapToEntity(dto) }
+//      .map[Gallery] { repository save _ }
+//      .map[GalleryDto] { mapToDto }
+//      .orElseThrow {
+//        () => new EntityNotFoundException(ErrorLabel.GALLERY_NOT_FOUND, "ID", dto.getId)
+//      }
 
   override def delete(gallery: GalleryDto): Unit =
     repository
       .findById(gallery.getId)
       .map[Unit] { repository delete _ } // TODO: does it work?
       .orElseThrow {
-        () => new EntityNotFoundException(ApiError.GALLERY_NOT_FOUND, "ID", gallery.getId)
+        () => new EntityNotFoundException(ErrorLabel.GALLERY_NOT_FOUND, "ID", gallery.getId)
       }
 
 }

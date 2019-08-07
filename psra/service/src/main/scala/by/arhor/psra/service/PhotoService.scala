@@ -5,12 +5,8 @@ import java.util
 import by.arhor.psra.dto.{PhotoDto, UserDto}
 import by.arhor.psra.model.Photo
 
-trait PhotoService extends Service {
+trait PhotoService extends Service[Photo, PhotoDto, String] {
 
-  override type M = Photo
-  override type D = PhotoDto
-  override type K = String
-
-  def findPhotosByTag(tag: String, requester: UserDto): util.List[D]
+  def findPhotosByTag(tag: String, requester: UserDto): util.List[PhotoDto]
 
 }

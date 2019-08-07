@@ -3,10 +3,8 @@ package by.arhor.psra.service
 import by.arhor.psra.dto.CourseDto
 import by.arhor.psra.model.Course
 
-trait CourseService extends Service {
+trait CourseService extends Service[Course, CourseDto, String] {
 
-  override type M = Course
-  override type D = CourseDto
-  override type K = String
+  def addLearnersToCourse(courseId: String, learnersIds: Array[String]): CourseDto
 
 }

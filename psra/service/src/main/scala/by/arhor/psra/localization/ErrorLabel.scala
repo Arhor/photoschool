@@ -2,7 +2,7 @@ package by.arhor.psra.localization
 
 import scala.beans.BeanProperty
 
-object ApiError {
+object ErrorLabel {
 
   sealed abstract class ErrorLabel(@BeanProperty val value: String) extends Label
 
@@ -12,7 +12,7 @@ object ApiError {
   case object PHOTO_NOT_FOUND   extends ErrorLabel("error.not.found.photo")
   case object USER_NOT_FOUND    extends ErrorLabel("error.not.found.user")
 
-  def values: Seq[Label] = Seq(
+  final def values(): Array[Label] = Array(
     COMMENT_NOT_FOUND,
     COURSE_NOT_FOUND,
     GALLERY_NOT_FOUND,

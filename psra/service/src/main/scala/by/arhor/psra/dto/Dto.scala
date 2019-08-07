@@ -7,10 +7,17 @@ import scala.beans.{BeanProperty, BooleanBeanProperty}
 
 abstract class Dto extends Serializable with Comparable[Dto] {
 
-  @BeanProperty var id: String = _
-  @BeanProperty var dateTimeCreated: LocalDateTime = _
-  @BeanProperty var dateTimeUpdated: LocalDateTime = _
-  @BooleanBeanProperty var enabled: Boolean = true
+  @BeanProperty
+  var id: String = _
+
+  @BeanProperty
+  var dateTimeCreated: LocalDateTime = _
+
+  @BeanProperty
+  var dateTimeUpdated: LocalDateTime = _
+
+  @BooleanBeanProperty
+  var enabled: Boolean = true
 
   override def compareTo(that: Dto): Int = {
     val thisId = if (this.id != null) this.id else ""
@@ -25,9 +32,9 @@ abstract class Dto extends Serializable with Comparable[Dto] {
         if (this eq value.asInstanceOf[AnyRef]) return true
         if (getClass == obj.getClass) {
           val dto = obj.asInstanceOf[Dto]
-          Objects.equals(id, dto.id) &&
-          Objects.equals(dateTimeCreated, dto.dateTimeCreated) &&
-          Objects.equals(dateTimeUpdated, dto.dateTimeUpdated) &&
+          id == dto.id &&
+          dateTimeCreated == dto.dateTimeCreated &&
+          dateTimeUpdated == dto.dateTimeUpdated &&
           enabled == dto.enabled
         } else {
           false
