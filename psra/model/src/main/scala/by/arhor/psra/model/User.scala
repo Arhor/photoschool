@@ -5,7 +5,6 @@ import java.util.Objects
 
 import by.arhor.psra.CoreVersion
 import by.arhor.psra.model.enums.Roles._
-import com.fasterxml.jackson.annotation.JsonIgnore
 import org.springframework.data.mongodb.core.index.Indexed
 import org.springframework.data.mongodb.core.mapping.{DBRef, Document}
 
@@ -28,7 +27,6 @@ class User extends Entity {
   @BeanProperty
   var role: Role = _
 
-  @JsonIgnore
   @BeanProperty
   @DBRef(`lazy` = true)
   var galleries: util.List[Gallery] = _
@@ -36,9 +34,9 @@ class User extends Entity {
   override def equals(obj: Any): Boolean = {
     if (super.equals(obj) && getClass == obj.getClass) {
       val user = obj.asInstanceOf[User]
-      Objects.equals(username, user.username) &&
-      Objects.equals(password, user.password) &&
-      Objects.equals(role, user.role)
+      username == user.username &&
+      password == user.password &&
+      role == user.role
     } else {
       false
     }
@@ -58,5 +56,4 @@ class User extends Entity {
     s"username=$username, " +
     s"password=$password, " +
     s"role=$role]"
-
 }

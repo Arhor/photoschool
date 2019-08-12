@@ -1,14 +1,17 @@
 package by.arhor.psra.service.impl;
 
 import by.arhor.psra.dto.CommentDto;
+import by.arhor.psra.dto.PhotoDto;
 import by.arhor.psra.exception.EntityNotFoundException;
 import by.arhor.psra.model.Comment;
+import by.arhor.psra.model.Photo;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.util.List;
 import java.util.Optional;
 
 import static org.hamcrest.Matchers.equalTo;
@@ -18,19 +21,23 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
-import static org.mockito.Mockito.any;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @RunWith(SpringRunner.class)
-public class CommentServiceImplTest extends MockBeanProvider {
+public class PhotoServiceImplTest extends MockBeanProvider {
 
   @SpyBean
-  private CommentServiceImpl service;
+  private PhotoServiceImpl service;
 
   @Before
   public void setup() {
+    when(modelMapper.map(photo, PhotoDto.class))
+        .thenReturn(photoDto);
+    when(modelMapper.map(photoDto, Photo.class))
+        .thenReturn(photo);
     when(modelMapper.map(comment, CommentDto.class))
         .thenReturn(commentDto);
     when(modelMapper.map(commentDto, Comment.class))
@@ -38,61 +45,48 @@ public class CommentServiceImplTest extends MockBeanProvider {
   }
 
   @Test
-  public void findAllTest() {
-    var mockComments = listOf(3, () -> comment);
+  public void findCommentsByPhotoIdPositiveTest() {
+    String mockId = "mock-id";
+    List<Comment> mockComments = listOf(5, () -> comment);
 
-    when(commentRepository.findAll())
+    when(photoRepository.findById(mockId))
+        .thenReturn(Optional.of(photo));
+    when(photo.comments())
         .thenReturn(mockComments);
 
-    var result = service.findAll();
+    List<CommentDto> result = service.findCommentsByPhotoId(mockId);
 
     assertThat(result, is(notNullValue()));
-    assertThat(result, hasSize(3));
+    assertThat(result, hasSize(5));
 
     result.forEach(dto -> {
       assertThat(dto, is(notNullValue()));
       assertThat(dto, is(equalTo(commentDto)));
     });
 
-    verify(commentRepository)
-        .findAll();
-    verify(modelMapper, times(3))
-        .map(comment, CommentDto.class);
-  }
-
-  @Test
-  public void findOnePositiveTest() {
-    var mockId = "mock-id";
-
-    when(commentRepository.findById(mockId))
-        .thenReturn(Optional.of(comment));
-
-    var result = service.findOne(mockId);
-
-    assertThat(result, is(notNullValue()));
-    assertThat(result, is(equalTo(commentDto)));
-
-    verify(commentRepository)
+    verify(photoRepository)
         .findById(mockId);
-    verify(modelMapper)
+    verify(photo)
+        .comments();
+    verify(modelMapper, times(5))
         .map(comment, CommentDto.class);
   }
 
   @Test
-  public void findOneNegativeTest() {
-    when(commentRepository.findById(any(String.class)))
+  public void findCommentsByPhotoIdNegativeTest() {
+    when(photoRepository.findById(any(String.class)))
         .thenReturn(Optional.empty());
 
-    var id = "test-id";
+    String id = "test-id";
 
     try {
-      service.findOne(id);
+      service.findCommentsByPhotoId(id);
       fail();
     } catch (Throwable error) {
       assertThat(error, is(instanceOf(EntityNotFoundException.class)));
 
       if (error instanceof EntityNotFoundException) {
-        var e = (EntityNotFoundException) error;
+        EntityNotFoundException e = (EntityNotFoundException) error;
 
         assertThat(e.fieldName(), is(equalTo("ID")));
         assertThat(e.fieldValue(), is(equalTo(id)));
@@ -101,26 +95,8 @@ public class CommentServiceImplTest extends MockBeanProvider {
       }
     }
 
-    verify(commentRepository)
+    verify(photoRepository)
         .findById(id);
-  }
-
-  @Test
-  public void createPositiveTest() {
-    when(commentRepository.insert(comment))
-        .thenReturn(comment);
-
-    var result = service.create(commentDto);
-
-    assertThat(result, is(notNullValue()));
-    assertThat(result, is(equalTo(commentDto)));
-
-    verify(modelMapper)
-        .map(commentDto, Comment.class);
-    verify(commentRepository)
-        .insert(comment);
-    verify(modelMapper)
-        .map(comment, CommentDto.class);
   }
 
 }

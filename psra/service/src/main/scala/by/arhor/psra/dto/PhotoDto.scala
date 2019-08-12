@@ -15,10 +15,10 @@ class PhotoDto extends Dto {
   override def equals(obj: Any): Boolean = {
     if (super.equals(obj) && getClass == obj.getClass) {
       val photo = obj.asInstanceOf[PhotoDto]
-      Objects.equals(name, photo.name) &&
-      Objects.equals(description, photo.description) &&
-      Objects.equals(path, photo.path) &&
-      Objects.equals(tags, photo.tags)
+      name == photo.name &&
+      description == photo.description &&
+      path == photo.path &&
+      tags == photo.tags
     } else {
       false
     }
@@ -26,6 +26,6 @@ class PhotoDto extends Dto {
 
   override def hashCode(): Int = super.hashCode() +
     Objects.hash(getName, getDescription, getPath) +
-    (if (getTags != null) getTags.stream.mapToInt(_.hashCode).sum() else 0)
+    (if (getTags != null) getTags.stream.mapToInt(_.hashCode).sum else 0)
 
 }

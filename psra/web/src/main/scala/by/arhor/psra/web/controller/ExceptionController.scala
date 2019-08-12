@@ -23,11 +23,13 @@ object ExceptionController {
 
 @Order(Ordered.HIGHEST_PRECEDENCE)
 @RestControllerAdvice
-class ExceptionController(@Autowired private val messageSource: MessageSource) extends ResponseEntityExceptionHandler {
+class ExceptionController(
+  @Autowired private val messageSource: MessageSource
+) extends ResponseEntityExceptionHandler {
 
   import ExceptionController._
 
-  @ExceptionHandler(Array(classOf[EntityNotFoundException]))
+  @ExceptionHandler(classOf[EntityNotFoundException])
   @ResponseStatus(HttpStatus.NOT_FOUND)
   def handleEntityNotFound(ex: EntityNotFoundException, request: WebRequest): ApiError = {
     log.error("Resource not found", ex)
@@ -37,28 +39,28 @@ class ExceptionController(@Autowired private val messageSource: MessageSource) e
     )
   }
 
-  @ExceptionHandler(Array(classOf[JsonProcessingException]))
+  @ExceptionHandler(classOf[JsonProcessingException])
   @ResponseStatus(HttpStatus.BAD_REQUEST)
   @throws(classOf[IOException])
   def jsonProcessingException(ex: JsonProcessingException, request: WebRequest): ApiError = {
     log.error("JSON processing exception", ex)
 
-    lazy val parser = ex.getProcessor.asInstanceOf[JsonParser]
+    val parser = ex.getProcessor.asInstanceOf[JsonParser]
 
-    lazy val value = Option(parser.getCurrentName) match {
-      case Some(name) => name
-      case None => parser.getText
+    val value = parser.getCurrentName match {
+      case name => name
+      case null => parser.getText
     }
 
-    lazy val loc = ex.getLocation
+    val loc = ex.getLocation
 
-    lazy val params = Array(
+    val params = Array(
       value,
       loc.getLineNr,
       loc.getColumnNr
     ).asInstanceOf[Array[AnyRef]]
 
-    lazy val error = Error(
+    val error = Error(
       Codes.INVALID_JSON,
       messageSource.getMessage(
         "error.json.parse",

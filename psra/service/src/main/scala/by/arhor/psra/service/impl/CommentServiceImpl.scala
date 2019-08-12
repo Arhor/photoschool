@@ -33,20 +33,6 @@ class CommentServiceImpl @Autowired() (
       .map[CommentDto] { mapToDto }
       .collect(toList())
 
-  override def findCommentsByPhotoId(pid: String): util.List[CommentDto] =
-    photoRepository
-      .findById(pid)
-      .map[util.List[CommentDto]] { photo =>
-        photo
-          .comments
-          .stream
-          .map[CommentDto] { mapToDto }
-          .collect(toList())
-      }
-      .orElseThrow {
-        () => new EntityNotFoundException(ErrorLabel.PHOTO_NOT_FOUND, "ID", pid)
-      }
-
   override def create(dto: CommentDto): CommentDto = {
     lazy val comment = mapToEntity(dto)
     comment.dateTimeCreated = LocalDateTime.now()

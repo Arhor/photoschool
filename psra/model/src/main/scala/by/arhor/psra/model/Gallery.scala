@@ -32,5 +32,4 @@ class Gallery extends Entity {
     s"dateTimeUpdated=$dateTimeUpdated, " +
     s"name=$name, " +
     s"visibility=$visibility]"
-
 }

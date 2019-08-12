@@ -19,7 +19,6 @@ dependencies {
     implementation 'org.scala-lang:scala-library:2.12.8'
     implementation 'com.beachape:enumeratum_2.11:1.5.13'
 
-    implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.9.8'
     implementation 'org.springframework.boot:spring-boot-starter-data-mongodb-reactive'
     implementation 'org.springframework.boot:spring-boot-starter-security'
 
