@@ -8,6 +8,12 @@ import org.springframework.data.mongodb.repository.{MongoRepository, Query}
 trait PhotoRepository extends MongoRepository[Photo, String] {
 
   @Query("{ 'tags' : { $in : [?0] } }")
-  def findPhotosByTag(tag: String): util.List[Photo]
+  def findByTag(tag: String): util.List[Photo]
+
+  @Query("{ 'tags' : { $in : ?0 } }")
+  def findByAnyOfTags(tags: Array[String]): util.List[Photo]
+
+  @Query("{ 'tags' : { $all : ?0 } }")
+  def findByAllOfTags(tags: Array[String]): util.List[Photo]
 
 }

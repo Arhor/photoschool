@@ -3,7 +3,6 @@ package by.arhor.psra.model
 import java.util
 
 import by.arhor.psra.CoreVersion
-import com.fasterxml.jackson.annotation.JsonIgnore
 import org.springframework.data.mongodb.core.index.Indexed
 import org.springframework.data.mongodb.core.mapping.{DBRef, Document}
 
@@ -23,12 +22,10 @@ class Course extends Entity {
   @BeanProperty
   var description: String = _
 
-  @JsonIgnore
   @DBRef(`lazy` = true)
   @BeanProperty
   var teacher: User = _
 
-  @JsonIgnore
   @DBRef(`lazy` = true)
   @BeanProperty
   var learners: util.List[User] = _
@@ -40,5 +37,4 @@ class Course extends Entity {
     s"dateTimeUpdated=$dateTimeUpdated, " +
     s"name=$name, " +
     s"description=$description]"
-
 }

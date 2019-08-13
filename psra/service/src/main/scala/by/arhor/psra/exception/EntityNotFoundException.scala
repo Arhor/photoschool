@@ -13,7 +13,7 @@ final class EntityNotFoundException(
 	val fieldValue: AnyRef
 ) extends LocalizedException {
 
-	override def getLabel: String = label.getValue.toString
+	override def getLabel: String = label.getValue
 
 	override def getParams: Array[AnyRef] = Array(fieldName, fieldValue)
 

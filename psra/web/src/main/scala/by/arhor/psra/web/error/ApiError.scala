@@ -21,6 +21,6 @@ case class ApiError(
 
   @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy hh:mm:ss")
   @BeanProperty
-  val timestamp: LocalDateTime = LocalDateTime.now()
+  val timestamp: LocalDateTime = LocalDateTime.now
 
 }

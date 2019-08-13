@@ -3,7 +3,6 @@ package by.arhor.psra.model
 import java.util
 
 import by.arhor.psra.CoreVersion
-import by.arhor.psra.model.enums.Visibilities.Visibility
 import org.springframework.data.mongodb.core.mapping.{DBRef, Document}
 
 import scala.beans.BeanProperty
@@ -19,7 +18,7 @@ class Gallery extends Entity {
   var name: String = _
 
   @BeanProperty
-  var visibility: Visibility = _
+  var visibility: Visibilities = _
 
   @DBRef(`lazy` = true)
   @BeanProperty

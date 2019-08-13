@@ -2,8 +2,6 @@ package by.arhor.psra.dto
 
 import java.util.Objects
 
-import by.arhor.psra.model.enums.Roles.Role
-
 import scala.beans.BeanProperty
 
 class UserDto extends Dto {

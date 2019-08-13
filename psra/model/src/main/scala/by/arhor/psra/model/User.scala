@@ -4,7 +4,6 @@ import java.util
 import java.util.Objects
 
 import by.arhor.psra.CoreVersion
-import by.arhor.psra.model.enums.Roles._
 import org.springframework.data.mongodb.core.index.Indexed
 import org.springframework.data.mongodb.core.mapping.{DBRef, Document}
 
@@ -25,7 +24,7 @@ class User extends Entity {
   var password: String = _
 
   @BeanProperty
-  var role: Role = _
+  var role: Roles = _
 
   @BeanProperty
   @DBRef(`lazy` = true)

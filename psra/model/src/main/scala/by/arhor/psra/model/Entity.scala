@@ -9,21 +9,21 @@ abstract class Entity extends Serializable
                          with Datable
                          with Deletable {
 
-  override def equals(obj: Any): Boolean = {
-    Option(obj) match {
-      case None => false
-      case Some(value) =>
-        if (this eq value.asInstanceOf[AnyRef]) return true
-        if (getClass == obj.getClass) {
-          val dto = obj.asInstanceOf[Entity]
-          Objects.equals(id, dto.id) &&
-          Objects.equals(dateTimeCreated, dto.dateTimeCreated) &&
-          Objects.equals(dateTimeUpdated, dto.dateTimeUpdated) &&
-          enabled == dto.enabled
-        } else {
-          false
-        }
-    }
+  override def equals(obj: Any): Boolean = obj match {
+    case null => false
+    case value =>
+      if (this eq value.asInstanceOf[AnyRef]) {
+        return true
+      }
+      if (getClass == obj.getClass) {
+        val dto = obj.asInstanceOf[Entity]
+        id == dto.id &&
+        dateTimeCreated == dto.dateTimeCreated &&
+        dateTimeUpdated == dto.dateTimeUpdated &&
+        enabled == dto.enabled
+      } else {
+        false
+      }
   }
 
   override def hashCode(): Int = Objects.hash(

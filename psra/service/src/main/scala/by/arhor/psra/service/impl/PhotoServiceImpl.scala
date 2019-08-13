@@ -44,7 +44,7 @@ class PhotoServiceImpl @Autowired() (
 	@Transactional(readOnly = true)
 	override def findPhotosByTag(tag: String, requester: UserDto): util.List[PhotoDto] =
 		repository
-			.findPhotosByTag(tag)
+			.findByTag(tag)
 			.stream
 			.map[PhotoDto] { mapToDto }
 			.collect(toList())
