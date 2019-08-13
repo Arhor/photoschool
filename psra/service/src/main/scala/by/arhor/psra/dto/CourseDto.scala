@@ -12,8 +12,8 @@ class CourseDto extends Dto {
   override def equals(obj: Any): Boolean = {
     if (super.equals(obj) && getClass == obj.getClass) {
       val course = obj.asInstanceOf[CourseDto]
-      Objects.equals(name, course.name) &&
-      Objects.equals(description, course.description)
+      name == course.name &&
+      description == course.description
     } else {
       false
     }
@@ -23,5 +23,4 @@ class CourseDto extends Dto {
     getName,
     getDescription
   )
-
 }

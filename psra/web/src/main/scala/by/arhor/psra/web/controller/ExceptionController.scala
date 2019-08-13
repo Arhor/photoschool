@@ -29,7 +29,7 @@ class ExceptionController(
 
   import ExceptionController._
 
-  @ExceptionHandler(classOf[EntityNotFoundException])
+  @ExceptionHandler(Array(classOf[EntityNotFoundException]))
   @ResponseStatus(HttpStatus.NOT_FOUND)
   def handleEntityNotFound(ex: EntityNotFoundException, request: WebRequest): ApiError = {
     log.error("Resource not found", ex)
@@ -39,7 +39,7 @@ class ExceptionController(
     )
   }
 
-  @ExceptionHandler(classOf[JsonProcessingException])
+  @ExceptionHandler(Array(classOf[JsonProcessingException]))
   @ResponseStatus(HttpStatus.BAD_REQUEST)
   @throws(classOf[IOException])
   def jsonProcessingException(ex: JsonProcessingException, request: WebRequest): ApiError = {
@@ -48,8 +48,8 @@ class ExceptionController(
     val parser = ex.getProcessor.asInstanceOf[JsonParser]
 
     val value = parser.getCurrentName match {
-      case name => name
       case null => parser.getText
+      case name => name
     }
 
     val loc = ex.getLocation
@@ -76,7 +76,7 @@ class ExceptionController(
     Error(
       Codes.NOT_FOUND,
       messageSource.getMessage(
-        ex.getLabel,
+        ex.getLabel.getValue,
         ex.getParams,
         request.getLocale))
 }

@@ -1,14 +1,13 @@
 package by.arhor.psra.exception
 
 import by.arhor.psra.CoreVersion
-
-import scala.beans.BeanProperty
+import by.arhor.psra.localization.Label
 
 object LocalizedException {
 	val serialVersionUID: Long = CoreVersion.SERIAL_VERSION_UID
 }
 
 abstract class LocalizedException extends RuntimeException {
-	def getLabel: String
+	def getLabel: Label
 	def getParams: Array[AnyRef]
 }

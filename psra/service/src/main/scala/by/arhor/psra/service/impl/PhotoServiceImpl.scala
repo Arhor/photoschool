@@ -63,7 +63,7 @@ class PhotoServiceImpl @Autowired() (
 				() => new EntityNotFoundException(ErrorLabel.PHOTO_NOT_FOUND, "ID", pid)
 			}
 
-	override def addCommentToPhoto(photoId: String, username: String, dto: CommentDto): Unit = {
+	override def addCommentToPhoto(photoId: String, username: String, dto: CommentDto): CommentDto = {
 		val photo = repository
 			.findById(photoId)
 			.orElseThrow {
@@ -81,6 +81,7 @@ class PhotoServiceImpl @Autowired() (
 		val createdComment = commentRepository.insert(comment)
 		photo.comments.add(createdComment)
 		repository.save(photo)
+		modelMapper.map(createdComment, classOf[CommentDto])
 	}
 
 	override def create(dto: PhotoDto): PhotoDto = {

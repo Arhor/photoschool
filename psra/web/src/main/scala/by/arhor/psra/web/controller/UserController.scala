@@ -13,18 +13,18 @@ import org.springframework.web.bind.annotation.{CrossOrigin, GetMapping, PathVar
 
 @CrossOrigin // does it really necessary ?
 @RestController
-@RequestMapping(path = "/users")
+@RequestMapping(path = Array("/users"))
 class UserController(@Autowired private val service: UserService) {
 	
-	@GetMapping(path = "/{id}", produces = APPLICATION_JSON_UTF8_VALUE)
+	@GetMapping(path = Array("/{id}"), produces = Array(APPLICATION_JSON_UTF8_VALUE))
 	@PreAuthorize("#oauth2.hasScope('ROLE_ADMIN')")
 	def getUserById(@PathVariable("id") id: String): UserDto = service.findOne(id)
 
-	@GetMapping(produces = APPLICATION_JSON_UTF8_VALUE)
+	@GetMapping(produces = Array(APPLICATION_JSON_UTF8_VALUE))
 	@PreAuthorize("#oauth2.hasScope('ROLE_ADMIN')")
 	def getAllUsers: util.List[UserDto] = service.findAll()
 
-	@PostMapping(produces = APPLICATION_JSON_UTF8_VALUE)
+	@PostMapping(produces = Array(APPLICATION_JSON_UTF8_VALUE))
 	@PreAuthorize("!(#oauth2.hasScope('ROLE_USER') and #oauth2.hasScope('ROLE_ADMIN'))")
 	def register(@RequestBody dto: UserDto): ResponseEntity[UserDto] = {
 		val created = service.create(dto)

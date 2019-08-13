@@ -9,10 +9,10 @@ import org.springframework.web.bind.annotation.{CrossOrigin, GetMapping, PathVar
 
 @CrossOrigin
 @RestController
-@RequestMapping(path = "/comments")
+@RequestMapping(path = Array("/comments"))
 class CommentController(@Autowired service: CommentService) {
 
-  @GetMapping(path = "/{id}", produces = APPLICATION_JSON_UTF8_VALUE)
+  @GetMapping(path = Array("/{id}"), produces = Array(APPLICATION_JSON_UTF8_VALUE))
   @PreAuthorize("#oauth2.hasScope('ROLE_USER') or #oauth2.hasScope('ROLE_ADMIN')")
   def getCommentById(@PathVariable("id") id: String): CommentDto = service.findOne(id)
 

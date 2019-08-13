@@ -12,8 +12,8 @@ class CommentDto extends Dto {
   override def equals(obj: Any): Boolean = {
     if (super.equals(obj) && getClass == obj.getClass) {
       val comment = obj.asInstanceOf[CommentDto]
-      Objects.equals(content, comment.content) &&
-      Objects.equals(user, comment.user)
+      content == comment.content &&
+      user == comment.user
     } else {
       false
     }
@@ -23,5 +23,4 @@ class CommentDto extends Dto {
     getContent,
     getUser
   )
-
 }

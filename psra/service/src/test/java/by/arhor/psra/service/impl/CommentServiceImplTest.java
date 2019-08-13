@@ -9,6 +9,7 @@ import org.junit.runner.RunWith;
 import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.util.List;
 import java.util.Optional;
 
 import static org.hamcrest.Matchers.equalTo;
@@ -39,12 +40,12 @@ public class CommentServiceImplTest extends MockBeanProvider {
 
   @Test
   public void findAllTest() {
-    var mockComments = listOf(3, () -> comment);
+    List<Comment> mockComments = listOf(3, () -> comment);
 
     when(commentRepository.findAll())
         .thenReturn(mockComments);
 
-    var result = service.findAll();
+    List<CommentDto> result = service.findAll();
 
     assertThat(result, is(notNullValue()));
     assertThat(result, hasSize(3));
@@ -62,12 +63,12 @@ public class CommentServiceImplTest extends MockBeanProvider {
 
   @Test
   public void findOnePositiveTest() {
-    var mockId = "mock-id";
+    String mockId = "mock-id";
 
     when(commentRepository.findById(mockId))
         .thenReturn(Optional.of(comment));
 
-    var result = service.findOne(mockId);
+    CommentDto result = service.findOne(mockId);
 
     assertThat(result, is(notNullValue()));
     assertThat(result, is(equalTo(commentDto)));
@@ -83,7 +84,7 @@ public class CommentServiceImplTest extends MockBeanProvider {
     when(commentRepository.findById(any(String.class)))
         .thenReturn(Optional.empty());
 
-    var id = "test-id";
+    String id = "test-id";
 
     try {
       service.findOne(id);
@@ -92,7 +93,7 @@ public class CommentServiceImplTest extends MockBeanProvider {
       assertThat(error, is(instanceOf(EntityNotFoundException.class)));
 
       if (error instanceof EntityNotFoundException) {
-        var e = (EntityNotFoundException) error;
+        EntityNotFoundException e = (EntityNotFoundException) error;
 
         assertThat(e.fieldName(), is(equalTo("ID")));
         assertThat(e.fieldValue(), is(equalTo(id)));
@@ -110,7 +111,7 @@ public class CommentServiceImplTest extends MockBeanProvider {
     when(commentRepository.insert(comment))
         .thenReturn(comment);
 
-    var result = service.create(commentDto);
+    CommentDto result = service.create(commentDto);
 
     assertThat(result, is(notNullValue()));
     assertThat(result, is(equalTo(commentDto)));

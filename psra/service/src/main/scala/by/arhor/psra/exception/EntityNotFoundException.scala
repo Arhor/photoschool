@@ -3,17 +3,17 @@ package by.arhor.psra.exception
 import by.arhor.psra.CoreVersion
 import by.arhor.psra.localization.Label
 
+import scala.beans.BeanProperty
+
 object EntityNotFoundException {
 	val serialVersionUID: Long = CoreVersion.SERIAL_VERSION_UID
 }
 
 final class EntityNotFoundException(
-  val label: Label,
-	val fieldName: String,
-	val fieldValue: AnyRef
+	@BeanProperty val label: Label,
+	@BeanProperty val fieldName: String,
+	@BeanProperty val fieldValue: AnyRef
 ) extends LocalizedException {
-
-	override def getLabel: String = label.getValue
 
 	override def getParams: Array[AnyRef] = Array(fieldName, fieldValue)
 

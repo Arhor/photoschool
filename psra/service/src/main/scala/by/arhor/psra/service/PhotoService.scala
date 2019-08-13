@@ -11,6 +11,6 @@ trait PhotoService extends Service[Photo, PhotoDto, String] {
 
   def findCommentsByPhotoId(pid: String): util.List[CommentDto]
 
-  def addCommentToPhoto(photoId: String, username: String, dto: CommentDto)
+  def addCommentToPhoto(photoId: String, username: String, dto: CommentDto): CommentDto
 
 }

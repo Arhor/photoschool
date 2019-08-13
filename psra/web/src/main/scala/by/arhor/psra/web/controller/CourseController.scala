@@ -8,10 +8,10 @@ import org.springframework.web.bind.annotation.{CrossOrigin, GetMapping, PathVar
 
 @CrossOrigin
 @RestController
-@RequestMapping(path = "/courses")
+@RequestMapping(path = Array("/courses"))
 class CourseController(@Autowired service: CourseService) {
 
-  @GetMapping(path = "/{id}", produces = APPLICATION_JSON_UTF8_VALUE)
+  @GetMapping(path = Array("/{id}"), produces = Array(APPLICATION_JSON_UTF8_VALUE))
   def getGalleryById(@PathVariable("id") id: String): CourseDto = service.findOne(id)
 
 }
