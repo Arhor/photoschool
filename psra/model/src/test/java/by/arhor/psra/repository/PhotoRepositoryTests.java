@@ -1,8 +1,6 @@
 package by.arhor.psra.repository;
 
-import by.arhor.psra.model.Roles;
 import by.arhor.psra.model.Photo;
-import by.arhor.psra.model.User;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -11,32 +9,40 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.util.HashSet;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
-
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.notNullValue;
-import static org.junit.Assert.assertThat;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @EnableAutoConfiguration
 public class PhotoRepositoryTests extends AbstractRepositoryTests {
 
+	private static final String[] tags = {"Sport", "Food", "Games"};
+
+	private List<Photo> generatePhotos() {
+		List<Photo> photos = new ArrayList<>();
+		int i;
+		for (i = 0; i < tags.length; i++) {
+			Photo p = new Photo();
+			p.setName("test_photo_" + i);
+			p.setDescription("description_" + i);
+			p.setPath("/user/photo_" + i + ".png");
+			p.setTags(Set.of(tags[i]));
+			photos.add(p);
+		}
+		Photo p = new Photo();
+		p.setName("test_photo_" + i);
+		p.setDescription("description_" + i);
+		p.setPath("/user/photo_" + i + ".png");
+		p.setTags(Set.of(tags));
+		photos.add(p);
+		return photos;
+	}
+
 	@Before
 	public void setup() {
-		Set<String> tags = new HashSet<>();
-
-		tags.add("one");
-		tags.add("two");
-		tags.add("three");
-
-		Photo photo = new Photo();
-
-		photo.setPath("/user/photo_1.png");
-		photo.setTags(tags);
-		photoRepository.insert(photo);
+		photoRepository.insert(generatePhotos());
 	}
 	
 	@After
@@ -45,32 +51,12 @@ public class PhotoRepositoryTests extends AbstractRepositoryTests {
 	}
 
 	@Test
-	public void findAllTest() {
-		List<Photo> photos = photoRepository.findAll();
-
-		photos.forEach(System.out::println);
-		assertThat(photos, is(notNullValue()));
-//		assertThat(photos, hasSize(1))
-
-		photos.forEach(photo -> assertThat(photo, is(notNullValue())) );
+	public void findByTagTest() {
+		for (String tag : tags) {
+			List<Photo> photo = photoRepository.findByTag(tag);
+			System.out.println("current tag: " + tag);
+			System.out.println(photo);
+		}
 	}
 
-	@Test
-	public void findAllByTagTest() {
-		String[] tags = {"one", "two", "five"};
-		photoRepository
-				.findByAllOfTags(tags)
-				.forEach(System.out::println);
-	}
-	
-	@Test
-	public void userRepoTest() {
-		User user = new User();
-
-		user.setRole(Roles.ROLE_USER);
-		user.setUsername("tester");
-		userRepository.insert(user);
-
-//		println(userRepository findByUsername "tester")
-	}
 }

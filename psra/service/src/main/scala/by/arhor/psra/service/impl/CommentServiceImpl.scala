@@ -11,13 +11,18 @@ import by.arhor.psra.repository.{CommentRepository, PhotoRepository}
 import by.arhor.psra.service.CommentService
 import org.modelmapper.ModelMapper
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 
+@Service
+@Transactional
 class CommentServiceImpl @Autowired() (
   private val repository: CommentRepository,
   private val photoRepository: PhotoRepository,
   override protected val modelMapper: ModelMapper,
 ) extends CommentService {
 
+  @Transactional(readOnly = true)
   override def findOne(id: String): CommentDto =
     repository
       .findById(id)
@@ -26,6 +31,7 @@ class CommentServiceImpl @Autowired() (
         () => new EntityNotFoundException(ErrorLabel.COMMENT_NOT_FOUND, "ID", id)
       }
 
+  @Transactional(readOnly = true)
   override def findAll(): util.List[CommentDto] =
     repository
       .findAll

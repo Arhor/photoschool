@@ -1,13 +1,33 @@
 package by.arhor.psra.model
 
+import java.time.LocalDateTime
 import java.util.Objects
 
-import by.arhor.psra.model.traits.{Datable, Deletable, Identifiable}
+import by.arhor.psra.model.traits.{Auditable, Deletable, Identifiable}
+import org.springframework.data.annotation.{CreatedDate, Id, LastModifiedDate}
 
-abstract class Entity extends Serializable
-                         with Identifiable
-                         with Datable
-                         with Deletable {
+import scala.beans.{BeanProperty, BooleanBeanProperty}
+
+abstract class Entity
+  extends Serializable
+     with Identifiable[String]
+     with Auditable
+     with Deletable {
+
+  @Id
+  @BeanProperty
+  var id: String = _
+
+  @CreatedDate
+  @BeanProperty
+  var dateTimeCreated: LocalDateTime = _
+
+  @LastModifiedDate
+  @BeanProperty
+  var dateTimeUpdated: LocalDateTime = _
+
+  @BooleanBeanProperty
+  var enabled: Boolean = true
 
   override def equals(obj: Any): Boolean = obj match {
     case null => false
@@ -16,11 +36,11 @@ abstract class Entity extends Serializable
         return true
       }
       if (getClass == obj.getClass) {
-        val dto = obj.asInstanceOf[Entity]
-        id == dto.id &&
-        dateTimeCreated == dto.dateTimeCreated &&
-        dateTimeUpdated == dto.dateTimeUpdated &&
-        enabled == dto.enabled
+        val entity = obj.asInstanceOf[Entity]
+        id == entity.id &&
+        dateTimeCreated == entity.dateTimeCreated &&
+        dateTimeUpdated == entity.dateTimeUpdated &&
+        enabled == entity.enabled
       } else {
         false
       }

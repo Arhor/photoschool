@@ -11,13 +11,18 @@ import by.arhor.psra.repository.{CourseRepository, UserRepository}
 import by.arhor.psra.service.CourseService
 import org.modelmapper.ModelMapper
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 
+@Service
+@Transactional
 class CourseServiceImpl @Autowired() (
   private val repository: CourseRepository,
   private val userRepository: UserRepository,
   override protected val modelMapper: ModelMapper,
 ) extends CourseService {
 
+  @Transactional(readOnly = true)
   override def findOne(id: String): CourseDto =
     repository
       .findById(id)
@@ -26,6 +31,7 @@ class CourseServiceImpl @Autowired() (
         () => new EntityNotFoundException(ErrorLabel.COURSE_NOT_FOUND, "ID", id)
       }
 
+  @Transactional(readOnly = true)
   override def findAll(): util.List[CourseDto] =
     repository
       .findAll
@@ -72,7 +78,7 @@ class CourseServiceImpl @Autowired() (
           () => new EntityNotFoundException(ErrorLabel.COURSE_NOT_FOUND, "ID", courseId)
         }
 
-    lazy val users = for {
+    val users = for {
       uid <- userIds
       user = userRepository
         .findById(uid)

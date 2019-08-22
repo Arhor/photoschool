@@ -2,7 +2,7 @@ import org.springframework.boot.gradle.plugin.SpringBootPlugin
 
 plugins {
     id 'scala'
-    id 'org.springframework.boot' version '2.1.5.RELEASE' apply false
+    id 'org.springframework.boot' version '2.1.7.RELEASE' apply false
 }
 
 apply plugin: 'io.spring.dependency-management'
