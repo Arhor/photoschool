@@ -2,7 +2,7 @@ import org.springframework.boot.gradle.plugin.SpringBootPlugin
 
 plugins {
     id 'scala'
-    id 'org.springframework.boot' version '2.1.7.RELEASE' apply false
+    id 'org.springframework.boot' version '2.1.5.RELEASE' apply false
 }
 
 apply plugin: 'io.spring.dependency-management'
@@ -16,7 +16,7 @@ dependencyManagement {
 dependencies {
     implementation project(':core')
 
-    implementation 'org.scala-lang:scala-library:2.12.8'
+    implementation 'org.scala-lang:scala-library:2.13.0'
 
     implementation 'org.springframework.boot:spring-boot-starter-data-mongodb-reactive'
     implementation 'org.springframework.boot:spring-boot-starter-security'
@@ -24,6 +24,11 @@ dependencies {
     testImplementation 'org.hamcrest:hamcrest-all:1.3'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'de.flapdoodle.embed:de.flapdoodle.embed.mongo'
+}
+
+compileScala {
+    sourceCompatibility = '1.8'
+    targetCompatibility = '1.8'
 }
 
 description = 'model'

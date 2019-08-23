@@ -1,6 +1,6 @@
 package by.arhor.psra.model
 
-import java.beans.BeanProperty
+import scala.beans.BeanProperty
 
 import by.arhor.psra.model.traits.{Auditable, Identifiable, Request}
 

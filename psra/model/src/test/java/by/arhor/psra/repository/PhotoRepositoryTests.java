@@ -10,8 +10,14 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
+import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.notNullValue;
+import static org.junit.Assert.assertThat;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -19,6 +25,13 @@ import java.util.Set;
 public class PhotoRepositoryTests extends AbstractRepositoryTests {
 
 	private static final String[] tags = {"Sport", "Food", "Games"};
+
+	@SafeVarargs
+	private static <T> Set<T> setOf(T...args) {
+		Set<T> set = new HashSet<>();
+		Collections.addAll(set, args);
+		return set;
+	}
 
 	private List<Photo> generatePhotos() {
 		List<Photo> photos = new ArrayList<>();
@@ -28,14 +41,14 @@ public class PhotoRepositoryTests extends AbstractRepositoryTests {
 			p.setName("test_photo_" + i);
 			p.setDescription("description_" + i);
 			p.setPath("/user/photo_" + i + ".png");
-			p.setTags(Set.of(tags[i]));
+			p.setTags(setOf(tags[i]));
 			photos.add(p);
 		}
 		Photo p = new Photo();
 		p.setName("test_photo_" + i);
 		p.setDescription("description_" + i);
 		p.setPath("/user/photo_" + i + ".png");
-		p.setTags(Set.of(tags));
+		p.setTags(setOf(tags));
 		photos.add(p);
 		return photos;
 	}
@@ -51,12 +64,19 @@ public class PhotoRepositoryTests extends AbstractRepositoryTests {
 	}
 
 	@Test
-	public void findByTagTest() {
+	public void findByAnyOfTagsTest() {
 		for (String tag : tags) {
-			List<Photo> photo = photoRepository.findByTag(tag);
-			System.out.println("current tag: " + tag);
-			System.out.println(photo);
+			List<Photo> photos = photoRepository.findByAnyOfTags(new String[] {tag});
+			assertThat(photos, notNullValue());
+			assertThat(photos, hasSize(2));
 		}
+	}
+
+	@Test
+	public void findByAllOfTagsTest() {
+		List<Photo> photos = photoRepository.findByAllOfTags(tags);
+		assertThat(photos, notNullValue());
+		assertThat(photos, hasSize(1));
 	}
 
 }

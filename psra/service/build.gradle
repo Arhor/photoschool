@@ -2,7 +2,7 @@ import org.springframework.boot.gradle.plugin.SpringBootPlugin
 
 plugins {
     id 'scala'
-    id 'org.springframework.boot' version '2.1.7.RELEASE' apply false
+    id 'org.springframework.boot' version '2.1.5.RELEASE' apply false
 }
 
 apply plugin: 'io.spring.dependency-management'
@@ -24,6 +24,11 @@ dependencies {
 
     testImplementation 'org.hamcrest:hamcrest-all:1.3'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
+}
+
+compileScala {
+    sourceCompatibility = '1.8'
+    targetCompatibility = '1.8'
 }
 
 description = 'service'
