@@ -7,10 +7,6 @@ import org.springframework.data.mongodb.core.mapping.{DBRef, Document}
 
 import scala.beans.BeanProperty
 
-object Comment {
-  val serialVersionUID: Long = CoreVersion.SERIAL_VERSION_UID
-}
-
 @Document("comments")
 class Comment extends Entity {
 
@@ -21,20 +17,17 @@ class Comment extends Entity {
   @BeanProperty
   var user: User = _
 
-  override def equals(obj: Any): Boolean = {
-    if (super.equals(obj) && getClass == obj.getClass) {
-      val comment = obj.asInstanceOf[Comment]
-      content == comment.content &&
-      user == comment.user
-    } else {
+  override def equals(other: Any): Boolean = other match {
+    case that: Comment =>
+      that.isInstanceOf[Comment] &&
+      super.equals(that) &&
+      that.content == this.content &&
+      that.user == this.user
+    case _ =>
       false
-    }
   }
 
-  override def hashCode(): Int = super.hashCode() + Objects.hash(
-    getContent,
-    getUser
-  )
+  override def hashCode(): Int = (super.hashCode, content, user).##
 
   override def toString: String = s"${getClass.getSimpleName} [" +
     s"id=$id, " +
@@ -42,6 +35,7 @@ class Comment extends Entity {
     s"dateTimeCreated=$dateTimeCreated, " +
     s"dateTimeUpdated=$dateTimeUpdated, " +
     s"content=$content, " +
-    s"user=$user]"
+    s"user=$user" +
+    s"]"
 
 }

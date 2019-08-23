@@ -8,10 +8,6 @@ import org.springframework.data.mongodb.core.mapping.{DBRef, Document}
 
 import scala.beans.BeanProperty
 
-object Course {
-  val serialVersionUID: Long = CoreVersion.SERIAL_VERSION_UID
-}
-
 @Document("courses")
 class Course extends Entity {
 
@@ -30,11 +26,24 @@ class Course extends Entity {
   @BeanProperty
   var learners: util.List[User] = _
 
+  override def equals(other: Any): Boolean = other match {
+    case that: Course =>
+      that.isInstanceOf[Course] &&
+      super.equals(that) &&
+      that.name == this.name &&
+      that.description == this.description
+    case _ =>
+      false
+  }
+
+  override def hashCode(): Int = (super.hashCode, name, description).##
+
   override def toString: String = s"${getClass.getSimpleName} [" +
     s"id=$id, " +
     s"enabled=$enabled, " +
     s"dateTimeCreated=$dateTimeCreated, " +
     s"dateTimeUpdated=$dateTimeUpdated, " +
     s"name=$name, " +
-    s"description=$description]"
+    s"description=$description" +
+    s"]"
 }

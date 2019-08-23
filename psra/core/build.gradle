@@ -2,8 +2,11 @@ plugins {
     id 'scala'
 }
 
+sourceCompatibility = '1.8'
+targetCompatibility = '1.8'
+
 dependencies {
-    implementation 'org.scala-lang:scala-library:2.12.8'
+    implementation 'org.scala-lang:scala-library:2.13.0'
 }
 
 description = 'core'

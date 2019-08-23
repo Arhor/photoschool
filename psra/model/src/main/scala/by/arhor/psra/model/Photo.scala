@@ -1,46 +1,42 @@
 package by.arhor.psra.model
 
-import java.util
-import java.util.Objects
+import java.util.{List => JavaList, Set => JavaSet}
 
-import by.arhor.psra.CoreVersion
 import org.springframework.data.mongodb.core.mapping.{DBRef, Document}
 
 import scala.beans.BeanProperty
 
-object Photo {
-  val serialVersionUID: Long = CoreVersion.SERIAL_VERSION_UID
-}
-
 @Document("photos")
 class Photo extends Entity {
   
-  @BeanProperty var name: String = _
-  @BeanProperty var description: String = _
-  @BeanProperty var path: String = _
-  @BeanProperty var tags: util.Set[String] = _
+  @BeanProperty
+  var name: String = _
+
+  @BeanProperty
+  var description: String = _
+
+  @BeanProperty
+  var path: String = _
+
+  @BeanProperty
+  var tags: JavaSet[String] = _
 
   @BeanProperty
   @DBRef(`lazy` = true)
-  var comments: util.List[Comment] = _
+  var comments: JavaList[Comment] = _
 
-  override def equals(obj: Any): Boolean = {
-    if (super.equals(obj) && getClass == obj.getClass) {
-      val photo = obj.asInstanceOf[Photo]
-      name == photo.name &&
-      description == photo.description &&
-      path == photo.path &&
-      tags == photo.tags
-    } else {
+  override def equals(other: Any): Boolean = other match {
+    case that: Photo =>
+      that.isInstanceOf[Photo] &&
+      super.equals(that) &&
+      that.name == this.name &&
+      that.description == this.description &&
+      that.tags == this.tags
+    case _ =>
       false
-    }
   }
 
-  override def hashCode(): Int = super.hashCode() + Objects.hash(
-    getName,
-    getDescription,
-    getPath
-  ) + (if (getTags != null) getTags.stream.mapToInt(_.hashCode).sum else 0)
+  override def hashCode(): Int = (super.hashCode, name, description, tags).##
 
   override def toString: String = s"${getClass.getSimpleName} [" +
     s"id=$id, " +
@@ -50,5 +46,6 @@ class Photo extends Entity {
     s"name=$name, " +
     s"description=$description, " +
     s"path=$path, " +
-    s"tags=$tags]"
+    s"tags=$tags" +
+    s"]"
 }

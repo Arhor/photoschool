@@ -9,8 +9,7 @@ import org.springframework.data.annotation.{CreatedDate, Id, LastModifiedDate}
 import scala.beans.{BeanProperty, BooleanBeanProperty}
 
 abstract class Entity
-  extends Serializable
-     with Identifiable[String]
+  extends Identifiable[String]
      with Auditable
      with Deletable {
 
@@ -29,27 +28,17 @@ abstract class Entity
   @BooleanBeanProperty
   var enabled: Boolean = true
 
-  override def equals(obj: Any): Boolean = obj match {
-    case null => false
-    case value =>
-      if (this eq value.asInstanceOf[AnyRef]) {
-        return true
-      }
-      if (getClass == obj.getClass) {
-        val entity = obj.asInstanceOf[Entity]
-        id == entity.id &&
-        dateTimeCreated == entity.dateTimeCreated &&
-        dateTimeUpdated == entity.dateTimeUpdated &&
-        enabled == entity.enabled
-      } else {
-        false
-      }
+  override def equals(other: Any): Boolean = other match {
+    case that: Entity =>
+      that.isInstanceOf[Entity] &&
+      that.id == this.id &&
+      that.dateTimeCreated == this.dateTimeCreated &&
+      that.dateTimeUpdated == this.dateTimeUpdated &&
+      that.enabled == this.enabled
+    case _ =>
+      false
   }
 
-  override def hashCode(): Int = Objects.hash(
-    getId,
-    getDateTimeCreated,
-    getDateTimeUpdated
-  ) + (if (isEnabled) 1 else 0)
+  override def hashCode(): Int = (id, dateTimeCreated, dateTimeUpdated, enabled).##
 
 }
