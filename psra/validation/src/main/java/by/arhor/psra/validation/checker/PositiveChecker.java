@@ -1,5 +1,6 @@
 package by.arhor.psra.validation.checker;
 
+import by.arhor.psra.validation.ErrorCode;
 import by.arhor.psra.validation.constraint.Positive;
 import by.arhor.psra.validation.exception.Status;
 import org.springframework.stereotype.Component;
@@ -42,7 +43,7 @@ public final class PositiveChecker implements Checker<Positive> {
      */
     @Override
     public Status getStatus(String className ,String fieldName, Positive constraint) {
-        return new Status(FAILED_POSITIVE_CHECK, className, fieldName);
+        return new Status(ErrorCode.FAILED_POSITIVE_CHECK, className, fieldName);
     }
 
     /**

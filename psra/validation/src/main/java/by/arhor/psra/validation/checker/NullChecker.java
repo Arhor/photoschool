@@ -1,5 +1,6 @@
 package by.arhor.psra.validation.checker;
 
+import by.arhor.psra.validation.ErrorCode;
 import by.arhor.psra.validation.constraint.NotNull;
 import by.arhor.psra.validation.exception.Status;
 import org.springframework.stereotype.Component;
@@ -28,7 +29,7 @@ public final class NullChecker implements Checker<NotNull> {
      */
     @Override
     public Status getStatus(String className ,String fieldName, NotNull constraint) {
-        return new Status(FAILED_NULL_CHECK, className, fieldName);
+        return new Status(ErrorCode.FAILED_NULL_CHECK, className, fieldName);
     }
 
     /**

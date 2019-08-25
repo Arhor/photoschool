@@ -24,11 +24,13 @@ class PhotoServiceImpl @Autowired() (
 	override protected val modelMapper: ModelMapper
 ) extends PhotoService {
 
+	import by.arhor.psra.dto.Converters._
+
 	@Transactional(readOnly = true)
 	override def findOne(id: String): PhotoDto =
 		repository
 			.findById(id)
-  		.map[PhotoDto] { mapToDto }
+  		.map[PhotoDto] { _.as[PhotoDto] }
 			.orElseThrow {
 				() => new EntityNotFoundException(ErrorLabel.PHOTO_NOT_FOUND, "ID", id)
 			}
@@ -44,7 +46,7 @@ class PhotoServiceImpl @Autowired() (
 	@Transactional(readOnly = true)
 	override def findPhotosByTag(tag: String, requester: UserDto): util.List[PhotoDto] =
 		repository
-			.findByTag(tag)
+			.findByAnyOfTags(Array(tag))
 			.stream
 			.map[PhotoDto] { mapToDto }
 			.collect(toList())
@@ -53,10 +55,9 @@ class PhotoServiceImpl @Autowired() (
 		repository
 			.findById(pid)
 			.map[util.List[CommentDto]] { photo =>
-				photo
-					.comments
+				photo.comments
 					.stream
-					.map[CommentDto] { modelMapper.map(_, classOf[CommentDto]) }
+					.map[CommentDto] { _.as[CommentDto] }
 					.collect(toList())
 			}
 			.orElseThrow {

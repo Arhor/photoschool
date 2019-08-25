@@ -49,20 +49,21 @@ public class ValidatorImpl implements Validator {
    */
   @SuppressWarnings("unchecked")
   private Set<Status> validateObject(Object object) {
-    var statusSet = new HashSet<Status>();
-    var className = object.getClass().getSimpleName();
-    for (var field : object.getClass().getDeclaredFields()) {
-      var fieldName = field.getName();
-      for (var annotation : field.getDeclaredAnnotations()) {
+    Objects.requireNonNull(object);
+    Set<Status> statusSet = new HashSet<>();
+    String className = object.getClass().getSimpleName();
+    for (Field field : object.getClass().getDeclaredFields()) {
+      String fieldName = field.getName();
+      for (Annotation annotation : field.getDeclaredAnnotations()) {
         if (isConstraint(annotation)) {
           Checker checker = checkerMap.get(annotation.annotationType());
-          var value = getProperty(object, fieldName);
+          Object value = getProperty(object, fieldName);
           if (!checker.check(value, annotation)) {
             Status status = checker.getStatus(className, fieldName, annotation);
             statusSet.add(status);
           }
         } else if (isValidate(annotation)) {
-          final var value = getProperty(object, fieldName);
+          final Object value = getProperty(object, fieldName);
           statusSet.addAll(processNestedValidation(value));
         }
       }

@@ -1,6 +1,6 @@
 package by.arhor.psra.repository
 
-import java.util.{List => JavaList}
+import java.util
 
 import by.arhor.psra.model.Photo
 import org.springframework.data.mongodb.repository.{MongoRepository, Query}
@@ -8,9 +8,9 @@ import org.springframework.data.mongodb.repository.{MongoRepository, Query}
 trait PhotoRepository extends MongoRepository[Photo, String] {
 
   @Query("{ 'tags' : { $in : ?0 } }")
-  def findByAnyOfTags(tags: Array[String]): JavaList[Photo]
+  def findByAnyOfTags(tags: Array[String]): util.List[Photo]
 
   @Query("{ 'tags' : { $all : ?0 } }")
-  def findByAllOfTags(tags: Array[String]): JavaList[Photo]
+  def findByAllOfTags(tags: Array[String]): util.List[Photo]
 
 }

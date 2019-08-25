@@ -1,5 +1,6 @@
 package by.arhor.psra.validation.checker;
 
+import by.arhor.psra.validation.ErrorCode;
 import by.arhor.psra.validation.constraint.Size;
 import by.arhor.psra.validation.exception.Status;
 import org.springframework.stereotype.Component;
@@ -35,7 +36,7 @@ public final class SizeChecker implements Checker<Size> {
     @Override
     public Status getStatus(String className ,String fieldName, Size constraint) {
         return new Status(
-                FAILED_LENGTH_CHECK,
+            ErrorCode.FAILED_LENGTH_CHECK,
                 className,
                 fieldName,
                 new Object[] { constraint.min(), constraint.max() }

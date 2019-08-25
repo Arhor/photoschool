@@ -23,4 +23,8 @@ class CommentDto extends Dto {
     getContent,
     getUser
   )
+
+  override def toString: String = s"${getClass.getSimpleName} [" +
+    s"content=${content}"+
+    s"]"
 }

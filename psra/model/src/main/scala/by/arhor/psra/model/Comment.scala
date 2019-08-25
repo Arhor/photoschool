@@ -1,8 +1,5 @@
 package by.arhor.psra.model
 
-import java.util.Objects
-
-import by.arhor.psra.CoreVersion
 import org.springframework.data.mongodb.core.mapping.{DBRef, Document}
 
 import scala.beans.BeanProperty

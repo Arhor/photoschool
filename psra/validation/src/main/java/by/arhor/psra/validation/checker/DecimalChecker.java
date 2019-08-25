@@ -1,5 +1,6 @@
 package by.arhor.psra.validation.checker;
 
+import by.arhor.psra.validation.ErrorCode;
 import by.arhor.psra.validation.constraint.Decimal;
 import by.arhor.psra.validation.exception.Status;
 import org.springframework.stereotype.Component;
@@ -44,7 +45,7 @@ public final class DecimalChecker implements Checker<Decimal> {
     @Override
     public Status getStatus(String className, String fieldName, Decimal constraint) {
         return new Status(
-                FAILED_DECIMAL_CHECK,
+                ErrorCode.FAILED_DECIMAL_CHECK,
                 className,
                 fieldName,
                 new Object[] { constraint.precision(), constraint.scale() }

@@ -1,5 +1,6 @@
 package by.arhor.psra.validation.checker;
 
+import by.arhor.psra.validation.ErrorCode;
 import by.arhor.psra.validation.constraint.Pattern;
 import by.arhor.psra.validation.exception.Status;
 import org.springframework.stereotype.Component;
@@ -36,7 +37,7 @@ public final class PatternChecker implements Checker<Pattern> {
     @Override
     public Status getStatus(String className ,String fieldName, Pattern constraint) {
         return new Status(
-                FAILED_PATTERN_CHECK,
+            ErrorCode.FAILED_PATTERN_CHECK,
                 className,
                 fieldName,
                 new Object[] {constraint.message()});

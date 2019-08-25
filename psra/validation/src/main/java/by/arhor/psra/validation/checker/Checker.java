@@ -30,11 +30,11 @@ public interface Checker<T extends Annotation> {
      * @param constraint may contain some detailed constraint bounds
      * @return new Status object
      */
-    Status getStatus(String className ,String fieldName, T constraint);
+    Status getStatus(String className, String fieldName, T constraint);
 
     /**
-     * Returns actual constraint-annotation class, which will be used for building Checkers map as concrete Checker
-     * implementation key.
+     * Returns actual constraint-annotation class, which will be used for
+     * building Checkers map as concrete Checker implementation key.
      *
      * @return constraint-annotation class
      */
