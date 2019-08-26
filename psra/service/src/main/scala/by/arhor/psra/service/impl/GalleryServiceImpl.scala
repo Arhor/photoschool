@@ -25,7 +25,7 @@ class GalleryServiceImpl @Autowired() (
   @Transactional(readOnly = true)
   override def findOne(id: String): GalleryDto = repository
     .findById(id)
-    .map[GalleryDto] { mapToDto }
+    .map[GalleryDto] { _.as[GalleryDto] }
     .orElseThrow {
       () => new EntityNotFoundException(ErrorLabel.GALLERY_NOT_FOUND, "ID", id)
     }
@@ -36,7 +36,7 @@ class GalleryServiceImpl @Autowired() (
     repository
       .findAll
       .stream
-      .map[GalleryDto] { mapToDto }
+      .map[GalleryDto] { _.as[GalleryDto] }
       .collect(toList())
 
   @Transactional(readOnly = true)
@@ -47,7 +47,7 @@ class GalleryServiceImpl @Autowired() (
         user
           .getGalleries
           .stream
-          .map[GalleryDto] { mapToDto }
+          .map[GalleryDto] { _.as[GalleryDto] }
           .collect(toList())
       }
       .orElseThrow {
@@ -57,9 +57,9 @@ class GalleryServiceImpl @Autowired() (
 
   override def create(dto: GalleryDto): GalleryDto =
     Some(dto)
-      .map[Gallery] { mapToEntity }
+      .map[Gallery] { _.as[Gallery] }
       .map[Gallery] { repository insert _ }
-      .map[GalleryDto] { mapToDto }
+      .map[GalleryDto] { _.as[GalleryDto] }
       .get
 
   override def update(dto: GalleryDto): GalleryDto = ???

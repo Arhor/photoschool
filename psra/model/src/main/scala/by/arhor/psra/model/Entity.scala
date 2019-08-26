@@ -1,17 +1,16 @@
 package by.arhor.psra.model
 
 import java.time.LocalDateTime
-import java.util.Objects
 
-import by.arhor.psra.model.traits.{Auditable, Deletable, Identifiable}
+import by.arhor.psra.traits.{Auditable, Deletable, Identifiable}
 import org.springframework.data.annotation.{CreatedDate, Id, LastModifiedDate}
 
 import scala.beans.{BeanProperty, BooleanBeanProperty}
 
 abstract class Entity
   extends Identifiable[String]
-     with Auditable
-     with Deletable {
+    with Auditable
+    with Deletable {
 
   @Id
   @BeanProperty

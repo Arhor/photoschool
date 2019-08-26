@@ -7,6 +7,7 @@ import java.util.stream.Collectors.toList
 import by.arhor.psra.dto.CommentDto
 import by.arhor.psra.exception.EntityNotFoundException
 import by.arhor.psra.localization.ErrorLabel
+import by.arhor.psra.model.Comment
 import by.arhor.psra.repository.{CommentRepository, PhotoRepository}
 import by.arhor.psra.service.CommentService
 import org.modelmapper.ModelMapper
@@ -25,44 +26,42 @@ class CommentServiceImpl @Autowired() (
   @Transactional(readOnly = true)
   override def findOne(id: String): CommentDto =
     repository
-      .findById(id)
-      .map[CommentDto] { mapToDto }
-      .orElseThrow {
-        () => new EntityNotFoundException(ErrorLabel.COMMENT_NOT_FOUND, "ID", id)
-      }
+      .findByIdAndEnabledTrue(id)
+      .map[CommentDto] { _.as[CommentDto] }
+      .orElseThrow(() => new EntityNotFoundException(ErrorLabel.COMMENT_NOT_FOUND, "ID", id))
 
   @Transactional(readOnly = true)
   override def findAll(): util.List[CommentDto] =
     repository
       .findAll
       .stream
-      .map[CommentDto] { mapToDto }
+      .map[CommentDto] { _.as[CommentDto] }
       .collect(toList())
 
   override def create(dto: CommentDto): CommentDto = {
-    lazy val comment = mapToEntity(dto)
+    val comment = dto.as[Comment]
     comment.dateTimeCreated = LocalDateTime.now()
-    lazy val created = repository.insert(comment)
-    mapToDto(created)
+    val created = repository.insert(comment)
+    created.as[CommentDto]
   }
 
   override def update(dto: CommentDto): CommentDto = {
-    lazy val comment = repository
-      .findById(dto.id)
+    val comment = repository
+      .findByIdAndEnabledTrue(dto.id)
       .orElseThrow {
         () => new EntityNotFoundException(ErrorLabel.COMMENT_NOT_FOUND, "ID", dto.id)
       }
     comment.content = dto.content
     comment.dateTimeUpdated = LocalDateTime.now()
-    lazy val updated = repository.save(comment)
-    mapToDto(updated)
+    val updated = repository.save(comment)
+    updated.as[CommentDto]
   }
 
-  override def delete(dto: CommentDto): Unit =
-    repository
-      .findById(dto.id)
-      .map[Unit] { repository.delete(_) }
-      .orElseThrow {
-        () => new EntityNotFoundException(ErrorLabel.COMMENT_NOT_FOUND, "ID", dto.id)
-      }
+  override def delete(dto: CommentDto): Unit = {
+    val comment = repository
+      .findByIdAndEnabledTrue(dto.id)
+      .orElseThrow(() => new EntityNotFoundException(ErrorLabel.COMMENT_NOT_FOUND, "ID", dto.id))
+    comment.enabled = false
+    repository save comment
+  }
 }

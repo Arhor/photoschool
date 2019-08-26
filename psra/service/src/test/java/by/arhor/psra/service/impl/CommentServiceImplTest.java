@@ -39,6 +39,12 @@ public class CommentServiceImplTest extends MockBeanProvider {
   }
 
   @Test
+  public void test() {
+    CommentDto dto = new CommentDto(null, null, null, true, null, null);
+    System.out.println(dto);
+  }
+
+  @Test
   public void findAllTest() {
     List<Comment> mockComments = listOf(3, () -> comment);
 

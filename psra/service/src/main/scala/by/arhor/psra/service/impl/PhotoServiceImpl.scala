@@ -24,8 +24,6 @@ class PhotoServiceImpl @Autowired() (
 	override protected val modelMapper: ModelMapper
 ) extends PhotoService {
 
-	import by.arhor.psra.dto.Converters._
-
 	@Transactional(readOnly = true)
 	override def findOne(id: String): PhotoDto =
 		repository
@@ -40,7 +38,7 @@ class PhotoServiceImpl @Autowired() (
 		repository
 			.findAll
 			.stream
-			.map[PhotoDto] { mapToDto }
+			.map[PhotoDto] { _.as[PhotoDto] }
   		.collect(toList())
 
 	@Transactional(readOnly = true)
@@ -48,7 +46,7 @@ class PhotoServiceImpl @Autowired() (
 		repository
 			.findByAnyOfTags(Array(tag))
 			.stream
-			.map[PhotoDto] { mapToDto }
+			.map[PhotoDto] { _.as[PhotoDto] }
 			.collect(toList())
 
 	override def findCommentsByPhotoId(pid: String): util.List[CommentDto] =
@@ -86,11 +84,11 @@ class PhotoServiceImpl @Autowired() (
 	}
 
 	override def create(dto: PhotoDto): PhotoDto = {
-		val photo: Photo = mapToEntity(dto)
+		val photo = dto.as[Photo]
 		photo.dateTimeCreated = LocalDateTime.now
 		photo.dateTimeUpdated = LocalDateTime.now
 		val created: Photo = repository.insert(photo)
-		mapToDto(created)
+		created.as[PhotoDto]
 	}
 
 	override def update(dto: PhotoDto): PhotoDto = ???

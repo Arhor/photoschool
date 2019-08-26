@@ -1,4 +1,4 @@
-package by.arhor.psra.model.traits
+package by.arhor.psra.traits
 
 trait Identifiable[K] {
 

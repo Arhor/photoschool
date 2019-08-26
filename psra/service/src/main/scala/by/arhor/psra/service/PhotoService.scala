@@ -5,7 +5,7 @@ import java.util
 import by.arhor.psra.dto.{CommentDto, PhotoDto, UserDto}
 import by.arhor.psra.model.Photo
 
-trait PhotoService extends Service[Photo, PhotoDto, String] {
+trait PhotoService extends Service[PhotoDto, String] {
 
   def findPhotosByTag(tag: String, requester: UserDto): util.List[PhotoDto]
 

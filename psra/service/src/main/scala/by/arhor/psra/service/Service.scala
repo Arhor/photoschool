@@ -8,7 +8,7 @@ import org.modelmapper.ModelMapper
 
 import scala.reflect.ClassTag
 
-trait Service[M <: Entity, D <: Dto, K] {
+trait Service[D <: Dto, K] {
 
   def findOne(id: K): D
   def findAll(): util.List[D]
@@ -18,12 +18,26 @@ trait Service[M <: Entity, D <: Dto, K] {
 
   protected val modelMapper: ModelMapper
 
-  def mapToDto(model: M)(implicit tag: ClassTag[D]): D = {
-    modelMapper.map[D] (model, tag.runtimeClass.asInstanceOf[Class[D]])
+  implicit protected def convert[T, R](from: T, to: Class[R]): R = modelMapper.map[R](from, to)
+
+  implicit protected class DtoToEntity[T <: Dto](dto: T) {
+    def as[R <: Entity](implicit f: (T, Class[R]) => R, tag: ClassTag[R]): R = {
+      val targetClass = tag.runtimeClass.asInstanceOf[Class[R]]
+      f(dto, targetClass)
+    }
   }
 
-  def mapToEntity(dto: D)(implicit tag: ClassTag[M]): M = {
-    modelMapper.map[M] (dto, tag.runtimeClass.asInstanceOf[Class[M]])
+  implicit protected class EntityToDto[T <: Entity](entity: T) {
+    def as[R <: Dto](implicit f: (T, Class[R]) => R, tag: ClassTag[R]): R = {
+      val targetClass = tag.runtimeClass.asInstanceOf[Class[R]]
+      f(entity, targetClass)
+    }
   }
-
+//  def mapToDto(model: M)(implicit tag: ClassTag[D]): D = {
+//    modelMapper.map[D] (model, tag.runtimeClass.asInstanceOf[Class[D]])
+//  }
+//
+//  def mapToEntity(dto: D)(implicit tag: ClassTag[M]): M = {
+//    modelMapper.map[M] (dto, tag.runtimeClass.asInstanceOf[Class[M]])
+//  }
 }

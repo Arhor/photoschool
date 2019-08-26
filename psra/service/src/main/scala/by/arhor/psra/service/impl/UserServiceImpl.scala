@@ -50,7 +50,7 @@ class UserServiceImpl @Autowired() (
 	override def findOne(id: String): UserDto =
 		repository
 			.findById(id)
-			.map[UserDto] { mapToDto }
+			.map[UserDto] { _.as[UserDto] }
   		.orElseThrow {
 				() => new EntityNotFoundException(ErrorLabel.USER_NOT_FOUND, "ID", id)
 			}
@@ -60,7 +60,7 @@ class UserServiceImpl @Autowired() (
 		repository
 			.findAll
 			.stream
-			.map[UserDto] { mapToDto }
+			.map[UserDto] { _.as[UserDto] }
 			.collect(toList())
 
 	override def findLearnersByCourseId(cid: String): util.List[UserDto] =
@@ -70,7 +70,7 @@ class UserServiceImpl @Autowired() (
 				course
 					.learners
 					.stream
-					.map[UserDto] { mapToDto }
+					.map[UserDto] { _.as[UserDto] }
 					.collect(toList())
 			}
 			.orElseThrow {
@@ -80,10 +80,10 @@ class UserServiceImpl @Autowired() (
 	override def create(dto: UserDto): UserDto = {
 		// FIXME Check for name duplicates
 
-		lazy val user: User = mapToEntity(dto) // lazy?
+		val user = dto.as[User]
 		user.password = encoder.encode(user.password)
-		lazy val created: User = repository.insert(user) // lazy?
-		mapToDto(created)
+		val created: User = repository.insert(user)
+		created.as[UserDto]
 	}
 
 	override def update(dto: UserDto): UserDto = ??? // TODO Auto-generated method stub

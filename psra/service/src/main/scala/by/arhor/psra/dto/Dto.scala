@@ -3,42 +3,31 @@ package by.arhor.psra.dto
 import java.time.LocalDateTime
 import java.util.Objects
 
+import by.arhor.psra.traits.{Auditable, Deletable, Identifiable}
+
 import scala.beans.{BeanProperty, BooleanBeanProperty}
 
-abstract class Dto extends Serializable with Comparable[Dto] {
+abstract class Dto
+  extends Identifiable[String]
+    with Auditable
+    with Deletable {
 
   @BeanProperty var id: String = _
   @BeanProperty var dateTimeCreated: LocalDateTime = _
   @BeanProperty var dateTimeUpdated: LocalDateTime = _
   @BooleanBeanProperty var enabled: Boolean = true
 
-  override def compareTo(that: Dto): Int = {
-    val thisId = if (this.id != null) this.id else ""
-    val thatId = if (that.id != null) that.id else ""
-    thisId.compareTo(thatId)
+  override def equals(other: Any): Boolean = other match {
+    case that: Dto =>
+      that.isInstanceOf[Dto] &&
+      that.id == this.id &&
+      that.dateTimeCreated == this.dateTimeCreated &&
+      that.dateTimeUpdated == this.dateTimeUpdated &&
+      that.enabled == this.enabled
+    case _ =>
+      false
   }
 
-  override def equals(obj: Any): Boolean = obj match {
-    case null => false
-    case value =>
-      if (this eq value.asInstanceOf[AnyRef]) {
-        return true
-      }
-      if (getClass == obj.getClass) {
-        val dto = obj.asInstanceOf[Dto]
-        id == dto.id &&
-        dateTimeCreated == dto.dateTimeCreated &&
-        dateTimeUpdated == dto.dateTimeUpdated &&
-        enabled == dto.enabled
-      } else {
-        false
-      }
-  }
-
-  override def hashCode(): Int = Objects.hash(
-    getId,
-    getDateTimeCreated,
-    getDateTimeUpdated
-  ) + (if (isEnabled) 1 else 0)
+  override def hashCode(): Int = (id, dateTimeCreated, dateTimeUpdated, enabled).##
 
 }

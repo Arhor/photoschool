@@ -7,6 +7,7 @@ import java.util.stream.Collectors.toList
 import by.arhor.psra.dto.CourseDto
 import by.arhor.psra.exception.EntityNotFoundException
 import by.arhor.psra.localization.ErrorLabel
+import by.arhor.psra.model.Course
 import by.arhor.psra.repository.{CourseRepository, UserRepository}
 import by.arhor.psra.service.CourseService
 import org.modelmapper.ModelMapper
@@ -26,7 +27,7 @@ class CourseServiceImpl @Autowired() (
   override def findOne(id: String): CourseDto =
     repository
       .findById(id)
-      .map[CourseDto] { mapToDto }
+      .map[CourseDto] { _.as[CourseDto] }
       .orElseThrow {
         () => new EntityNotFoundException(ErrorLabel.COURSE_NOT_FOUND, "ID", id)
       }
@@ -36,14 +37,14 @@ class CourseServiceImpl @Autowired() (
     repository
       .findAll
       .stream
-      .map[CourseDto] { mapToDto }
+      .map[CourseDto] { _.as[CourseDto] }
       .collect(toList())
 
   override def create(dto: CourseDto): CourseDto = {
-    lazy val course = mapToEntity(dto)
-    course.dateTimeCreated = LocalDateTime.now()
-    lazy val created = repository.insert(course)
-    mapToDto(created)
+    val course = dto.as[Course]
+    course.dateTimeCreated = LocalDateTime.now
+    val created = repository.insert(course)
+    created.as[CourseDto]
   }
 
   override def update(dto: CourseDto): CourseDto = {
@@ -52,14 +53,10 @@ class CourseServiceImpl @Autowired() (
       .orElseThrow {
         () => new EntityNotFoundException(ErrorLabel.COURSE_NOT_FOUND, "ID", dto.id)
       }
-    val toUpdate = mapToEntity(dto)
+    val toUpdate = dto.as[Course]
 
-    toUpdate.dateTimeCreated = course.dateTimeCreated
-    toUpdate.dateTimeUpdated = LocalDateTime.now()
-
-
-    lazy val updated = repository.save(toUpdate)
-    mapToDto(updated)
+    val updated = repository.save(toUpdate)
+    updated.as[CourseDto]
   }
 
   override def delete(dto: CourseDto): Unit =
@@ -90,6 +87,6 @@ class CourseServiceImpl @Autowired() (
     users.foreach { course.learners.add(_) }
 
     val updated = repository.save(course)
-    mapToDto(updated)
+    updated.as[CourseDto]
   }
 }

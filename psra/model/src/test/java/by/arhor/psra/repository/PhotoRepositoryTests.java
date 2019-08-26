@@ -7,6 +7,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.ArrayList;
@@ -15,6 +17,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.assertThat;
@@ -77,6 +80,35 @@ public class PhotoRepositoryTests extends AbstractRepositoryTests {
 		List<Photo> photos = photoRepository.findByAllOfTags(tags);
 		assertThat(photos, notNullValue());
 		assertThat(photos, hasSize(1));
+	}
+
+	@Test
+	public void findByIdAndEnabledTrueTest() {
+		List<Photo> photos = photoRepository.findAll();
+
+		assertThat(photos, notNullValue());
+
+		photos.forEach(p -> {
+			Photo photo_1 = photoRepository.findById(p.id()).get();
+			Photo photo_2 = photoRepository.findByIdAndEnabledTrue(p.id()).get();
+
+			assertThat(photo_1, notNullValue());
+			assertThat(photo_2, notNullValue());
+			assertThat(photo_1, equalTo(photo_2));
+
+			System.out.printf("%s - %s%n", photo_1, photo_2);
+		});
+	}
+
+	@Test
+	public void findAllEnabledTrue() {
+		PageRequest request = PageRequest.of(0, 10);
+		Page<Photo> page = photoRepository.findAllByEnabledTrue(request);
+
+		assertThat(page, notNullValue());
+		assertThat(page.isEmpty(), equalTo(false));
+
+		page.get().forEach(System.out::println);
 	}
 
 }

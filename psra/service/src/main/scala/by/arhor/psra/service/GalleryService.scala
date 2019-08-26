@@ -5,7 +5,7 @@ import java.util
 import by.arhor.psra.dto.GalleryDto
 import by.arhor.psra.model.Gallery
 
-trait GalleryService extends Service[Gallery, GalleryDto, String] {
+trait GalleryService extends Service[GalleryDto, String] {
 
   def findGalleriesByUserId(uid: String): util.List[GalleryDto]
 
