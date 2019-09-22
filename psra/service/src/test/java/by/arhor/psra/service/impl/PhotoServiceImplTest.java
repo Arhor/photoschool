@@ -49,9 +49,9 @@ public class PhotoServiceImplTest extends MockBeanProvider {
     String mockId = "mock-id";
     List<Comment> mockComments = listOf(5, () -> comment);
 
-    when(photoRepository.findById(mockId))
+    when(photoRepository.findByIdAndEnabledTrue(mockId))
         .thenReturn(Optional.of(photo));
-    when(photo.comments())
+    when(photo.getComments())
         .thenReturn(mockComments);
 
     List<CommentDto> result = service.findCommentsByPhotoId(mockId);
@@ -65,16 +65,16 @@ public class PhotoServiceImplTest extends MockBeanProvider {
     });
 
     verify(photoRepository)
-        .findById(mockId);
+        .findByIdAndEnabledTrue(mockId);
     verify(photo)
-        .comments();
+        .getComments();
     verify(modelMapper, times(5))
         .map(comment, CommentDto.class);
   }
 
   @Test
   public void findCommentsByPhotoIdNegativeTest() {
-    when(photoRepository.findById(any(String.class)))
+    when(photoRepository.findByIdAndEnabledTrue(any(String.class)))
         .thenReturn(Optional.empty());
 
     String id = "test-id";
@@ -88,15 +88,15 @@ public class PhotoServiceImplTest extends MockBeanProvider {
       if (error instanceof EntityNotFoundException) {
         EntityNotFoundException e = (EntityNotFoundException) error;
 
-        assertThat(e.fieldName(), is(equalTo("ID")));
-        assertThat(e.fieldValue(), is(equalTo(id)));
+        assertThat(e.getFieldName(), is(equalTo("ID")));
+        assertThat(e.getFieldValue(), is(equalTo(id)));
       } else {
         fail();
       }
     }
 
     verify(photoRepository)
-        .findById(id);
+        .findByIdAndEnabledTrue(id);
   }
 
 }

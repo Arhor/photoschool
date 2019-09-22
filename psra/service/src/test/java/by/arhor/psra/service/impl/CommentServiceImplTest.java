@@ -39,12 +39,6 @@ public class CommentServiceImplTest extends MockBeanProvider {
   }
 
   @Test
-  public void test() {
-    CommentDto dto = new CommentDto(null, null, null, true, null, null);
-    System.out.println(dto);
-  }
-
-  @Test
   public void findAllTest() {
     List<Comment> mockComments = listOf(3, () -> comment);
 
@@ -71,7 +65,7 @@ public class CommentServiceImplTest extends MockBeanProvider {
   public void findOnePositiveTest() {
     String mockId = "mock-id";
 
-    when(commentRepository.findById(mockId))
+    when(commentRepository.findByIdAndEnabledTrue(mockId))
         .thenReturn(Optional.of(comment));
 
     CommentDto result = service.findOne(mockId);
@@ -80,14 +74,14 @@ public class CommentServiceImplTest extends MockBeanProvider {
     assertThat(result, is(equalTo(commentDto)));
 
     verify(commentRepository)
-        .findById(mockId);
+        .findByIdAndEnabledTrue(mockId);
     verify(modelMapper)
         .map(comment, CommentDto.class);
   }
 
   @Test
   public void findOneNegativeTest() {
-    when(commentRepository.findById(any(String.class)))
+    when(commentRepository.findByIdAndEnabledTrue(any(String.class)))
         .thenReturn(Optional.empty());
 
     String id = "test-id";
@@ -101,15 +95,15 @@ public class CommentServiceImplTest extends MockBeanProvider {
       if (error instanceof EntityNotFoundException) {
         EntityNotFoundException e = (EntityNotFoundException) error;
 
-        assertThat(e.fieldName(), is(equalTo("ID")));
-        assertThat(e.fieldValue(), is(equalTo(id)));
+        assertThat(e.getFieldName(), is(equalTo("ID")));
+        assertThat(e.getFieldValue(), is(equalTo(id)));
       } else {
         fail();
       }
     }
 
     verify(commentRepository)
-        .findById(id);
+        .findByIdAndEnabledTrue(id);
   }
 
   @Test
