@@ -18,11 +18,9 @@ import by.arhor.psra.repository.UserRepository;
 import org.mockito.Mock;
 import org.modelmapper.ModelMapper;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.boot.test.mock.mockito.SpyBean;
 
 import java.util.List;
 import java.util.function.Supplier;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.toList;

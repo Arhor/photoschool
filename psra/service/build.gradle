@@ -6,8 +6,8 @@ plugins {
     id 'scala'
 }
 
-sourceCompatibility = '1.8'
-targetCompatibility = '1.8'
+sourceCompatibility = '13'
+targetCompatibility = '13'
 
 dependencyManagement {
     imports {
@@ -19,7 +19,6 @@ dependencies {
     implementation project(":core")
     implementation project(":model")
 
-    implementation 'org.scala-lang:scala-library:2.13.0'
     implementation 'org.springframework.boot:spring-boot-starter-data-mongodb-reactive'
     implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.modelmapper:modelmapper:2.3.4'
