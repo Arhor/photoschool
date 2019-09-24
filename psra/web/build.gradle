@@ -1,17 +1,15 @@
 plugins {
     id 'org.springframework.boot' version '2.1.7.RELEASE'
     id 'io.spring.dependency-management' version '1.0.8.RELEASE'
-    id 'scala'
+    id 'java'
 }
 
-sourceCompatibility = '1.8'
-targetCompatibility = '1.8'
+sourceCompatibility = '12' //JavaVersion.VERSION_12
+targetCompatibility = '12'
 
 dependencies {
     implementation project(":core")
 	implementation project(":service")
-
-    implementation 'org.scala-lang:scala-library:2.13.0'
 
     implementation 'com.google.code.findbugs:jsr305:3.0.2'
     

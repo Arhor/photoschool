@@ -1,4 +1,4 @@
-package by.arhor.psra;
+package by.arhor.psra.function;
 
 @FunctionalInterface
 public interface Procedure {

@@ -1,23 +1,11 @@
-package by.arhor.psra;
+package by.arhor.psra.function;
 
 import java.util.Objects;
 import java.util.function.BiFunction;
-import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-public class Lazy<T> implements Supplier<T> {
-
-  public static final Lazy<?> ZERO = new Lazy<>(() -> null) {
-    @Override
-    public Object get() {
-      return null;
-    }
-    @Override
-    public boolean isComputed() {
-      return true;
-    }
-  };
+public final class Lazy<T> implements RichSupplier<T> {
 
   private final Supplier<T> source;
 
@@ -49,19 +37,18 @@ public class Lazy<T> implements Supplier<T> {
     return computed;
   }
 
+  @Override
   public <R> Lazy<R> map(Function<T, R> f) {
     return new Lazy<>(() -> f.apply(this.get()));
   }
 
+  @Override
   public <R> Lazy<R> flatMap(Function<T, Lazy<R>> f) {
     return new Lazy<>(() -> f.apply(this.get()).get());
   }
 
+  @Override
   public <R, U> Lazy<U> merge(Lazy<R> that, BiFunction<T, R, U> f) {
     return new Lazy<>(() -> f.apply(this.get(), that.get()));
-  }
-
-  public void forEach(Consumer<T> action) {
-    action.accept(get());
   }
 }
