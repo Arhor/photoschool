@@ -4,8 +4,16 @@ plugins {
     id 'java'
 }
 
-sourceCompatibility = '12' //JavaVersion.VERSION_12
+sourceCompatibility = '12'
 targetCompatibility = '12'
+
+tasks.withType(JavaCompile).each {
+    it.options.compilerArgs.add('--enable-preview')
+}
+
+test {
+    jvmArgs(['--enable-preview'])
+}
 
 dependencies {
     implementation project(":core")
