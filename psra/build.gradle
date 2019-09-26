@@ -4,9 +4,15 @@ allprojects {
 }
 
 subprojects {
+    apply plugin: 'java'
+
     repositories {
         jcenter()
         mavenCentral()
         mavenLocal()
+    }
+
+    tasks.withType(JavaCompile).each {
+        it.options.compilerArgs += ['-Xlint:preview', '-Xlint:unchecked']
     }
 }

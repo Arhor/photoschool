@@ -44,7 +44,7 @@ public class PhotoController {
   }
 
   @PostMapping(path = "/{id}/comments", consumes = APPLICATION_JSON_UTF8_VALUE)
-  public ResponseEntity addCommentToPhoto(
+  public ResponseEntity<Void> addCommentToPhoto(
       @PathVariable("id") String id,
       @RequestBody CommentDto dto,
       Authentication auth) {
@@ -60,6 +60,6 @@ public class PhotoController {
             .slash(comment.getId())
             .toUri());
 
-    return new ResponseEntity(headers, HttpStatus.CREATED);
+    return new ResponseEntity<>(headers, HttpStatus.CREATED);
   }
 }

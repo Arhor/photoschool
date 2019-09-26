@@ -1,5 +1,7 @@
 package by.arhor.psra.math;
 
+import java.util.Arrays;
+
 public class DMatrixTest {
 
   public static void main(String[] args) {
@@ -11,14 +13,21 @@ public class DMatrixTest {
         matrix.set(i, j, counter++);
       }
     }
-    System.out.println();
-    System.out.println(matrix);
 
+    for (int j = 0; j < matrix.rows; j++) {
+      for (int i = 0; i < matrix.cols; i ++) {
+        System.out.print(matrix.get(i, j) + " ");
+      }
+      System.out.println();
+    }
     System.out.println();
-    System.out.println(matrix.transpose());
-
-    System.out.println();
-    System.out.println(matrix.determinant());
+    final var transposed = matrix.transpose();
+    for (int j = 0; j < matrix.rows; j++) {
+      for (int i = 0; i < matrix.cols; i ++) {
+        System.out.print(transposed.get(i, j) + " ");
+      }
+      System.out.println();
+    }
   }
 
 }

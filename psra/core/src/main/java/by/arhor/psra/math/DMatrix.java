@@ -2,6 +2,7 @@ package by.arhor.psra.math;
 
 import java.util.Arrays;
 import java.util.Objects;
+import java.util.StringJoiner;
 
 public class DMatrix implements Matrix {
 
@@ -10,17 +11,15 @@ public class DMatrix implements Matrix {
   // FIXME - cache determinant
 
   private final double[] store;
-  public final int cols;
   public final int rows;
+  public final int cols;
 
-  public DMatrix(final int cols, final int rows) {
-    if (cols < 0 || rows < 0) {
-      throw new IllegalArgumentException("Illegal initial size: " +
-          "cols = " + cols + ", " +
-          "rows = " + rows);
+  public DMatrix(final int rows, final int cols) {
+    if ((rows < 0) || (cols < 0)) {
+      throw new IllegalArgumentException("Illegal initial size: " + toString());
     }
-    this.cols = cols;
     this.rows = rows;
+    this.cols = cols;
 
     final int size = cols * rows;
 
@@ -41,22 +40,36 @@ public class DMatrix implements Matrix {
     return rows;
   }
 
-  public double get(final int col, final int row) {
-    ensureIndex(col, row);
+  public double get(final int row, final int col) {
+    ensureIndex(row, col);
     return store[row * cols + col];
   }
 
-  public void set(final int col, final int row, final double value) {
-    ensureIndex(col, row);
+  public void set(final int row, final int col, final double value) {
+    ensureIndex(row, col);
     store[row * cols + col] = value;
   }
 
-  public boolean hasDeterminant() {
+  public DMatrix plus(DMatrix that) {
+    Objects.requireNonNull(that);
+    if ((this.cols == that.cols) && (this.rows == that.rows)) {
+      final var matrix = new DMatrix(cols, rows);
+      for (int i = 0; i < store.length; i++) {
+        matrix.store[i] = this.store[i] + that.store[i];
+      }
+      return matrix;
+    }
+    throw new IllegalArgumentException("Incompatible operand size:\n" +
+        "\tthis - " + this.toString() + "\n" +
+        "\tthat - " + that.toString());
+  }
+
+  public boolean isSquare() {
     return (cols == rows);
   }
 
   public double determinant() {
-    if (hasDeterminant()) {
+    if (isSquare()) {
       return 0;
     }
     throw new UnsupportedOperationException("Determinant can be computed only for square matrices");
@@ -82,38 +95,20 @@ public class DMatrix implements Matrix {
 
   public DMatrix transpose() {
     final var matrix = new DMatrix(rows, cols);
-    for (int i = 0; i < cols; i++) {
-      for (int j = 0; j < rows; j++) {
+    for (int i = 0; i < rows; i++) {
+      for (int j = 0; j < cols; j++) {
         matrix.set(j, i, get(i, j));
       }
     }
     return matrix;
   }
 
-  public DMatrix plus(DMatrix that) {
-    Objects.requireNonNull(that);
-    if (this.cols == that.cols && this.rows == that.rows) {
-      final var matrix = new DMatrix(cols, rows);
-      for (int i = 0; i < store.length; i++) {
-        matrix.store[i] = this.store[i] + that.store[i];
-      }
-      return matrix;
-    }
-    throw new IllegalArgumentException("Incompatible operand size:\n" +
-        "\tthis - " + this.sizeInfo() + "\n" +
-        "\tthat - " + that.sizeInfo());
-  }
-
   private void ensureIndex(final int col, final int row) {
     if (store == EMPTY_STORE
-        || col >= cols
-        || row >= rows) {
-      throw new IndexOutOfBoundsException("Actual size: " + sizeInfo());
+        || row >= rows
+        || col >= cols) {
+      throw new IndexOutOfBoundsException("Actual size: " + toString());
     }
-  }
-
-  private String sizeInfo() {
-    return "cols = " + cols + ", rows = " + rows;
   }
 
   @Override
@@ -125,27 +120,23 @@ public class DMatrix implements Matrix {
       return false;
     }
     DMatrix dMatrix = (DMatrix) o;
-    return cols == dMatrix.cols
-        && rows == dMatrix.rows
+    return rows == dMatrix.rows
+        && cols == dMatrix.cols
         && Arrays.equals(store, dMatrix.store);
   }
 
   @Override
   public int hashCode() {
-    int result = Objects.hash(cols, rows);
+    int result = Objects.hash(rows, cols);
     result = 31 * result + Arrays.hashCode(store);
     return result;
   }
 
-  // FIXME - move to separate class - MatrixUtils
   @Override
   public String toString() {
-    final var sb = new StringBuilder();
-    for (int j = 0; j < rows; j++) {
-      for (int i = 0; i < cols; i++) {
-        sb.append(get(i, j)).append((i == cols - 1) ? '\n' : ' ');
-      }
-    }
-    return sb.toString();
+    return new StringJoiner(", ", DMatrix.class.getSimpleName() + "[", "]")
+        .add("rows=" + rows)
+        .add("cols=" + cols)
+        .toString();
   }
 }
