@@ -2,7 +2,11 @@ package by.arhor.psra.repository;
 
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.Random;
+import java.util.Set;
 
 abstract class AbstractRepositoryTest {
 	
@@ -13,7 +17,7 @@ abstract class AbstractRepositoryTest {
 
 	private Random rand = new Random();
 
-	private String generatePath() {
+	protected String generatePath() {
 		int depth = rand.nextInt(4);
 		StringBuilder builder = new StringBuilder();
 		for (int i = 0; i <= depth; i++) {

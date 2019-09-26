@@ -11,9 +11,7 @@ import java.util.StringJoiner;
 @Document("courses")
 public class Course extends Entity {
 
-  @Indexed(unique = true)
   private String name;
-  
   private String description;
 
   @DBRef(lazy = true)

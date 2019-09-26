@@ -28,8 +28,8 @@ import static java.util.stream.Collectors.toList;
 @Service
 @Transactional
 public class UserServiceImpl
-    implements UserService
-             , UserDetailsService {
+  implements UserService
+           , UserDetailsService {
 
   private final UserRepository repository;
   private final CourseRepository courseRepository;
@@ -95,6 +95,8 @@ public class UserServiceImpl
   @Override
 	public UserDto create(UserDto dto) {
 		final var user = mapper.map(dto, User.class);
+
+//		repository.
 
 		user.setPassword(encoder.encode(user.getPassword()));
 

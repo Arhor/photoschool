@@ -24,7 +24,7 @@ public abstract class Entity
   @LastModifiedDate
   private LocalDateTime dateTimeUpdated;
 
-  private boolean enabled;
+  private boolean enabled = true;
 
   @Override
   public String getId() {

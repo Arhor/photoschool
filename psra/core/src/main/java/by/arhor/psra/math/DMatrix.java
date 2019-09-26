@@ -8,8 +8,6 @@ public class DMatrix implements Matrix {
 
   private static final double[] EMPTY_STORE = {};
 
-  // FIXME - cache determinant
-
   private final double[] store;
   public final int rows;
   public final int cols;
@@ -40,6 +38,17 @@ public class DMatrix implements Matrix {
     return rows;
   }
 
+  @Override
+  public DMatrix transpose() {
+    final var matrix = new DMatrix(rows, cols);
+    for (int i = 0; i < rows; i++) {
+      for (int j = 0; j < cols; j++) {
+        matrix.set(j, i, get(i, j));
+      }
+    }
+    return matrix;
+  }
+
   public double get(final int row, final int col) {
     ensureIndex(row, col);
     return store[row * cols + col];
@@ -48,6 +57,14 @@ public class DMatrix implements Matrix {
   public void set(final int row, final int col, final double value) {
     ensureIndex(row, col);
     store[row * cols + col] = value;
+  }
+
+  public void fill(double arg) {
+    Arrays.fill(store, arg);
+  }
+
+  public void clear() {
+    fill(0d);
   }
 
   public DMatrix plus(DMatrix that) {
@@ -64,41 +81,18 @@ public class DMatrix implements Matrix {
         "\tthat - " + that.toString());
   }
 
-  public boolean isSquare() {
-    return (cols == rows);
-  }
-
-  public double determinant() {
-    if (isSquare()) {
-      return 0;
-    }
-    throw new UnsupportedOperationException("Determinant can be computed only for square matrices");
-  }
-
-  // FIXME - fix computations
-  private double computeDeterminant(int i, int j) {
-    final var even = (i + 1) % 2 == 0;
-    if ((cols - i) == 2) {
-      final var a = get(i, j);
-      final var b = get(i + 1, j);
-      final var c = get(i, j + 1);
-      final var d = get(i + 1, j + 1);
-      return (even ? 1 : -1) * (a * d - c * b);
-    } else {
-      var accumulator = 0;
-      for (int index = i; index < cols; index++) {
-        accumulator += computeDeterminant(index, j + 1);
-      }
-      return accumulator;
-    }
-  }
-
-  public DMatrix transpose() {
+  public DMatrix plus(double arg) {
     final var matrix = new DMatrix(rows, cols);
-    for (int i = 0; i < rows; i++) {
-      for (int j = 0; j < cols; j++) {
-        matrix.set(j, i, get(i, j));
-      }
+    for (int i = 0; i < store.length; i++) {
+      matrix.store[i] = this.store[i] + arg;
+    }
+    return matrix;
+  }
+
+  public DMatrix multiply(double arg) {
+    final var matrix = new DMatrix(rows, cols);
+    for (int i = 0; i < store.length; i++) {
+      matrix.store[i] = this.store[i] * arg;
     }
     return matrix;
   }
@@ -109,6 +103,20 @@ public class DMatrix implements Matrix {
         || col >= cols) {
       throw new IndexOutOfBoundsException("Actual size: " + toString());
     }
+  }
+
+  private void swapRows(int i, int j) {
+    if ((i >= 0) && (j >= 0) && (i < rows) && (j < rows)) {
+
+    }
+    throw new IndexOutOfBoundsException("Actual rows: " + rows);
+  }
+
+  private void swapCols(int i, int j) {
+    if ((i >= 0) && (j >= 0) && (i < cols) && (j < cols)) {
+
+    }
+    throw new IndexOutOfBoundsException("Actual cols: " + cols);
   }
 
   @Override

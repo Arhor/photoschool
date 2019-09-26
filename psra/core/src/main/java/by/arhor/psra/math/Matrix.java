@@ -6,4 +6,10 @@ public interface Matrix {
 
   int rows();
 
+  Matrix transpose();
+
+  default boolean isSquare() {
+    return (cols() == rows());
+  }
+
 }

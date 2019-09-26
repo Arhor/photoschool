@@ -1,5 +1,6 @@
 package by.arhor.psra.model;
 
+import by.arhor.psra.traits.Likable;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -9,12 +10,13 @@ import java.util.Set;
 import java.util.StringJoiner;
 
 @Document("photos")
-public class Photo extends Entity {
+public class Photo extends Entity implements Likable {
   
   private String name;
   private String description;
   private String path;
   private Set<String> tags;
+  private int likes;
 
   @DBRef(lazy = true)
   private List<Comment> comments;
@@ -51,6 +53,16 @@ public class Photo extends Entity {
     this.tags = tags;
   }
 
+  @Override
+  public int getLikes() {
+    return likes;
+  }
+
+  @Override
+  public void setLikes(int likes) {
+    this.likes = likes;
+  }
+
   public List<Comment> getComments() {
     return comments;
   }
@@ -74,12 +86,13 @@ public class Photo extends Entity {
     return Objects.equals(name, photo.name)
         && Objects.equals(description, photo.description)
         && Objects.equals(path, photo.path)
-        && Objects.equals(tags, photo.tags);
+        && Objects.equals(tags, photo.tags)
+        && likes == photo.likes;
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(super.hashCode(), name, description, path, tags);
+    return Objects.hash(super.hashCode(), name, description, path, tags, likes);
   }
 
   @Override
@@ -89,6 +102,7 @@ public class Photo extends Entity {
         .add("description='" + description + "'")
         .add("path='" + path + "'")
         .add("tags=" + tags)
+        .add("likes=" + likes)
         .toString();
   }
 }

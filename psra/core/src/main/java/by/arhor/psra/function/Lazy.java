@@ -7,16 +7,15 @@ import java.util.function.Supplier;
 
 public final class Lazy<T> implements RichSupplier<T> {
 
-  private final Supplier<T> source;
-
+  private Supplier<T> source;
   private boolean computed;
   private T value;
 
-  private Lazy(Supplier<T> source) {
+  private Lazy(final Supplier<T> source) {
     this.source = source;
   }
 
-  public static <T> Lazy<T> eval(Supplier<T> source) {
+  public static <T> Lazy<T> eval(final Supplier<T> source) {
     Objects.requireNonNull(source, "Lazy evaluation source must not be null");
     return new Lazy<>(source);
   }
@@ -26,6 +25,7 @@ public final class Lazy<T> implements RichSupplier<T> {
       synchronized (this) {
         if (!computed) {
           value = source.get();
+          source = null;
           computed = true;
         }
       }
@@ -38,7 +38,7 @@ public final class Lazy<T> implements RichSupplier<T> {
   }
 
   @Override
-  public <R> Lazy<R> map(Function<T, R> f) {
+  public <R> Lazy<R> map(final Function<T, R> f) {
     return new Lazy<>(() -> f.apply(this.get()));
   }
 
@@ -49,6 +49,7 @@ public final class Lazy<T> implements RichSupplier<T> {
 
   @Override
   public <R, U> Lazy<U> merge(Lazy<R> that, BiFunction<T, R, U> f) {
+    Objects.requireNonNull(that);
     return new Lazy<>(() -> f.apply(this.get(), that.get()));
   }
 }

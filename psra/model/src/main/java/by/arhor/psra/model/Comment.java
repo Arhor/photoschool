@@ -1,5 +1,6 @@
 package by.arhor.psra.model;
 
+import by.arhor.psra.traits.Likable;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -7,9 +8,10 @@ import java.util.Objects;
 import java.util.StringJoiner;
 
 @Document("comments")
-public class Comment extends Entity {
+public class Comment extends Entity implements Likable {
 
   private String text;
+  private int likes;
   
   @DBRef
   private User user;
@@ -20,6 +22,16 @@ public class Comment extends Entity {
 
   public void setText(String text) {
     this.text = text;
+  }
+
+  @Override
+  public int getLikes() {
+    return likes;
+  }
+
+  @Override
+  public void setLikes(int likes) {
+    this.likes = likes;
   }
 
   public User getUser() {
@@ -43,12 +55,13 @@ public class Comment extends Entity {
     }
     Comment comment = (Comment) o;
     return Objects.equals(text, comment.text)
-        && Objects.equals(user, comment.user);
+        && Objects.equals(user, comment.user)
+        && likes == comment.likes;
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(super.hashCode(), text, user);
+    return Objects.hash(super.hashCode(), text, user, likes);
   }
 
   @Override
@@ -56,6 +69,7 @@ public class Comment extends Entity {
     return new StringJoiner(", ", Comment.class.getSimpleName() + "[", "]")
         .add("content='" + text + "'")
         .add("user=" + user)
+        .add("likes=" + likes)
         .toString();
   }
 }

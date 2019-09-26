@@ -14,4 +14,13 @@ public interface UserRepository
 	@Query("{ 'enabled' : true, 'username' : '?0' }")
 	Optional<User> findByUsername(String username);
 
+	@Query(value = "{ 'username' : '?0' }", exists = true)
+	boolean existsByUsername(String username);
+
+	@Query("{ 'enabled' : true, 'email' : '?0' }")
+	Optional<User> findByEmail(String email);
+
+	@Query(value = "{ 'email' : '?0' }", exists = true)
+	boolean existsByEmail(String email);
+
 }

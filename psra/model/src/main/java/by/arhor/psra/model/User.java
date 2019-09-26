@@ -14,10 +14,13 @@ public class User extends Entity {
 
   @Indexed(unique = true)
   private String username;
-
   private String password;
+  private Role role = Role.GUEST;
 
-  private Role role;
+  @Indexed(unique = true)
+  private String email;
+  private String name;
+  private String surname;
 
   @DBRef(lazy = true)
   private List<Gallery> galleries;
@@ -46,6 +49,30 @@ public class User extends Entity {
     this.role = role;
   }
 
+  public String getEmail() {
+    return email;
+  }
+
+  public void setEmail(String email) {
+    this.email = email;
+  }
+
+  public String getName() {
+    return name;
+  }
+
+  public void setName(String name) {
+    this.name = name;
+  }
+
+  public String getSurname() {
+    return surname;
+  }
+
+  public void setSurname(String surname) {
+    this.surname = surname;
+  }
+
   public List<Gallery> getGalleries() {
     return galleries;
   }
@@ -68,12 +95,15 @@ public class User extends Entity {
     User user = (User) o;
     return Objects.equals(username, user.username)
         && Objects.equals(password, user.password)
+        && Objects.equals(email, user.email)
+        && Objects.equals(name, user.name)
+        && Objects.equals(surname, user.surname)
         && role == user.role;
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(super.hashCode(), username, password, role);
+    return Objects.hash(super.hashCode(), username, password, role, email, name, surname);
   }
 
   @Override
@@ -82,6 +112,9 @@ public class User extends Entity {
         .add("username='" + username + "'")
         .add("password='" + password + "'")
         .add("role=" + role)
+        .add("email='" + email + "'")
+        .add("name='" + name + "'")
+        .add("surname='" + surname + "'")
         .toString();
   }
 }

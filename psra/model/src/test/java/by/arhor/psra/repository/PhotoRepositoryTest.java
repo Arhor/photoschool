@@ -17,6 +17,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import static by.arhor.psra.Predef.setOf;
 import static junit.framework.TestCase.assertTrue;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
@@ -29,13 +30,6 @@ import static org.junit.Assert.assertThat;
 public class PhotoRepositoryTest extends AbstractRepositoryTest {
 
 	private static final String[] tags = { "Sport", "Food", "Games" };
-
-	@SafeVarargs
-	private static <T> Set<T> setOf(T...args) {
-		Set<T> set = new HashSet<>();
-		Collections.addAll(set, args);
-		return set;
-	}
 
 	private List<Photo> generatePhotos() {
 		List<Photo> photos = new ArrayList<>();
