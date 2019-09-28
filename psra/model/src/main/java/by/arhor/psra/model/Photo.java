@@ -1,22 +1,23 @@
 package by.arhor.psra.model;
 
-import by.arhor.psra.traits.Likable;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 import java.util.StringJoiner;
 
 @Document("photos")
-public class Photo extends Entity implements Likable {
+public class Photo extends Entity {
   
   private String name;
   private String description;
   private String path;
   private Set<String> tags;
-  private int likes;
 
   @DBRef(lazy = true)
   private List<Comment> comments;
@@ -46,29 +47,51 @@ public class Photo extends Entity implements Likable {
   }
 
   public Set<String> getTags() {
-    return tags;
+    return Collections.unmodifiableSet(tags);
   }
 
   public void setTags(Set<String> tags) {
     this.tags = tags;
   }
 
-  @Override
-  public int getLikes() {
-    return likes;
+  public void addTag(String tag) {
+    if (tag != null) {
+      if (tags == null) {
+        tags = new HashSet<>();
+      }
+      tags.add(tag);
+    }
   }
 
-  @Override
-  public void setLikes(int likes) {
-    this.likes = likes;
+  public void removeTag(String tag) {
+    if ((tag != null) && (tags != null)) {
+      tags.remove(tag);
+    }
   }
 
   public List<Comment> getComments() {
-    return comments;
+    return Collections.unmodifiableList(comments);
   }
 
   public void setComments(List<Comment> comments) {
     this.comments = comments;
+  }
+
+  public void addComment(Comment comment) {
+    if (comment != null) {
+      if (comments == null) {
+        comments = new ArrayList<>();
+        comments.add(comment);
+      } else if (!comments.contains(comment)) {
+        comments.add(comment);
+      }
+    }
+  }
+
+  public void removeComment(Comment comment) {
+    if ((comment != null) && (comments != null)) {
+      comments.remove(comment);
+    }
   }
 
   @Override
@@ -86,23 +109,25 @@ public class Photo extends Entity implements Likable {
     return Objects.equals(name, photo.name)
         && Objects.equals(description, photo.description)
         && Objects.equals(path, photo.path)
-        && Objects.equals(tags, photo.tags)
-        && likes == photo.likes;
+        && Objects.equals(tags, photo.tags);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(super.hashCode(), name, description, path, tags, likes);
+    return Objects.hash(super.hashCode(), name, description, path, tags);
   }
 
   @Override
   public String toString() {
     return new StringJoiner(", ", Photo.class.getSimpleName() + "[", "]")
+        .add("id=" + getId())
+        .add("created='" + getDateTimeCreated() + "'")
+        .add("updated='" + getDateTimeUpdated() + "'")
+        .add("enabled=" + isEnabled())
         .add("name='" + name + "'")
         .add("description='" + description + "'")
         .add("path='" + path + "'")
         .add("tags=" + tags)
-        .add("likes=" + likes)
         .toString();
   }
 }

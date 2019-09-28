@@ -4,7 +4,8 @@ import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.net.URI;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.StringJoiner;
@@ -24,6 +25,9 @@ public class User extends Entity {
 
   @DBRef(lazy = true)
   private List<Gallery> galleries;
+
+  @DBRef(lazy = true)
+  private List<User> friends;
 
   public String getUsername() {
     return username;
@@ -74,11 +78,46 @@ public class User extends Entity {
   }
 
   public List<Gallery> getGalleries() {
-    return galleries;
+    return Collections.unmodifiableList(galleries);
   }
 
   public void setGalleries(List<Gallery> galleries) {
     this.galleries = galleries;
+  }
+
+  public void addGallery(Gallery gallery) {
+    if (gallery != null) {
+      if (galleries == null) {
+        galleries = new ArrayList<>();
+        galleries.add(gallery);
+      } else if (!galleries.contains(gallery)) {
+        galleries.add(gallery);
+      }
+    }
+  }
+
+  public void removeGallery(Gallery gallery) {
+    if ((gallery != null) && (galleries != null)) {
+      galleries.remove(gallery);
+    }
+  }
+
+  public List<User> getFriends() {
+    return Collections.unmodifiableList(friends);
+  }
+
+  public void setFriends(List<User> friends) {
+    this.friends = friends;
+  }
+
+  public void addFriend(User friend) {
+
+  }
+
+  public void removeFriend(User friend) {
+    if ((friend != null) && (friends != null)) {
+      friends.remove(friend);
+    }
   }
 
   @Override
@@ -93,12 +132,12 @@ public class User extends Entity {
       return false;
     }
     User user = (User) o;
-    return Objects.equals(username, user.username)
+    return role == user.role
+        && Objects.equals(username, user.username)
         && Objects.equals(password, user.password)
         && Objects.equals(email, user.email)
         && Objects.equals(name, user.name)
-        && Objects.equals(surname, user.surname)
-        && role == user.role;
+        && Objects.equals(surname, user.surname);
   }
 
   @Override
@@ -109,6 +148,10 @@ public class User extends Entity {
   @Override
   public String toString() {
     return new StringJoiner(", ", User.class.getSimpleName() + "[", "]")
+        .add("id=" + getId())
+        .add("created='" + getDateTimeCreated() + "'")
+        .add("updated='" + getDateTimeUpdated() + "'")
+        .add("enabled=" + isEnabled())
         .add("username='" + username + "'")
         .add("password='" + password + "'")
         .add("role=" + role)

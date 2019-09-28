@@ -6,6 +6,11 @@ allprojects {
 subprojects {
     apply plugin: 'java'
 
+    ext {
+        spring_boot = '2.1.7.RELEASE'
+        spring_dependency_management = '1.0.8.RELEASE'
+    }
+
     repositories {
         jcenter()
         mavenCentral()

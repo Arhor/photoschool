@@ -4,6 +4,8 @@ import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.StringJoiner;
@@ -45,11 +47,28 @@ public class Course extends Entity {
   }
 
   public List<User> getLearners() {
-    return learners;
+    return Collections.unmodifiableList(learners);
   }
 
   public void setLearners(List<User> learners) {
     this.learners = learners;
+  }
+
+  public void addLearner(User user) {
+    if (user != null) {
+      if (learners == null) {
+        learners = new ArrayList<>();
+        learners.add(user);
+      } else if (!learners.contains(user)) {
+        learners.add(user);
+      }
+    }
+  }
+
+  public void removeLearner(User user) {
+    if ((user != null) && (learners != null)) {
+      learners.remove(user);
+    }
   }
 
   @Override
@@ -76,6 +95,10 @@ public class Course extends Entity {
   @Override
   public String toString() {
     return new StringJoiner(", ", Course.class.getSimpleName() + "[", "]")
+        .add("id=" + getId())
+        .add("created='" + getDateTimeCreated() + "'")
+        .add("updated='" + getDateTimeUpdated() + "'")
+        .add("enabled=" + isEnabled())
         .add("name='" + name + "'")
         .add("description='" + description + "'")
         .toString();

@@ -1,5 +1,6 @@
 package by.arhor.psra.repository;
 
+import by.arhor.psra.model.Gallery;
 import by.arhor.psra.model.User;
 import org.junit.After;
 import org.junit.Before;
@@ -36,6 +37,29 @@ public class UserRepositoryTest extends AbstractRepositoryTest {
   @After
   public void teardown() {
     userRepository.deleteAll();
+  }
+
+  @Test
+  public void addGalleryTest() {
+    var gallery = new Gallery();
+    gallery.setName("test gallery");
+
+    gallery = galleryRepository.insert(gallery);
+
+    var user = new User();
+    user.setUsername("test username");
+    user.setPassword("test password");
+    user.setEmail("test@mail.org");
+    user.setName("Max");
+
+    log.info("User before create: {}", user);
+    user = userRepository.insert(user);
+    log.info("User after create: {}", user);
+
+    user.addGallery(gallery);
+    user = userRepository.save(user);
+
+    log.info("User galleries: {}", user.getGalleries());
   }
 
   @Test
@@ -91,6 +115,7 @@ public class UserRepositoryTest extends AbstractRepositoryTest {
       final var user = new User();
       user.setUsername("User_" + i);
       user.setPassword("Pass_" + i);
+      user.setEmail("test_" + i + ".mail@domen.org");
       users.add(user);
     }
 

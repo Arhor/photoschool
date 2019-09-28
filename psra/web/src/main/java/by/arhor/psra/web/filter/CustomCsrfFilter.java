@@ -36,13 +36,13 @@ public class CustomCsrfFilter extends OncePerRequestFilter {
   private static final String ERROR_MSG = "CSRF tokens missing or not matching";
   private static final String CSRF_COOKIE = "XSRF-TOKEN";
   private static final String CSRF_HEADER = "X-XSRF-TOKEN";
-  private static final Lazy<Pattern> SAFE_METHOD_HOLDER;
+  private static final Lazy<Pattern> SAFE_METHOD;
 
   static {
-    SAFE_METHOD_HOLDER = Lazy.eval(() -> Pattern.compile("^(GET|HEAD|TRACE|OPTIONS)$"));
+    SAFE_METHOD = Lazy.eval(() -> Pattern.compile("^(GET|HEAD|TRACE|OPTIONS)$"));
+    int m = new Integer(5);
   }
 
-  private final Pattern SAFE_METHOD = SAFE_METHOD_HOLDER.get();
   private final AccessDeniedHandler accessDeniedHandler = new AccessDeniedHandlerImpl();
 
   @Override
@@ -51,22 +51,26 @@ public class CustomCsrfFilter extends OncePerRequestFilter {
       HttpServletResponse res,
       FilterChain filterChain) throws IOException, ServletException {
 
+    boolean finished = false;
+
     if (isTokenRequired(req)) {
       final var csrfHeaderToken = req.getHeader(CSRF_HEADER);
       final var csrfCookieToken = getCsrfCookieToken(req);
 
       if (csrfCookieToken == null || !csrfCookieToken.equals(csrfHeaderToken)) {
         accessDeniedHandler.handle(req, res, new AccessDeniedException(ERROR_MSG));
-        return;
+        finished = true;
       }
     }
-    filterChain.doFilter(req, res);
+    if (!finished) {
+      filterChain.doFilter(req, res);
+    }
   }
 
   private boolean isTokenRequired(HttpServletRequest req) {
     final var method = req.getMethod();
     return (method != null)
-        && SAFE_METHOD.matcher(method).matches();
+        && SAFE_METHOD.get().matcher(method).matches();
   }
 
   private String getCsrfCookieToken(HttpServletRequest req) {
