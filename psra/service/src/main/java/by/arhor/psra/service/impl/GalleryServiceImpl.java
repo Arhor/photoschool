@@ -2,6 +2,7 @@ package by.arhor.psra.service.impl;
 
 import by.arhor.psra.dto.GalleryDto;
 import by.arhor.psra.exception.EntityNotFoundException;
+import by.arhor.psra.localization.ErrorLabel;
 import by.arhor.psra.model.Gallery;
 import by.arhor.psra.repository.GalleryRepository;
 import by.arhor.psra.repository.UserRepository;
@@ -19,51 +20,36 @@ import static java.util.stream.Collectors.toList;
 
 @Service
 @Transactional
-class GalleryServiceImpl implements GalleryService {
+class GalleryServiceImpl
+    extends AbstractService<Gallery, GalleryDto, String>
+    implements GalleryService {
 
   private final GalleryRepository repository;
   private final UserRepository userRepository;
-  private final ModelMapper mapper;
 
   @Autowired
-  public GalleryServiceImpl(
-      GalleryRepository repository,
-      UserRepository userRepository,
-      ModelMapper mapper) {
-
+  public GalleryServiceImpl(GalleryRepository repository,
+                            UserRepository userRepository,
+                            ModelMapper mapper) {
+    super(repository, mapper, GalleryDto.class);
     this.repository = repository;
     this.userRepository = userRepository;
-    this.mapper = mapper;
   }
 
   @Override
-  @Transactional(readOnly = true)
-  public GalleryDto findOne(String id) {
-    return repository
-        .findByIdAndEnabledTrue(id)
-        .map(gallery -> mapper.map(gallery, GalleryDto.class))
-        .orElseThrow(() -> new EntityNotFoundException(GALLERY_NOT_FOUND, "ID", id));
-  }
-
-  @Override
-  @Transactional(readOnly = true)
-  public List<GalleryDto> findAll() {
-    return repository
-        .findAll()
-        .stream()
-        .map(gallery -> mapper.map(gallery, GalleryDto.class))
-        .collect(toList());
+  protected ErrorLabel notFoundLabel() {
+    return GALLERY_NOT_FOUND;
   }
 
   @Override
   @Transactional(readOnly = true)
   public List<GalleryDto> findGalleriesByUserId(String uid) {
     return userRepository
-        .findByIdAndEnabledTrue(uid)
+        .findById(uid)
         .orElseThrow(() -> new EntityNotFoundException(USER_NOT_FOUND, "ID", uid))
         .getGalleries()
         .stream()
-        .map(gallery -> mapper.map(gallery, GalleryDto.class))
+        .map(this::toDto)
         .collect(toList());
   }
 
@@ -77,7 +63,7 @@ class GalleryServiceImpl implements GalleryService {
   @Override
   public GalleryDto update(GalleryDto dto) {
     final var gallery = repository
-        .findByIdAndEnabledTrue(dto.getId())
+        .findById(dto.getId())
         .orElseThrow(() -> new EntityNotFoundException(GALLERY_NOT_FOUND, "ID", dto.getId()));
 
     gallery.setName(dto.getName());
@@ -85,17 +71,4 @@ class GalleryServiceImpl implements GalleryService {
     final var updated = repository.save(gallery);
     return mapper.map(updated, GalleryDto.class);
   }
-
-  @Override
-  public void delete(GalleryDto dto) {
-    final var gallery = repository
-        .findByIdAndEnabledTrue(dto.getId())
-        .orElseThrow(() -> new EntityNotFoundException(GALLERY_NOT_FOUND, "ID", dto.getId()));
-
-    gallery.setEnabled(false);
-
-    repository.save(gallery);
-  }
-
-
 }

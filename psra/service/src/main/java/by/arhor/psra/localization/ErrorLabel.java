@@ -2,6 +2,7 @@ package by.arhor.psra.localization;
 
 public enum ErrorLabel implements Label {
 
+  ENTITY_NOT_FOUND   ("error.not.found.entity"),
   COMMENT_NOT_FOUND  ("error.not.found.comment"),
   COURSE_NOT_FOUND   ("error.not.found.course"),
   GALLERY_NOT_FOUND  ("error.not.found.gallery"),
@@ -18,4 +19,5 @@ public enum ErrorLabel implements Label {
   public String getValue() {
     return value;
   }
+
 }

@@ -7,9 +7,7 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
 
 
-public interface UserRepository
-	extends MongoRepository<User, String>
-		    , BasicRepository<User, String> {
+public interface UserRepository extends BaseRepository<User, String> {
 
 	@Query("{ 'enabled' : true, 'username' : '?0' }")
 	Optional<User> findByUsername(String username);

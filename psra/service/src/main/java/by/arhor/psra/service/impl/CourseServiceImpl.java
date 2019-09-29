@@ -1,9 +1,11 @@
 package by.arhor.psra.service.impl;
 
 import by.arhor.psra.dto.CourseDto;
+import by.arhor.psra.dto.UserDto;
 import by.arhor.psra.exception.EntityNotFoundException;
 import by.arhor.psra.localization.ErrorLabel;
 import by.arhor.psra.model.Course;
+import by.arhor.psra.model.User;
 import by.arhor.psra.repository.CourseRepository;
 import by.arhor.psra.repository.UserRepository;
 import by.arhor.psra.service.CourseService;
@@ -20,40 +22,25 @@ import static java.util.stream.Collectors.toList;
 
 @Service
 @Transactional
-public class CourseServiceImpl implements CourseService {
+public class CourseServiceImpl
+  extends AbstractService<Course, CourseDto, String>
+  implements CourseService {
 
   private final CourseRepository repository;
   private final UserRepository userRepository;
-  private final ModelMapper mapper;
 
   @Autowired
-  public CourseServiceImpl(
-      CourseRepository repository,
-      UserRepository userRepository,
-      ModelMapper mapper) {
-
+  public CourseServiceImpl(CourseRepository repository,
+                           UserRepository userRepository,
+                           ModelMapper mapper) {
+    super(repository, mapper, CourseDto.class);
     this.repository = repository;
     this.userRepository = userRepository;
-    this.mapper = mapper;
   }
 
   @Override
-  @Transactional(readOnly = true)
-  public CourseDto findOne(String id) {
-    return repository
-        .findByIdAndEnabledTrue(id)
-        .map(course -> mapper.map(course, CourseDto.class))
-        .orElseThrow(() -> new EntityNotFoundException(COURSE_NOT_FOUND, "ID", id));
-  }
-
-  @Override
-  @Transactional(readOnly = true)
-  public List<CourseDto> findAll() {
-    return repository
-        .findAll()
-        .stream()
-        .map(course -> mapper.map(course, CourseDto.class))
-        .collect(toList());
+  protected ErrorLabel notFoundLabel() {
+    return COURSE_NOT_FOUND;
   }
 
   @Override
@@ -66,7 +53,7 @@ public class CourseServiceImpl implements CourseService {
   @Override
   public CourseDto update(CourseDto dto) {
     final var course = repository
-      .findByIdAndEnabledTrue(dto.getId())
+      .findById(dto.getId())
       .orElseThrow(() -> new EntityNotFoundException(COURSE_NOT_FOUND, "ID", dto.getId()));
 
     course.setName(dto.getName());
@@ -77,34 +64,32 @@ public class CourseServiceImpl implements CourseService {
   }
 
   @Override
-  public void delete(CourseDto dto) {
-    final var course = repository
-      .findByIdAndEnabledTrue(dto.getId())
-      .orElseThrow(() -> new EntityNotFoundException(COURSE_NOT_FOUND, "ID", dto.getId()));
-
-    course.setEnabled(false);
-
-    repository.save(course);
-  }
-
-  @Override
   public CourseDto addLearnersToCourse(String courseId, String[] userIds) {
     final var course = repository
-        .findByIdAndEnabledTrue(courseId)
+        .findById(courseId)
         .orElseThrow(() -> new EntityNotFoundException(COURSE_NOT_FOUND, "ID", courseId));
 
-    if (course.getLearners() == null) {
-      course.setLearners(new ArrayList<>());
-    }
-
+    var users = new ArrayList<User>(userIds.length);
     for (String uid : userIds) {
       final var user = userRepository
-          .findByIdAndEnabledTrue(uid)
+          .findById(uid)
           .orElseThrow(() -> new EntityNotFoundException(ErrorLabel.USER_NOT_FOUND, "ID", uid));
-      course.getLearners().add(user);
+      users.add(user);
     }
+    users.forEach(course::addLearner);
 
     final var updated = repository.save(course);
     return mapper.map(updated, CourseDto.class);
+  }
+
+  @Override
+  public List<UserDto> findLearnersByCourseId(String cid) {
+    return repository
+        .findById(cid)
+        .orElseThrow(() -> new EntityNotFoundException(COURSE_NOT_FOUND, "ID", cid))
+        .getLearners()
+        .stream()
+        .map(user -> mapper.map(user, UserDto.class))
+        .collect(toList());
   }
 }

@@ -2,6 +2,7 @@ package by.arhor.psra.service.impl;
 
 import by.arhor.psra.dto.UserDto;
 import by.arhor.psra.exception.EntityNotFoundException;
+import by.arhor.psra.localization.ErrorLabel;
 import by.arhor.psra.model.User;
 import by.arhor.psra.repository.CourseRepository;
 import by.arhor.psra.repository.UserRepository;
@@ -17,36 +18,35 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-
-import static by.arhor.psra.localization.ErrorLabel.COURSE_NOT_FOUND;
 import static by.arhor.psra.localization.ErrorLabel.USER_NOT_FOUND;
 import static java.util.Collections.singletonList;
-import static java.util.stream.Collectors.toList;
 
 @Primary
 @Service
 @Transactional
 public class UserServiceImpl
-  implements UserService
-           , UserDetailsService {
+    extends AbstractService<User, UserDto, String>
+    implements UserService
+             , UserDetailsService {
 
   private final UserRepository repository;
   private final CourseRepository courseRepository;
   private final PasswordEncoder encoder;
-  private final ModelMapper mapper;
 
   @Autowired
-  public UserServiceImpl(
-      UserRepository repository,
-      CourseRepository courseRepository,
-      PasswordEncoder encoder,
-      ModelMapper mapper) {
-
+  public UserServiceImpl(UserRepository repository,
+                         CourseRepository courseRepository,
+                         PasswordEncoder encoder,
+                         ModelMapper mapper) {
+    super(repository, mapper, UserDto.class);
     this.repository = repository;
     this.courseRepository = courseRepository;
     this.encoder = encoder;
-    this.mapper = mapper;
+  }
+
+  @Override
+  protected ErrorLabel notFoundLabel() {
+    return USER_NOT_FOUND;
   }
 
   @Override
@@ -63,40 +63,8 @@ public class UserServiceImpl
   }
 
   @Override
-	@Transactional(readOnly = true)
-  public UserDto findOne(String id) {
-    return repository
-        .findByIdAndEnabledTrue(id)
-        .map(user -> mapper.map(user, UserDto.class))
-  		  .orElseThrow(() -> new EntityNotFoundException(USER_NOT_FOUND, "ID", id));
-  }
-
-  @Override
-	@Transactional(readOnly = true)
-	public List<UserDto> findAll() {
-    return repository
-        .findAll()
-        .stream()
-        .map(user -> mapper.map(user, UserDto.class))
-        .collect(toList());
-  }
-
-  @Override
-	public List<UserDto> findLearnersByCourseId(String cid) {
-    return courseRepository
-        .findByIdAndEnabledTrue(cid)
-        .orElseThrow(() -> new EntityNotFoundException(COURSE_NOT_FOUND, "ID", cid))
-        .getLearners()
-        .stream()
-        .map(user -> mapper.map(user, UserDto.class))
-        .collect(toList());
-  }
-
-  @Override
 	public UserDto create(UserDto dto) {
 		final var user = mapper.map(dto, User.class);
-
-//		repository.
 
 		user.setPassword(encoder.encode(user.getPassword()));
 
@@ -107,7 +75,7 @@ public class UserServiceImpl
 	@Override
 	public UserDto update(UserDto dto) {
     final var user = repository
-        .findByIdAndEnabledTrue(dto.getId())
+        .findById(dto.getId())
         .orElseThrow(() -> new EntityNotFoundException(USER_NOT_FOUND, "ID", dto.getId()));
 
     user.setUsername(dto.getUsername());
@@ -116,16 +84,5 @@ public class UserServiceImpl
     final var updated = repository.save(user);
 
     return mapper.map(updated, UserDto.class);
-  }
-
-  @Override
-	public void delete(UserDto dto) {
-    final var user = repository
-        .findByIdAndEnabledTrue(dto.getId())
-        .orElseThrow(() -> new EntityNotFoundException(USER_NOT_FOUND, "ID", dto.getId()));
-
-    user.setEnabled(false);
-
-    repository.save(user);
   }
 }

@@ -3,6 +3,7 @@ package by.arhor.psra.service.impl;
 import by.arhor.psra.dto.CommentDto;
 import by.arhor.psra.dto.PhotoDto;
 import by.arhor.psra.exception.EntityNotFoundException;
+import by.arhor.psra.localization.ErrorLabel;
 import by.arhor.psra.model.Comment;
 import by.arhor.psra.model.Photo;
 import by.arhor.psra.repository.CommentRepository;
@@ -22,43 +23,28 @@ import static java.util.stream.Collectors.toList;
 
 @Service
 @Transactional
-class PhotoServiceImpl implements PhotoService {
+class PhotoServiceImpl
+		extends AbstractService<Photo, PhotoDto, String>
+		implements PhotoService {
 
 	private final PhotoRepository repository;
 	private final CommentRepository commentRepository;
 	private final UserRepository userRepository;
-	private final ModelMapper mapper;
 
 	@Autowired
-	public PhotoServiceImpl(
-			PhotoRepository repository,
-			CommentRepository commentRepository,
-			UserRepository userRepository,
-			ModelMapper mapper) {
-
+	public PhotoServiceImpl(PhotoRepository repository,
+													CommentRepository commentRepository,
+													UserRepository userRepository,
+													ModelMapper mapper) {
+		super(repository, mapper, PhotoDto.class);
 		this.repository = repository;
 		this.commentRepository = commentRepository;
 		this.userRepository = userRepository;
-		this.mapper = mapper;
 	}
 
 	@Override
-	@Transactional(readOnly = true)
-	public PhotoDto findOne(String id) {
-		return repository
-				.findByIdAndEnabledTrue(id)
-				.map(photo -> mapper.map(photo, PhotoDto.class))
-				.orElseThrow(() -> new EntityNotFoundException(PHOTO_NOT_FOUND, "ID", id));
-	}
-
-	@Override
-	@Transactional(readOnly = true)
-	public List<PhotoDto> findAll() {
-		return repository
-				.findAll()
-				.stream()
-				.map(photo -> mapper.map(photo, PhotoDto.class))
-  			.collect(toList());
+	protected ErrorLabel notFoundLabel() {
+		return PHOTO_NOT_FOUND;
 	}
 
 	@Override
@@ -67,7 +53,7 @@ class PhotoServiceImpl implements PhotoService {
 		return repository
 				.findByAnyOfTags(new String[] { tag })
 				.stream()
-				.map(photo -> mapper.map(photo, PhotoDto.class))
+				.map(this::toDto)
 				.collect(toList());
 	}
 
@@ -75,7 +61,7 @@ class PhotoServiceImpl implements PhotoService {
 	@Transactional(readOnly = true)
 	public List<CommentDto> findCommentsByPhotoId(String pid) {
 		return repository
-				.findByIdAndEnabledTrue(pid)
+				.findById(pid)
 				.orElseThrow(() -> new EntityNotFoundException(PHOTO_NOT_FOUND, "ID", pid))
 				.getComments()
 				.stream()
@@ -86,7 +72,7 @@ class PhotoServiceImpl implements PhotoService {
 	@Override
 	public CommentDto addCommentToPhoto(String photoId, String username, CommentDto dto) {
 		final var photo = repository
-			.findByIdAndEnabledTrue(photoId)
+			.findById(photoId)
 			.orElseThrow(() -> new EntityNotFoundException(PHOTO_NOT_FOUND, "ID", photoId));
 
 		final var user = userRepository
@@ -97,7 +83,7 @@ class PhotoServiceImpl implements PhotoService {
 		comment.setUser(user);
 
 		final var createdComment = commentRepository.insert(comment);
-		photo.getComments().add(createdComment);
+		photo.addComment(createdComment);
 
 		repository.save(photo);
 
@@ -114,7 +100,7 @@ class PhotoServiceImpl implements PhotoService {
 	@Override
 	public PhotoDto update(PhotoDto dto) {
 		final var photo = repository
-				.findByIdAndEnabledTrue(dto.getId())
+				.findById(dto.getId())
 				.orElseThrow(() -> new EntityNotFoundException(PHOTO_NOT_FOUND, "ID", dto.getId()));
 
 		photo.setName(dto.getName());
@@ -124,16 +110,5 @@ class PhotoServiceImpl implements PhotoService {
 
 		final var created = repository.save(photo);
 		return mapper.map(created, PhotoDto.class);
-	}
-
-	@Override
-	public void delete(PhotoDto dto) {
-		final var photo = repository
-				.findByIdAndEnabledTrue(dto.getId())
-				.orElseThrow(() -> new EntityNotFoundException(PHOTO_NOT_FOUND, "ID", dto.getId()));
-
-		photo.setEnabled(false);
-
-		repository.save(photo);
 	}
 }

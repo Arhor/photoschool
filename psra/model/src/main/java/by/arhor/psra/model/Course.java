@@ -1,6 +1,5 @@
 package by.arhor.psra.model;
 
-import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -13,8 +12,11 @@ import java.util.StringJoiner;
 @Document("courses")
 public class Course extends Entity {
 
+  public static final short UNLIMITED = Short.MAX_VALUE;
+
   private String name;
   private String description;
+  private short limit = UNLIMITED;
 
   @DBRef(lazy = true)
   private User teacher;
@@ -36,6 +38,14 @@ public class Course extends Entity {
 
   public void setDescription(String description) {
     this.description = description;
+  }
+
+  public short getLimit() {
+    return limit;
+  }
+
+  public void setLimit(short limit) {
+    this.limit = limit > 0 ? limit : UNLIMITED;
   }
 
   public User getTeacher() {
@@ -83,13 +93,14 @@ public class Course extends Entity {
       return false;
     }
     Course course = (Course) o;
-    return Objects.equals(name, course.name)
+    return limit == course.limit
+        && Objects.equals(name, course.name)
         && Objects.equals(description, course.description);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(super.hashCode(), name, description);
+    return Objects.hash(super.hashCode(), name, description, limit);
   }
 
   @Override
@@ -101,6 +112,7 @@ public class Course extends Entity {
         .add("enabled=" + isEnabled())
         .add("name='" + name + "'")
         .add("description='" + description + "'")
+        .add("limit=" + ((limit == UNLIMITED) ? "UNLIMITED" : limit))
         .toString();
   }
 }

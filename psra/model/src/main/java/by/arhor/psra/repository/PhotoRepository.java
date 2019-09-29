@@ -7,9 +7,7 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
 
 
-public interface PhotoRepository
-  extends MongoRepository<Photo, String>
-        , BasicRepository<Photo, String> {
+public interface PhotoRepository extends BaseRepository<Photo, String> {
 
   @Query("{ 'enabled' : true, 'tags' : { $in : ?0 } }")
   List<Photo> findByAnyOfTags(String[] tags);
