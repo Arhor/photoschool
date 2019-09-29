@@ -12,10 +12,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import static by.arhor.psra.Predef.setOf;
 import static junit.framework.TestCase.assertTrue;
@@ -83,24 +80,19 @@ public class PhotoRepositoryTest extends AbstractRepositoryTest {
 
 		assertThat(photos, notNullValue());
 
-		photos.forEach(p -> {
+		for (Photo p : photos) {
 			String id = p.getId();
 
 			var photo_1 = photoRepository.findById(id);
-			var photo_2 = photoRepository.findByIdAndEnabledTrue(id);
 
 			assertTrue(photo_1.isPresent());
-			assertTrue(photo_2.isPresent());
-			assertThat(photo_1.get(), equalTo(photo_2.get()));
-
-			System.out.printf("%s - %s%n", photo_1, photo_2);
-		});
+		}
 	}
 
 	@Test
 	public void findAllEnabledTrue() {
 		PageRequest request = PageRequest.of(0, 10);
-		Page<Photo> page = photoRepository.findAllByEnabledTrue(request);
+		Page<Photo> page = photoRepository.findAll(request);
 
 		assertThat(page, notNullValue());
 		assertThat(page.isEmpty(), equalTo(false));

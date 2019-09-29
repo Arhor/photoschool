@@ -69,8 +69,7 @@ public class UserRepositoryTest extends AbstractRepositoryTest {
 
       final var found = userRepository.findByUsername(user.getUsername());
       assertTrue(
-          found.isPresent()
-      );
+          found.isPresent());
       log.info("Fetched user: {}", found.get());
     }
   }
@@ -85,8 +84,7 @@ public class UserRepositoryTest extends AbstractRepositoryTest {
       assertTrue(
           userRepository
               .findByUsername(user.getUsername())
-              .isEmpty()
-      );
+              .isEmpty());
     }
   }
 
