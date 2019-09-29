@@ -4,7 +4,6 @@ import by.arhor.psra.dto.UserDto;
 import by.arhor.psra.exception.EntityNotFoundException;
 import by.arhor.psra.localization.ErrorLabel;
 import by.arhor.psra.model.User;
-import by.arhor.psra.repository.CourseRepository;
 import by.arhor.psra.repository.UserRepository;
 import by.arhor.psra.service.UserService;
 import org.modelmapper.ModelMapper;
@@ -30,17 +29,14 @@ public class UserServiceImpl
              , UserDetailsService {
 
   private final UserRepository repository;
-  private final CourseRepository courseRepository;
   private final PasswordEncoder encoder;
 
   @Autowired
   public UserServiceImpl(UserRepository repository,
-                         CourseRepository courseRepository,
                          PasswordEncoder encoder,
                          ModelMapper mapper) {
     super(repository, mapper, UserDto.class);
     this.repository = repository;
-    this.courseRepository = courseRepository;
     this.encoder = encoder;
   }
 
@@ -55,10 +51,10 @@ public class UserServiceImpl
     return repository
         .findByUsername(username)
         .map(user ->
-          new org.springframework.security.core.userdetails.User(
-            user.getUsername(),
-            user.getPassword(),
-            singletonList(new SimpleGrantedAuthority(user.getRole().toString()))))
+            new org.springframework.security.core.userdetails.User(
+                user.getUsername(),
+                user.getPassword(),
+                singletonList(new SimpleGrantedAuthority(user.getRole().toString()))))
 			  .orElseThrow(() -> new UsernameNotFoundException(username));
   }
 

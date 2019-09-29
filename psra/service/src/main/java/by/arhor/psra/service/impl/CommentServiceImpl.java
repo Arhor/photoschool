@@ -1,6 +1,7 @@
 package by.arhor.psra.service.impl;
 
 import by.arhor.psra.dto.CommentDto;
+import by.arhor.psra.exception.EntityNotFoundException;
 import by.arhor.psra.localization.ErrorLabel;
 import by.arhor.psra.model.Comment;
 import by.arhor.psra.repository.CommentRepository;
@@ -9,6 +10,8 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Objects;
 
 import static by.arhor.psra.localization.ErrorLabel.COMMENT_NOT_FOUND;
 
@@ -40,9 +43,10 @@ public class CommentServiceImpl
 
   @Override
   public CommentDto update(CommentDto dto) {
+    Objects.requireNonNull(dto);
     final var comment = repository
       .findById(dto.getId())
-      .orElseThrow (notFoundBy("ID", dto.getId()));
+      .orElseThrow (() -> new EntityNotFoundException(COMMENT_NOT_FOUND, "ID", dto.getId()));
 
     comment.setText(dto.getText());
 

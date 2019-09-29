@@ -11,12 +11,11 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.function.Supplier;
 
 import static java.util.stream.Collectors.toList;
 
 public abstract class AbstractService<E extends Entity, D extends Dto, K>
-  implements Service<D, K> {
+    implements Service<D, K> {
 
   protected final BaseRepository<E, K> repository;
   protected final ModelMapper mapper;
@@ -32,17 +31,13 @@ public abstract class AbstractService<E extends Entity, D extends Dto, K>
 
   protected abstract ErrorLabel notFoundLabel();
 
-  private Supplier<EntityNotFoundException> notFoundBy(String field, Object value) {
-    return () -> new EntityNotFoundException(notFoundLabel(), field, value);
-  }
-
   @Override
   @Transactional(readOnly = true)
   public D findOne(K id) {
     return repository
         .findById(id)
         .map(this::toDto)
-        .orElseThrow(notFoundBy("ID", id));
+        .orElseThrow(() -> new EntityNotFoundException(notFoundLabel(), "ID", id));
   }
 
   @Override
@@ -69,12 +64,13 @@ public abstract class AbstractService<E extends Entity, D extends Dto, K>
   public void delete(K id) {
     final var entity = repository
         .findById(id)
-        .orElseThrow(notFoundBy("ID", id));
+        .orElseThrow(() -> new EntityNotFoundException(notFoundLabel(), "ID", id));
+
     entity.setEnabled(false);
     repository.save(entity);
   }
 
-  protected D toDto(E entity) {
+  D toDto(E entity) {
     return mapper.map(entity, dtoClass);
   }
 }

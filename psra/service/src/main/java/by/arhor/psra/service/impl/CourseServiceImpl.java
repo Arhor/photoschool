@@ -18,13 +18,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static by.arhor.psra.localization.ErrorLabel.COURSE_NOT_FOUND;
+import static by.arhor.psra.localization.ErrorLabel.USER_NOT_FOUND;
 import static java.util.stream.Collectors.toList;
 
 @Service
 @Transactional
 public class CourseServiceImpl
-  extends AbstractService<Course, CourseDto, String>
-  implements CourseService {
+    extends AbstractService<Course, CourseDto, String>
+    implements CourseService {
 
   private final CourseRepository repository;
   private final UserRepository userRepository;
@@ -73,7 +74,7 @@ public class CourseServiceImpl
     for (String uid : userIds) {
       final var user = userRepository
           .findById(uid)
-          .orElseThrow(() -> new EntityNotFoundException(ErrorLabel.USER_NOT_FOUND, "ID", uid));
+          .orElseThrow(() -> new EntityNotFoundException(USER_NOT_FOUND, "ID", uid));
       users.add(user);
     }
     users.forEach(course::addLearner);
