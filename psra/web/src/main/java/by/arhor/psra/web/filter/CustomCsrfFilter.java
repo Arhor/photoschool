@@ -40,7 +40,6 @@ public class CustomCsrfFilter extends OncePerRequestFilter {
 
   static {
     SAFE_METHOD = Lazy.eval(() -> Pattern.compile("^(GET|HEAD|TRACE|OPTIONS)$"));
-    int m = new Integer(5);
   }
 
   private final AccessDeniedHandler accessDeniedHandler = new AccessDeniedHandlerImpl();
@@ -53,7 +52,11 @@ public class CustomCsrfFilter extends OncePerRequestFilter {
 
     boolean finished = false;
 
-    if (isTokenRequired(req)) {
+    final var method = req.getMethod();
+    final boolean isTokenRequired =
+        (method != null) && SAFE_METHOD.get().matcher(method).matches();
+
+    if (isTokenRequired) {
       final var csrfHeaderToken = req.getHeader(CSRF_HEADER);
       final var csrfCookieToken = getCsrfCookieToken(req);
 
@@ -67,17 +70,12 @@ public class CustomCsrfFilter extends OncePerRequestFilter {
     }
   }
 
-  private boolean isTokenRequired(HttpServletRequest req) {
-    final var method = req.getMethod();
-    return (method != null)
-        && SAFE_METHOD.get().matcher(method).matches();
-  }
-
+  // plain for-loop is used due to performance optimisation
   private String getCsrfCookieToken(HttpServletRequest req) {
     final var cookies = req.getCookies();
     if (cookies != null) {
       for (var c : cookies) {
-        if (CSRF_COOKIE.equals(c.getName())) {
+        if (c != null && CSRF_COOKIE.equals(c.getName())) {
           return c.getValue();
         }
       }

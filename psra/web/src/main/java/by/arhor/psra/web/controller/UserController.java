@@ -44,10 +44,13 @@ public class UserController {
 		return service.findAll();
 	}
 
-	@PostMapping(path = "/", produces = APPLICATION_JSON_UTF8_VALUE)
+	@PostMapping(
+			path = "/",
+			consumes = APPLICATION_JSON_UTF8_VALUE,
+			produces = APPLICATION_JSON_UTF8_VALUE)
 	@PreAuthorize("!(#oauth2.hasScope('ROLE_USER') and #oauth2.hasScope('ROLE_ADMIN'))")
-	public ResponseEntity<UserDto> register(@RequestBody UserDto dto) {
-		final var registered = service.create(dto);
+	public ResponseEntity<UserDto> register(@RequestBody UserDto user) {
+		final var registered = service.create(user);
 
 		final var headers = new HttpHeaders();
 		headers.setLocation(

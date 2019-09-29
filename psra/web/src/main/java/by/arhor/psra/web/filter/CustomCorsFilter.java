@@ -22,15 +22,19 @@ import static org.springframework.http.HttpHeaders.ORIGIN;
 @Order(Ordered.HIGHEST_PRECEDENCE)
 public class CustomCorsFilter extends OncePerRequestFilter {
 
-  private static final String[] ALLOWED_HEADERS = {
-      "x-requested-with",
-      "authorization",
-      "Content-Type",
-      "Authorization",
-      "credential",
-      "X-XSRF-TOKEN",
-      "X-CSRF-TOKEN"
-  };
+  private static final String ALLOWED_HEADERS;
+
+  static {
+    ALLOWED_HEADERS = String.join(",", new String[]{
+        "x-requested-with",
+        "authorization",
+        "Content-Type",
+        "Authorization",
+        "credential",
+        "X-XSRF-TOKEN",
+        "X-CSRF-TOKEN"
+    });
+  }
 
   @Override
   public void doFilterInternal(
@@ -38,15 +42,13 @@ public class CustomCorsFilter extends OncePerRequestFilter {
       HttpServletResponse res,
       FilterChain chain) throws IOException, ServletException {
 
-    final var headers = String.join(",", ALLOWED_HEADERS);
-
     final var requestOrigin = req.getHeader(ORIGIN);
 
     res.setHeader(ACCESS_CONTROL_ALLOW_ORIGIN, requestOrigin);
     res.setHeader(ACCESS_CONTROL_ALLOW_CREDENTIALS, "true");
     res.setHeader(ACCESS_CONTROL_ALLOW_METHODS, "PATCH,POST,PUT,GET,OPTIONS,DELETE");
     res.setHeader(ACCESS_CONTROL_MAX_AGE, "3600");
-    res.setHeader(ACCESS_CONTROL_ALLOW_HEADERS, headers);
+    res.setHeader(ACCESS_CONTROL_ALLOW_HEADERS, ALLOWED_HEADERS);
 
     // FIXME: what does it condition for?
     if ("OPTIONS".equalsIgnoreCase(req.getMethod())) {
