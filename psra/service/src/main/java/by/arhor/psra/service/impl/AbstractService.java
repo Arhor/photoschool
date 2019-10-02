@@ -7,7 +7,6 @@ import by.arhor.psra.model.Entity;
 import by.arhor.psra.repository.BaseRepository;
 import by.arhor.psra.service.Service;
 import by.arhor.psra.util.MappingDelegate;
-import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.transaction.annotation.Transactional;
 

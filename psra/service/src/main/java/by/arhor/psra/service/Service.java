@@ -1,22 +1,8 @@
 package by.arhor.psra.service;
 
-import by.arhor.psra.dto.Dto;
-
-import java.util.List;
-
-public interface Service<D, K> {
-
-  D findOne(K id);
-
-  List<D> findAll();
-
-  List<D> findAll(int page, int size);
-
-  D create(D dto);
-
-  D update(D dto);
-
-  void delete(K id);
+public interface Service<T, K>
+    extends CanFind<T, K>
+          , CanDelete<K> {
 
 //  implicit protected def convert[T, R](from: T, to: Class[R]): R = modelMapper.map[R](from, to)
 //

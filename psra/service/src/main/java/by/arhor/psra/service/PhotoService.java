@@ -5,7 +5,10 @@ import by.arhor.psra.dto.PhotoDto;
 
 import java.util.List;
 
-public interface PhotoService extends Service<PhotoDto, String> {
+public interface PhotoService
+    extends Service<PhotoDto, String>
+          , CanCreate<PhotoDto>
+          , CanUpdate<PhotoDto> {
 
   List<PhotoDto> findPhotosByTag(String tag, String username);
 

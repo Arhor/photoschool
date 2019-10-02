@@ -33,12 +33,6 @@ public class CommentServiceImpl
   }
 
   @Override
-  public CommentDto create(CommentDto dto) {
-    throw new UnsupportedOperationException(
-        "Comment creation available only for related entity");
-  }
-
-  @Override
   public CommentDto update(CommentDto dto) {
     Objects.requireNonNull(dto);
     final var comment = repository
