@@ -1,5 +1,6 @@
 package by.arhor.psra.model;
 
+import by.arhor.psra.CoreVersion;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -12,6 +13,8 @@ import java.util.StringJoiner;
 
 @Document("galleries")
 public class Gallery extends Entity {
+
+  private static final long serialVersionUID = CoreVersion.SERIAL_VERSION_UID;
 
   private String name;
   private Access access = Access.PUBLIC;

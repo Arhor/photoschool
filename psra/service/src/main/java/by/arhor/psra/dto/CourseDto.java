@@ -2,6 +2,7 @@ package by.arhor.psra.dto;
 
 import by.arhor.psra.CoreVersion;
 
+import java.time.LocalDate;
 import java.util.Objects;
 import java.util.StringJoiner;
 
@@ -12,6 +13,8 @@ public final class CourseDto extends Dto {
   private String name;
   private String description;
   private short limit;
+  private LocalDate startDate;
+  private LocalDate endDate;
 
   public String getName() {
     return name;
@@ -37,6 +40,22 @@ public final class CourseDto extends Dto {
     this.limit = limit;
   }
 
+  public LocalDate getStartDate() {
+    return startDate;
+  }
+
+  public void setStartDate(LocalDate startDate) {
+    this.startDate = startDate;
+  }
+
+  public LocalDate getEndDate() {
+    return endDate;
+  }
+
+  public void setEndDate(LocalDate endDate) {
+    this.endDate = endDate;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -51,12 +70,14 @@ public final class CourseDto extends Dto {
     CourseDto courseDto = (CourseDto) o;
     return limit == courseDto.limit
         && Objects.equals(name, courseDto.name)
-        && Objects.equals(description, courseDto.description);
+        && Objects.equals(description, courseDto.description)
+        && Objects.equals(startDate, courseDto.startDate)
+        && Objects.equals(endDate, courseDto.endDate);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(super.hashCode(), name, description, limit);
+    return Objects.hash(super.hashCode(), name, description, limit, startDate, endDate);
   }
 
   @Override
@@ -65,6 +86,8 @@ public final class CourseDto extends Dto {
         .add("name='" + name + "'")
         .add("description='" + description + "'")
         .add("limit=" + limit)
+        .add("startDate=" + startDate)
+        .add("endDate=" + endDate)
         .toString();
   }
 }

@@ -1,8 +1,10 @@
 package by.arhor.psra.model;
 
+import by.arhor.psra.CoreVersion;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -12,11 +14,14 @@ import java.util.StringJoiner;
 @Document("courses")
 public class Course extends Entity {
 
-  public static final short UNLIMITED = Short.MAX_VALUE;
+  private static final long serialVersionUID = CoreVersion.SERIAL_VERSION_UID;
+  private static final short UNLIMITED = -1;
 
   private String name;
   private String description;
   private short limit = UNLIMITED;
+  private LocalDate startDate;
+  private LocalDate endDate;
 
   @DBRef(lazy = true)
   private User teacher;
@@ -46,6 +51,22 @@ public class Course extends Entity {
 
   public void setLimit(short limit) {
     this.limit = (limit > 0) ? limit : UNLIMITED;
+  }
+
+  public LocalDate getStartDate() {
+    return startDate;
+  }
+
+  public void setStartDate(LocalDate startDate) {
+    this.startDate = startDate;
+  }
+
+  public LocalDate getEndDate() {
+    return endDate;
+  }
+
+  public void setEndDate(LocalDate endDate) {
+    this.endDate = endDate;
   }
 
   public User getTeacher() {
@@ -95,12 +116,14 @@ public class Course extends Entity {
     Course course = (Course) o;
     return limit == course.limit
         && Objects.equals(name, course.name)
-        && Objects.equals(description, course.description);
+        && Objects.equals(description, course.description)
+        && Objects.equals(startDate, course.startDate)
+        && Objects.equals(endDate, course.endDate);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(super.hashCode(), name, description, limit);
+    return Objects.hash(super.hashCode(), name, description, limit, startDate, endDate);
   }
 
   @Override
@@ -113,6 +136,8 @@ public class Course extends Entity {
         .add("name='" + name + "'")
         .add("description='" + description + "'")
         .add("limit=" + ((limit == UNLIMITED) ? "UNLIMITED" : limit))
+        .add("startDate=" + startDate)
+        .add("endDate=" + endDate)
         .toString();
   }
 }

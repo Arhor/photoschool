@@ -15,6 +15,7 @@ public abstract class Dto
              , Deletable
              , Serializable {
 
+  // TODO: do I really need such a lot of info in dto?
   private String id;
   private LocalDateTime dateTimeCreated;
   private LocalDateTime dateTimeUpdated;
