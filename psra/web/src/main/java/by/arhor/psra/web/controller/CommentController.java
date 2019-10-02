@@ -29,4 +29,8 @@ public class CommentController {
   public CommentDto getCommentById(@PathVariable("id") String id) {
     return service.findOne(id);
   }
+
+//  public Flux[CommentDto] commentsById() {
+//    return null;
+//  }
 }

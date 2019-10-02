@@ -10,7 +10,7 @@ import by.arhor.psra.repository.CommentRepository;
 import by.arhor.psra.repository.PhotoRepository;
 import by.arhor.psra.repository.UserRepository;
 import by.arhor.psra.service.PhotoService;
-import org.modelmapper.ModelMapper;
+import by.arhor.psra.util.MappingDelegate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -35,7 +35,7 @@ class PhotoServiceImpl
 	public PhotoServiceImpl(PhotoRepository repository,
 													CommentRepository commentRepository,
 													UserRepository userRepository,
-													ModelMapper mapper) {
+													MappingDelegate mapper) {
 		super(repository, mapper, PhotoDto.class);
 		this.repository = repository;
 		this.commentRepository = commentRepository;

@@ -6,7 +6,7 @@ import by.arhor.psra.localization.ErrorLabel;
 import by.arhor.psra.model.Comment;
 import by.arhor.psra.repository.CommentRepository;
 import by.arhor.psra.service.CommentService;
-import org.modelmapper.ModelMapper;
+import by.arhor.psra.util.MappingDelegate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,12 +21,10 @@ public class CommentServiceImpl
     extends AbstractService<Comment, CommentDto, String>
     implements CommentService {
 
-  private final CommentRepository repository;
-
   @Autowired
-  public CommentServiceImpl(CommentRepository repository, ModelMapper mapper) {
+  public CommentServiceImpl(CommentRepository repository,
+                            MappingDelegate mapper) {
     super(repository, mapper, CommentDto.class);
-    this.repository = repository;
   }
 
   @Override
@@ -36,9 +34,8 @@ public class CommentServiceImpl
 
   @Override
   public CommentDto create(CommentDto dto) {
-    final var comment = mapper.map(dto, Comment.class);
-    final var created = repository.insert(comment);
-    return mapper.map(created, CommentDto.class);
+    throw new UnsupportedOperationException(
+        "Comment creation available only for related entity");
   }
 
   @Override

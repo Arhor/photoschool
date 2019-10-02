@@ -45,7 +45,7 @@ public class Course extends Entity {
   }
 
   public void setLimit(short limit) {
-    this.limit = limit > 0 ? limit : UNLIMITED;
+    this.limit = (limit > 0) ? limit : UNLIMITED;
   }
 
   public User getTeacher() {

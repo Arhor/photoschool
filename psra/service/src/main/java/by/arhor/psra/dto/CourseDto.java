@@ -1,12 +1,17 @@
 package by.arhor.psra.dto;
 
+import by.arhor.psra.CoreVersion;
+
 import java.util.Objects;
 import java.util.StringJoiner;
 
-public class CourseDto extends Dto {
+public final class CourseDto extends Dto {
+
+  private static final long serialVersionUID = CoreVersion.SERIAL_VERSION_UID;
 
   private String name;
   private String description;
+  private short limit;
 
   public String getName() {
     return name;
@@ -24,6 +29,14 @@ public class CourseDto extends Dto {
     this.description = description;
   }
 
+  public short getLimit() {
+    return limit;
+  }
+
+  public void setLimit(short limit) {
+    this.limit = limit;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -36,13 +49,14 @@ public class CourseDto extends Dto {
       return false;
     }
     CourseDto courseDto = (CourseDto) o;
-    return Objects.equals(name, courseDto.name)
+    return limit == courseDto.limit
+        && Objects.equals(name, courseDto.name)
         && Objects.equals(description, courseDto.description);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(super.hashCode(), name, description);
+    return Objects.hash(super.hashCode(), name, description, limit);
   }
 
   @Override
@@ -50,6 +64,7 @@ public class CourseDto extends Dto {
     return new StringJoiner(", ", CourseDto.class.getSimpleName() + "[", "]")
         .add("name='" + name + "'")
         .add("description='" + description + "'")
+        .add("limit=" + limit)
         .toString();
   }
 }

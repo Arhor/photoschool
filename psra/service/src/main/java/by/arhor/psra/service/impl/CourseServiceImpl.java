@@ -9,7 +9,7 @@ import by.arhor.psra.model.User;
 import by.arhor.psra.repository.CourseRepository;
 import by.arhor.psra.repository.UserRepository;
 import by.arhor.psra.service.CourseService;
-import org.modelmapper.ModelMapper;
+import by.arhor.psra.util.MappingDelegate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,15 +27,13 @@ public class CourseServiceImpl
     extends AbstractService<Course, CourseDto, String>
     implements CourseService {
 
-  private final CourseRepository repository;
   private final UserRepository userRepository;
 
   @Autowired
   public CourseServiceImpl(CourseRepository repository,
                            UserRepository userRepository,
-                           ModelMapper mapper) {
+                           MappingDelegate mapper) {
     super(repository, mapper, CourseDto.class);
-    this.repository = repository;
     this.userRepository = userRepository;
   }
 
@@ -59,6 +57,7 @@ public class CourseServiceImpl
 
     course.setName(dto.getName());
     course.setDescription(dto.getDescription());
+    course.setLimit(dto.getLimit());
 
     final var updated = repository.save(course);
     return mapper.map(updated, CourseDto.class);

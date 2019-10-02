@@ -1,9 +1,13 @@
 package by.arhor.psra.dto;
 
+import by.arhor.psra.CoreVersion;
+
 import java.util.Objects;
 import java.util.StringJoiner;
 
-public class CommentDto extends Dto {
+public final class CommentDto extends Dto {
+
+  private static final long serialVersionUID = CoreVersion.SERIAL_VERSION_UID;
 
   private String text;
   private UserDto user;

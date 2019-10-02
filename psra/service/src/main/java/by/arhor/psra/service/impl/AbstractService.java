@@ -6,11 +6,13 @@ import by.arhor.psra.localization.ErrorLabel;
 import by.arhor.psra.model.Entity;
 import by.arhor.psra.repository.BaseRepository;
 import by.arhor.psra.service.Service;
+import by.arhor.psra.util.MappingDelegate;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Objects;
 
 import static java.util.stream.Collectors.toList;
 
@@ -18,11 +20,11 @@ public abstract class AbstractService<E extends Entity, D extends Dto, K>
     implements Service<D, K> {
 
   protected final BaseRepository<E, K> repository;
-  protected final ModelMapper mapper;
+  protected final MappingDelegate mapper;
   protected final Class<D> dtoClass;
 
   public AbstractService(BaseRepository<E, K> repository,
-                         ModelMapper mapper,
+                         MappingDelegate mapper,
                          Class<D> dtoClass) {
     this.repository = repository;
     this.mapper = mapper;
@@ -34,6 +36,7 @@ public abstract class AbstractService<E extends Entity, D extends Dto, K>
   @Override
   @Transactional(readOnly = true)
   public D findOne(K id) {
+    Objects.requireNonNull(id);
     return repository
         .findById(id)
         .map(this::toDto)
@@ -62,6 +65,7 @@ public abstract class AbstractService<E extends Entity, D extends Dto, K>
 
   @Override
   public void delete(K id) {
+    Objects.requireNonNull(id);
     final var entity = repository
         .findById(id)
         .orElseThrow(() -> new EntityNotFoundException(notFoundLabel(), "ID", id));

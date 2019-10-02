@@ -4,14 +4,16 @@ import by.arhor.psra.traits.Auditable;
 import by.arhor.psra.traits.Deletable;
 import by.arhor.psra.traits.Identifiable;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.StringJoiner;
 
 public abstract class Dto
-  implements Identifiable<String>
-           , Auditable
-           , Deletable {
+    implements Identifiable<String>
+             , Auditable
+             , Deletable
+             , Serializable {
 
   private String id;
   private LocalDateTime dateTimeCreated;

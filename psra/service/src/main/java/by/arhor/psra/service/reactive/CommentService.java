@@ -1,4 +1,4 @@
-package by.arhor.psra.service;
+package by.arhor.psra.service.reactive;
 
 import by.arhor.psra.dto.CommentDto;
 

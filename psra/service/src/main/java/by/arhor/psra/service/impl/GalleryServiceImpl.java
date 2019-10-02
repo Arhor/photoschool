@@ -7,7 +7,7 @@ import by.arhor.psra.model.Gallery;
 import by.arhor.psra.repository.GalleryRepository;
 import by.arhor.psra.repository.UserRepository;
 import by.arhor.psra.service.GalleryService;
-import org.modelmapper.ModelMapper;
+import by.arhor.psra.util.MappingDelegate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,7 +30,7 @@ class GalleryServiceImpl
   @Autowired
   public GalleryServiceImpl(GalleryRepository repository,
                             UserRepository userRepository,
-                            ModelMapper mapper) {
+                            MappingDelegate mapper) {
     super(repository, mapper, GalleryDto.class);
     this.repository = repository;
     this.userRepository = userRepository;

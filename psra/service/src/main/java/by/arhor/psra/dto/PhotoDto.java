@@ -1,10 +1,14 @@
 package by.arhor.psra.dto;
 
+import by.arhor.psra.CoreVersion;
+
 import java.util.Set;
 import java.util.Objects;
 import java.util.StringJoiner;
 
-public class PhotoDto extends Dto {
+public final class PhotoDto extends Dto {
+
+  private static final long serialVersionUID = CoreVersion.SERIAL_VERSION_UID;
 
   private String name;
   private String description;
